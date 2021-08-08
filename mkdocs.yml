@@ -31,25 +31,25 @@ theme:
         icon: material/weather-night
         name: Switch to light mode
   features:
-    - navigation.instant
-    - navigation.tabs
-    - navigation.top
-    - navigation.sections
-    - navigation.tracking
+    #- navigation.instant
+    #- navigation.tabs
+    #- navigation.top
+    #- navigation.sections
+    #- navigation.tracking
     - search.highlight
     - search.share
     - search.suggest
     - toc.integrate
 
-# nav:
-#   - Overview: README.md
-#   - Dataset:
-#     - OLID-BR Dataset: dataset/README.md
-#     - Annotation: dataset/annotation.md
-#     - Data sample: dataset/data-sample.md
-#     - Download: dataset/download.md
-#     - Publications: dataset/publications.md
-#   - Glossary: glossary/README.md
+nav:
+  - Overview: README.md
+  - Dataset:
+    - OLID-BR Dataset: dataset/README.md
+    - Annotation: dataset/annotation.md
+    - Data sample: dataset/data-sample.md
+    - Download: dataset/download.md
+    - Publications: dataset/publications.md
+  - Glossary: glossary/README.md
 
 plugins:
   - tooltips
