@@ -1,0 +1,65 @@
+# Project information
+site_name: Toxicity detection
+site_description: My master's thesis about toxicity detection on text messages.
+site_url: https://github.com/DougTrajano/pucrs-toxicity-detection
+site_author: Douglas Trajano
+
+# Repository
+repo_name: ds-project-template
+repo_url: https://github.com/DougTrajano/pucrs-toxicity-detection
+edit_uri: ""
+
+# Other
+use_directory_urls: false
+
+theme:
+  name: material
+  logo: assets/logo.png
+  favicon: assets/favicon.ico
+  palette:
+    - media: "(prefers-color-scheme: light)" # get system preference
+      scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)" # get system preference
+      scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - toc.integrate
+
+plugins:
+  - tooltips
+  - search
+  - section-index
+  - git-revision-date-localized
+
+copyright: Copyright 2021 Douglas Trajano. All rights reserved.
+
+extra_css:
+  - stylesheets/extra.css
+  - stylesheets/tooltip.css
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
+  - javascripts/tables.js
+  
+extra:
+  version:
+    provider: mike
+
+markdown_extensions:
+  - footnotes
+  - admonition
+  - attr_list
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - toc:
+      permalink: 🔗
