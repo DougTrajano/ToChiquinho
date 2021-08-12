@@ -37,10 +37,19 @@ What is the target?
 
 As toxic span we define a sequence of words that attribute to the text's toxicity. Consider, for example, the following text:
 
-> "This is a `stupid` example, so thank you for nothing `a!@#!@.`"
+=== "English"
+    > "This is a `stupid` example, so thank you for nothing `a!@#!@.`"
 
-The toxic spans are:
+    The toxic spans are:
 
-```python
-["stupid", "a!@#!@."]
-```
+    ```python
+    ["stupid", "a!@#!@."]
+    ```
+
+=== "Portuguese"
+    > "Esse é um exemplo `estúpido`, então obrigado por nada `a!@#!@.`"
+
+    The toxic spans are:
+
+    ```python
+    ["estúpido", "a!@#!@."]
