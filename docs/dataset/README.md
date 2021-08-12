@@ -53,3 +53,4 @@ As toxic span we define a sequence of words that attribute to the text's toxicit
 
     ```python
     ["estúpido", "a!@#!@."]
+    ```
