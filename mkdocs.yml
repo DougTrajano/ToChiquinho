@@ -49,7 +49,7 @@ nav:
     - Data sample: dataset/data-sample.md
     - Download: dataset/download.md
     - Publications: dataset/publications.md
-  - Glossary: glossary/README.md
+  - Glossary: glossary.md
 
 plugins:
   - tooltips
@@ -61,18 +61,18 @@ extra:
   version:
     provider: mike
   social:
-      - icon: fontawesome/brands/linkedin
-        link: https://www.linkedin.com/in/douglas-trajano
-        name: Douglas Trajano - LinkedIn
-      - icon: fontawesome/brands/medium
-        link: https://dougtrajano.medium.com/
-        name: Douglas Trajano - Medium
-      - icon: fontawesome/brands/github
-        link: https://github.com/DougTrajano
-        name: DougTrajano - GitHub
-      - icon: fontawesome/brands/kaggle
-        link: https://www.kaggle.com/dougtrajano
-        name: Douglas Trajano - Kaggle
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/douglas-trajano
+      name: Douglas Trajano - LinkedIn
+    - icon: fontawesome/brands/medium
+      link: https://dougtrajano.medium.com/
+      name: Douglas Trajano - Medium
+    - icon: fontawesome/brands/github
+      link: https://github.com/DougTrajano
+      name: DougTrajano - GitHub
+    - icon: fontawesome/brands/kaggle
+      link: https://www.kaggle.com/dougtrajano
+      name: Douglas Trajano - Kaggle
 
 extra_css:
   - https://unpkg.com/mermaid@7.1.2/dist/mermaid.css

@@ -53,3 +53,7 @@ As toxic span we define a sequence of words that attribute to the text's toxicit
 
     ```python
     ["estúpido", "a!@#!@."]
+    ```
+
+[^1]: Weng, L. (2021, March 21). Reducing toxicity in language models. Lil'Log. https://lilianweng.github.io/lil-log/2021/03/21/reducing-toxicity-in-language-models.html.
+[^2]: Zampieri et al. "Predicting the type and target of offensive posts in social media." NAACL 2019.
