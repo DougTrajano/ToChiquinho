@@ -1,3 +1,3 @@
-# Data sample
+# Data Sample
 
 Pending
