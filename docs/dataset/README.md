@@ -3,8 +3,9 @@
 OLID-BR contains a collection of annotated sentences in Brazilian Portuguese using an annotation model that encompasses the following levels:
 
 - Offensive content detection
-- Offensive categorization
-- Target identification
+- Offensive category identification
+- Offensive target detection
+- Offensive target identification
 - Offensive spans identification
 
 ![](images/categorization.png)
@@ -18,7 +19,15 @@ Is it an offensive sentence?
 - `OFF` Offensive: Inappropriate language, insults, or threats.
 - `NOT` Not offensive: No offense or profanity.
 
-### Offensive categorization
+### Offensive category identification
+
+Which category of offensive content is it?
+
+`Homophobia`, `Racism`, `Sexism`, `Identity Attack`, `Insult`, `Profanity`, `Sexually Explicit`, and `Xenophobia`.
+
+See the [glossary](../glossary.md) for more information.
+
+### Offensive target categorization
 
 Is the offensive text targeted?
 
@@ -57,3 +66,4 @@ As toxic span we define a sequence of words that attribute to the text's toxicit
 
 [^1]: Weng, L. (2021, March 21). Reducing toxicity in language models. Lil'Log. https://lilianweng.github.io/lil-log/2021/03/21/reducing-toxicity-in-language-models.html.
 [^2]: Zampieri et al. "Predicting the type and target of offensive posts in social media." NAACL 2019.
+[^3]: João A. Leite, Diego F. Silva, Kalina Bontcheva, Carolina Scarton (2020): Toxic Language Detection in Social Media for Brazilian Portuguese: New Dataset and Multilingual Analysis. Published at AACL-IJCNLP 2020.

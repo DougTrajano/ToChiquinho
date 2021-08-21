@@ -48,6 +48,7 @@ nav:
     - Annotation: dataset/annotation.md
     - Data sample: dataset/data-sample.md
     - Download: dataset/download.md
+    - Metadata: dataset/metadata.md
     - Publications: dataset/publications.md
   - Glossary: glossary.md
 
