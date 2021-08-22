@@ -8,7 +8,10 @@ OLID-BR contains a collection of annotated sentences in Brazilian Portuguese usi
 - Offensive target identification
 - Offensive spans identification
 
-![](images/categorization.png)
+<figure>
+  <img src="../images/categorization.png"/>
+  <figcaption>Categorization - Image by author.</figcaption>
+</figure>
 
 ## Categorization
 
@@ -27,14 +30,14 @@ Which category of offensive content is it?
 
 See the [glossary](../glossary.md) for more information.
 
-### Offensive target categorization
+### Offensive target detection
 
 Is the offensive text targeted?
 
 - `TIN` Targeted Insult: Targeted insult or threat towards an individual, a group or other.
 - `UNT` Untargeted: Non-targeted profanity and swearing.
 
-### Target identification
+### Offensive target identification
 
 What is the target?
 

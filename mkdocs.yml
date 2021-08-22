@@ -46,8 +46,8 @@ nav:
   - Dataset:
     - OLID-BR Dataset: dataset/README.md
     - Annotation: dataset/annotation.md
-    - Data sample: dataset/data-sample.md
-    - Data source: dataset/data-sources.md
+    - Data Sample: dataset/data-sample.md
+    - Data Pipeline: dataset/data-pipeline.md
     - Download: dataset/download.md
     - Metadata: dataset/metadata.md
     - Publications: dataset/publications.md
