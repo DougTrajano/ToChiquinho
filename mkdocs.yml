@@ -51,6 +51,7 @@ nav:
     - Download: dataset/download.md
     - Metadata: dataset/metadata.md
     - Publications: dataset/publications.md
+  - ML Models: ml-models/README.md
   - Glossary: glossary.md
 
 plugins:

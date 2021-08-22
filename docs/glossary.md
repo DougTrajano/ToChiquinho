@@ -11,21 +11,37 @@ Many different terms are used in the literature that we need to know about. This
 
 ## Categories
 
-- **Homophobia**: The fear or hatred of homosexuality (and other non-heterosexual identities) and persons perceived to be gay or lesbian.[^3]
+### Homophobia
 
-- **Racism**: Prejudiced thoughts and discriminatory actions based on difference in race/ethnicity.[^3]
+The fear or hatred of homosexuality (and other non-heterosexual identities) and persons perceived to be gay or lesbian.[^3]
 
-- **Sexism**: Prejudiced thoughts and discriminatory actions based on difference in sex/gender, usually by men against women (a.k.a misogyny).[^3]
+### Racism
 
-- **Identity Attack**: Negative or hateful comments targeting someone because of their identity.[^4]
+Prejudiced thoughts and discriminatory actions based on difference in race/ethnicity.[^3]
 
-- **Insult:** Insulting, inflammatory, or negative comment towards a person or a group of people.[^4]
+### Sexism
 
-- **Profanity (a.k.a obscene)**: Swear words, curse words, or other obscene or profane language.[^4]
+Prejudiced thoughts and discriminatory actions based on difference in sex/gender, usually by men against women (a.k.a misogyny).[^3]
 
-- **Sexually Explicit**: Contains references to sexual acts, body parts, or other lewd content.[^3]
+### Identity Attack
 
-- **Xenophobia**: The fear or hatred of that which is perceived to be foreign or strange.[^5]
+Negative or hateful comments targeting someone because of their identity.[^4]
+
+### Insult
+
+Insulting, inflammatory, or negative comment towards a person or a group of people.[^4]
+
+### Profanity/Obscene
+
+Swear words, curse words, or other obscene or profane language.[^4]
+
+### Sexually Explicit
+
+Contains references to sexual acts, body parts, or other lewd content.[^3]
+
+### Xenophobia
+
+The fear or hatred of that which is perceived to be foreign or strange.[^5]
 
 [^1]: Weng, L. (2021, March 21). Reducing toxicity in language models. Lil'Log. https://lilianweng.github.io/lil-log/2021/03/21/reducing-toxicity-in-language-models.html.
 [^2]: Zampieri et al. "Predicting the type and target of offensive posts in social media." NAACL 2019.
