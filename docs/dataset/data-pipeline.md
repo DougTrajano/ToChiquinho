@@ -13,9 +13,9 @@ We want to collect comments from different sources, such as:
 
 For each source, we defined a set of public profiles that we want to collect comments from. To maintain privacy, we won't share the profile names.
 
-## Data Pipeline
+## Architecture
 
-The following diagram shows the [**data pipeline**]{A data pipeline is a series of data processing steps.}.
+The following diagram shows the architecture of the [**data pipeline**]{A data pipeline is a series of data processing steps.}.
 
 <figure>
   <img src="../images/ingestion-pipeline.png"/>
