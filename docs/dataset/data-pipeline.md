@@ -19,7 +19,7 @@ The following diagram shows the architecture of the [**data pipeline**]{A data p
 
 <figure>
   <img src="../images/ingestion-pipeline.png"/>
-  <figcaption>Data Pipeline - Image by author.</figcaption>
+  <figcaption>Architecture - Image by author.</figcaption>
 </figure>
 
 ## Filtering
