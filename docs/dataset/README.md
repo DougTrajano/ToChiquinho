@@ -2,9 +2,9 @@
 
 OLID-BR contains a collection of annotated sentences in Brazilian Portuguese using an annotation model that encompasses the following levels:
 
-- Offensive content detection
-- Offensive target identification
-- Offensive spans identification
+- [[Offensive content detection](#offensive-content-detection)]{Detect offensive content in sentences and categorize it.}
+- [[Offensive target identification](#offensive-target-identification)]{Detect if a offensive sentence is targeted to a person or group of people.}
+- [[Offensive spans identification](#offensive-spans-identification)]{Detect curse words in sentences.}
 
 <figure>
   <img src="../images/categorization.png"/>
