@@ -15,29 +15,27 @@ OLID-BR contains a collection of annotated sentences in Brazilian Portuguese usi
 
 ### Offensive content detection
 
-Is it an offensive sentence?
+This level is used to detect offensive content in the sentence.
+
+#### Is it an offensive sentence?
 
 - `OFF` Offensive: Inappropriate language, insults, or threats.
 - `NOT` Not offensive: No offense or profanity.
 
-### Offensive category identification
-
-Which category of offensive content is it?
+#### Which category of offensive content is it?
 
 `Homophobia`, `Racism`, `Sexism`, `Identity Attack`, `Insult`, `Profanity`, `Sexually Explicit`, and `Xenophobia`.
 
 See the [glossary](../glossary.md) for more information.
 
-### Offensive target detection
+### Offensive target identification
 
-Is the offensive text targeted?
+#### Is the offensive text targeted?
 
 - `TIN` Targeted Insult: Targeted insult or threat towards an individual, a group or other.
 - `UNT` Untargeted: Non-targeted profanity and swearing.
 
-### Offensive target identification
-
-What is the target?
+#### What is the target?
 
 - `IND` The offense targets an individual, often defined as “cyberbullying”.
 - `GRP` The offense targets a group of people based on ethnicity, gender, sexual
