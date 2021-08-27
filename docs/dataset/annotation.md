@@ -33,8 +33,8 @@ A qualified annotators has the following requirements:
     
     Example:
 
-    - I believe the president of the USER company doesn't do a good job.
-    - We lost because the USER player didn't score a goal.
+    - @USER @USER Obama wanted liberals & illegals to move into red states
+    - @USER @USER @USER It’s not my fault you support gun control
     
     **What is offensive text?**
 
@@ -49,7 +49,7 @@ A qualified annotators has the following requirements:
 
     A bad sentence contains curse words, for example:
 
-    "What a idiot example! You're Dork!"
+    - What a idiot example! You're Dork!
 
     In the above phrase, the words `idiot` and `Dork` are examples of bad sentences. Sets of words can also be used, for example: `piece of shit`.
 
