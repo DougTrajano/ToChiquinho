@@ -35,15 +35,16 @@ A qualified annotators has the following requirements:
 
     - I believe the president of the USER company doesn't do a good job.
     - We lost because the USER player didn't score a goal.
-    - What is offensive text?
+    
+    **What is offensive text?**
 
-    Offensive text is something that goes beyond freedom of expression and hurts the image or honor of a person or group.
+    An offensive text is something that exposes a threat or insult a person or a group of people.
 
     Examples:
 
-    - The president of the USER company is an idiot and doesn't understand what's important to the company.
-    - This retard doesn't know how to play pqp
-    
+    - @USER @USER Go home you’re drunk!!! @USER #MAGA #Trump2020 👊🇺🇸👊 URL
+    - @USER Someone should'veTaken"" this piece of shit to a volcano. 😂
+
     **What is a bad sentence?**
 
     A bad sentence contains curse words, for example:
