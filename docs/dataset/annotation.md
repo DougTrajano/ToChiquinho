@@ -21,8 +21,46 @@ A qualified annotators has the following requirements:
 ## Annotators guidelines
 
 === "English"
+    Hi! Welcome to the Offensive Language Identification Dataset in Brazilian Portuguese.
+
+    Warning! You will see several offensive phrases, be aware that they are not targeted for you. Avoid spending too many hours doing this work, your health first, ok? ❤
+
+    Before starting, let's define some concepts and see some examples.
+
+    **What is negative text?**
+
+    A negative text is something that exposes an uncomfortable opinion or a negative sentiment, but it is not a threat.
     
-    Pending
+    Example:
+
+    - I believe the president of the USER company doesn't do a good job.
+    - We lost because the USER player didn't score a goal.
+    - What is offensive text?
+
+    Offensive text is something that goes beyond freedom of expression and hurts the image or honor of a person or group.
+
+    Examples:
+
+    - The president of the USER company is an idiot and doesn't understand what's important to the company.
+    - This retard doesn't know how to play pqp
+    
+    **What is a bad sentence?**
+
+    A bad sentence contains curse words, for example:
+
+    "What a idiot example! You're Dork!"
+
+    In the above phrase, the words `idiot` and `Dork` are examples of bad sentences. Sets of words can also be used, for example: `piece of shit`.
+
+    **Spelling errors and ways to avoid detection of toxicity**
+
+    Misspellings should be interpreted as its own word, but it will not be fixed.
+
+    Sometimes, users try to spell the curse words wrong to avoid detection of toxicity. For example:
+
+    - M@therfucker! You're a piece of sh1t!
+    
+    You should follow the annotation in the same way as if the user wrote the sentence correctly.
 
 === "Portuguese"
 
