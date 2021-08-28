@@ -1,4 +1,4 @@
-# OLID-BR Dataset
+# OLID-BR
 
 OLID-BR contains a collection of annotated sentences in Brazilian Portuguese using an annotation model that encompasses the following levels:
 

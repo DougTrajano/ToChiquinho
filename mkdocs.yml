@@ -44,7 +44,7 @@ theme:
 nav:
   - Overview: README.md
   - Dataset:
-    - OLID-BR Dataset: dataset/README.md
+    - OLID-BR: dataset/README.md
     - OLID-EN: dataset/olid-en.md
     - Annotation: dataset/annotation.md
     - Data Sample: dataset/data-sample.md
