@@ -1,4 +1,11 @@
+---
+title: OLID-EN
+summary: Offensive Language Identification Dataset
+---
+
 # OLID v1.0
+
+OLID was a reference dataset for OLID-BR.
 
 OLID contains 14,100 annotate tweets using a hierarchical annotation. Each instance contains up to 3 labels each corresponding to one of the following levels:
 

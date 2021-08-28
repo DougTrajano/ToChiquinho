@@ -24,14 +24,14 @@ The following diagram shows the architecture of the [**data pipeline**]{A data p
 
 ## Filtering
 
-We want to filter out comments that are not relevant to the toxicity detection using the following criteria:
+We want to filter out comments that are not relevant to the scope of the dataset.
 
 - Comments must be in Portuguese.
 - Comments that have one or more related keywords.
-- Comments that have more than 50% of confidence score in [[Perspective API](https://www.perspectiveapi.com/)]{Perspective API is the product of a collaborative research effort by Jigsaw and Google's Counter Abuse Technology team.}.
 
 ## Privacy
 
 We will apply some privacy policies to the comments collected from each source directly in the ingestion pipeline.
 
-- Remove usernames, user ids, and other information that can be used to identify the user.
+- User mentions were replaced with the word "@USER".
+- URLs were replaced with the word "URL".
