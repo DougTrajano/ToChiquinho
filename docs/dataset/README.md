@@ -7,8 +7,8 @@ OLID-BR contains a collection of annotated sentences in Brazilian Portuguese usi
 - [[Offensive spans identification](#offensive-spans-identification)]{Detect curse words in sentences.|top-right}
 
 <figure>
-  <img src="../images/categorization.png"/>
-  <figcaption>Categorization - Image by author.</figcaption>
+  <img src="../images/olid-br-taxonomy.png"/>
+  <figcaption>Hierarchical taxonomy for categorizing offensive language, proposed by author.</figcaption>
 </figure>
 
 ## Categorization
@@ -63,6 +63,5 @@ As toxic span we define a sequence of words that attribute to the text's toxicit
     ["estúpido", "a!@#!@."]
     ```
 
-[^1]: Weng, L. (2021, March 21). Reducing toxicity in language models. Lil'Log. https://lilianweng.github.io/lil-log/2021/03/21/reducing-toxicity-in-language-models.html.
-[^2]: Zampieri et al. "Predicting the type and target of offensive posts in social media." NAACL 2019.
-[^3]: João A. Leite, Diego F. Silva, Kalina Bontcheva, Carolina Scarton (2020): Toxic Language Detection in Social Media for Brazilian Portuguese: New Dataset and Multilingual Analysis. Published at AACL-IJCNLP 2020.
+[^1]: Zampieri et al. "Predicting the type and target of offensive posts in social media." NAACL 2019.
+[^2]: João A. Leite, Diego F. Silva, Kalina Bontcheva, Carolina Scarton (2020): Toxic Language Detection in Social Media for Brazilian Portuguese: New Dataset and Multilingual Analysis. Published at AACL-IJCNLP 2020.
