@@ -8,7 +8,7 @@ summary: Offensive Language Identification Dataset in Brazilian Portuguese.
 OLID-BR contains a collection of annotated sentences in Brazilian Portuguese using an annotation model that encompasses the following levels:
 
 - [[Offensive content detection](#offensive-content-detection)]{Detect offensive content in sentences and categorize it.|top-right}
-- [[Offensive target identification](#offensive-target-identification)]{Detect if a offensive sentence is targeted to a person or group of people.|top-right}
+- [[Offense target identification](#offense-target-identification)]{Detect if an offensive sentence is targeted to a person or group of people.|top-right}
 - [[Offensive spans identification](#offensive-spans-identification)]{Detect curse words in sentences.|top-right}
 
 <figure>
@@ -29,7 +29,7 @@ We use the [[Perspective API](https://www.perspectiveapi.com/)]{Perspective API 
 - `OFF` Offensive: Inappropriate language, insults, or threats.
 - `NOT` Not offensive: No offense or profanity.
 
-**Which category of offensive content is it?**
+**Which kind of offense does it contain?**
 
 These categories are tagged by our annotators.
 
@@ -37,7 +37,7 @@ These categories are tagged by our annotators.
 
 See the [glossary](../glossary.md) for detailed explanation.
 
-### Offensive target identification
+### Offense target identification
 
 This level is used to detect if an offensive sentence is targeted to a person or group of people.
 
@@ -46,7 +46,7 @@ This level is used to detect if an offensive sentence is targeted to a person or
 - `TIN` Targeted Insult: Targeted insult or threat towards an individual, a group or other.
 - `UNT` Untargeted: Non-targeted profanity and swearing.
 
-**What is the target of the offensive?**
+**What is the target of the offense?**
 
 - `IND` The offense targets an individual, often defined as “cyberbullying”.
 - `GRP` The offense targets a group of people based on ethnicity, gender, sexual
