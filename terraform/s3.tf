@@ -30,3 +30,17 @@ resource "aws_s3_bucket" "bucket" {
     local.tags
   )
 }
+
+resource "aws_s3_bucket_object" "raw_data" {
+  bucket  = "${aws_s3_bucket.bucket.id}"
+  acl     = "private"
+  key     = "raw_data"
+  content = ""
+}
+
+resource "aws_s3_bucket_object" "processed_data" {
+  bucket  = "${aws_s3_bucket.bucket.id}"
+  acl     = "private"
+  key     = "processed_data"
+  content = ""
+}
