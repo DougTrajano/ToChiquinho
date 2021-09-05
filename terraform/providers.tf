@@ -9,12 +9,9 @@ terraform {
   required_version = ">= 0.14.9"
 
   backend "s3" {
-    # Replace this with your bucket name!
-    bucket         = "terraform-state"
-    key            = "global/s3/terraform.tfstate"
+    bucket         = "doug-terraform-states"
+    key            = "toxicity-detection/s3/terraform.tfstate"
     region         = "us-east-1"
-    
-    # Replace this with your DynamoDB table name!
     dynamodb_table = "terraform-locks"
     encrypt        = true
   }

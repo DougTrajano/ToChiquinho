@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "bucket" {
-  bucket_prefix = "${local.name}-bucket"
+  bucket        = "${local.name}-bucket"
   acl           = "private"
 
   versioning {
