@@ -12,11 +12,11 @@ Each sentence is tagged by at least three qualified annotators.
 
 ## Who are qualified annotators?
 
-A qualified annotators has the following requirements:
+A qualified annotator has the following requirements:
 
 - **Basic English** as it has the language used in the annotation tool.
 - **Native Portuguese** as the texts presented in the dataset are in Brazilian Portuguese.
-- A good understanding about offensive language (in portuguese) and how to detect it.
+- A good understanding of offensive language (in Portuguese) and how to detect it.
 
 ## Annotators guidelines
 
