@@ -17,6 +17,7 @@ theme:
   name: material
   logo: assets/logo.png
   favicon: assets/favicon.ico
+  language: en
   icon:
     repo: fontawesome/brands/github
   palette:
@@ -42,25 +43,31 @@ theme:
     - toc.integrate
 
 nav:
-  - Overview: README.md
+  - Overview: README.en.md
   - Dataset:
-    - OLID-BR: dataset/README.md
-    - OLID-EN: dataset/olid-en.md
-    - Annotation: dataset/annotation.md
-    - Data Sample: dataset/data-sample.md
-    - Data Pipeline: dataset/data-pipeline.md
-    - Download: dataset/download.md
-    - Metadata: dataset/metadata.md
-    - Publications: dataset/publications.md
-  - ML Models: ml-models/README.md
-  - Glossary: glossary.md
+    - OLID-BR: dataset/README.en.md
+    - OLID-EN: dataset/olid.en.md
+    - Annotation: dataset/annotation.en.md
+    - Data Sample: dataset/data-sample.en.md
+    - Data Pipeline: dataset/data-pipeline.en.md
+    - Download: dataset/download.en.md
+    - Metadata: dataset/metadata.en.md
+    - Publications: dataset/publications.en.md
+  - ML Models: ml-models/README.en.md
+  - Glossary: glossary.en.md
 
 plugins:
   - tooltips
   - search
   - section-index
   - git-revision-date-localized
-  
+  - i18n:
+      default_language: en
+      languages:
+        en: english
+        pt: portuguese
+      material_alternate: false
+
 extra:
   version:
     provider: mike
@@ -77,6 +84,13 @@ extra:
     - icon: fontawesome/brands/kaggle
       link: https://www.kaggle.com/dougtrajano
       name: Douglas Trajano - Kaggle
+  alternate:
+    - name: English
+      link: ./en/
+      lang: en
+    - name: Portuguese
+      link: ./pt/
+      lang: pt
 
 extra_css:
   - https://unpkg.com/mermaid@7.1.2/dist/mermaid.css

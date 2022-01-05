@@ -5,7 +5,7 @@ summary: A glossary of terms used in the Toxicity Detection project.
 
 Many different terms are used in the literature that we need to know about. This page is a collection of terms definitions that are used in the Toxicity Detection project.
 
-## Target
+## Kinds of Offensive Language
 
 ### Hate Speech
 
@@ -25,7 +25,7 @@ Negative or hateful comments targeting someone because of their identity.[^2]
 
 Insulting, inflammatory, or negative comment towards a person or a group of people.[^2]
 
-### Profane (a.k.a obscene)
+### Profanity (a.k.a obscene)
 
 Swear words, curse words, or other obscene or profane language.[^2]
 
@@ -33,13 +33,13 @@ Swear words, curse words, or other obscene or profane language.[^2]
 
 Prejudiced thoughts and discriminatory actions based on difference in race/ethnicity.[^3]
 
+### Religious intolerance
+
+Pending
+
 ### Sexism
 
 Prejudiced thoughts and discriminatory actions based on difference in sex/gender, usually by men against women (a.k.a misogyny).[^3]
-
-### Sexually Explicit
-
-Contains references to sexual acts, body parts, or other lewd content.[^3]
 
 ### Xenophobia
 
