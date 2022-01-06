@@ -56,23 +56,13 @@ This level is used to detect if an offensive sentence is targeted to a person or
 
 As toxic span we define a sequence of words that attribute to the text's toxicity. Consider, for example, the following text:
 
-=== "English"
-    > "This is a `stupid` example, so thank you for nothing `a!@#!@.`"
+> "This is a `stupid` example, so thank you for nothing `a!@#!@.`"
 
-    The toxic spans are:
+The toxic spans are:
 
-    ```python
-    ["stupid", "a!@#!@."]
-    ```
-
-=== "Portuguese"
-    > "Esse é um exemplo `estúpido`, então obrigado por nada `a!@#!@.`"
-
-    The toxic spans are:
-
-    ```python
-    ["estúpido", "a!@#!@."]
-    ```
+```python
+["stupid", "a!@#!@."]
+```
 
 [^1]: Zampieri et al. "Predicting the type and target of offensive posts in social media." NAACL 2019.
 [^2]: João A. Leite, Diego F. Silva, Kalina Bontcheva, Carolina Scarton (2020): Toxic Language Detection in Social Media for Brazilian Portuguese: New Dataset and Multilingual Analysis. Published at AACL-IJCNLP 2020.
