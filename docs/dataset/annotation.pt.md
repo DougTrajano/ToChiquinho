@@ -70,7 +70,7 @@ O comentário é preconceituoso ou discriminatório com base na religião, culto
 
 O comentário é preconceituoso ou discriminatório com base no gênero de uma pessoa ou grupo de pessoas.
 
-##### Xanophobia
+##### Xenophobia
 
 O comentário é preconceituoso ou discriminatório com pessoas que são estrangeiras ou de outras culturas.
 
