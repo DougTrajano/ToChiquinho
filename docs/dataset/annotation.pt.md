@@ -1,28 +1,28 @@
-# Annotation
+# Anotação
 
-This section describes the [**data annotation process**]{Data annotation is the categorization and labeling of data for AI applications,.} and the respective [guidelines](#annotators-guidelines) for the dataset.
+Essa seção contém o [**processo de anotação dos dados**]{Anotação dos dados é o processo de rotulagem de dados. É usada para treinar diferentes modelos em computadores.} e as [diretrizes para anotadores](#diretrizes-para-anotadores) do dataset.
 
-## Annotation Process
+## Processo de anotação
 
-We use [qualified annotators](#who-are-qualified-annotators) to annotate the dataset. The annotators are trained by the authors of the dataset.
+Nós usamos anotadores qualificados para anotar os dados. Os anotadores foram treinados pelo autor do dataset.
 
-Each sentence is tagged by at least three qualified annotators.
+### Concordância entre os anotadores
 
-### Annotation Agreement
+Cada comentário é avaliado por dois anotadores, caso haja discordância entre os anotadores, um terceiro anotador é usado para avaliar o comentário.
 
-Pending
+## Quem é um anotador qualificado?
 
-## Who are qualified annotators?
+Um anotador qualificado precisa ter as seguintes características:
 
-A qualified annotator must have the following attributes:
- 
-- **Basic English** as it has the language used in the annotation tool.
-- **Native Portuguese** as the texts presented in the dataset are in Brazilian Portuguese.
-- A good understanding of offensive language (in Portuguese) and how to detect it. The concepts will be explained below.
+- **Inglês básico**, já que a ferramenta de anotação é feita em Inglês.
+- **Português nativo**, já que os textos do dataset são em Português do Brasil.
+- Bom conhecimento sobre linguagem ofensiva (em Português) e como identificá-la. Os conceitos serão explicados em X.
 
-## Annotation Guidelines
+## Diretrizes para anotadores
 
-The annotators are required to follow the following guidelines:
+Os anotadores devem seguir as seguintes diretrizes:
+
+---
 
 Olá! Seja bem-vindo ao projeto de anotação de comentários ofensivos em português do Brasil.
 
@@ -30,11 +30,11 @@ Alerta! Você verá neste projeto várias frases ofensivas, tenha consciência d
 
 Antes de começar, vamos alinhar alguns conceitos importantes.
 
-### What's the task to do?
+### Qual a tarefa que você está fazendo?
 
 Você deverá anotar/rotular comentários ofensivos. As informações que você fornecerá serão utilizadas para ajudar a identificar comentários ofensivos e/ou entender melhor o comportamento dos *haters*.
 
-### Which questions should I answer?
+### Quais perguntas você deverá responder?
 
 Para cada comentário, você deve responder as seguintes perguntas:
 
@@ -80,7 +80,7 @@ Essa pergunta procura identificar se o comentário tóxico é direcionado a um i
 
 Marque apenas se existir um alvo claro do comentário tóxico.
 
-#### What words are toxic/offensive?
+#### Quais palavras são ofensivas/tóxicas?
 
 Quais palavras são ofensivas ou tóxicas? Marque as palavras no texto que são profanas, insultantes ou tóxicas.
 

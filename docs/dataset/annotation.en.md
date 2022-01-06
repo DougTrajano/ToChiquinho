@@ -1,16 +1,14 @@
 # Annotation
 
-This section describes the [**data annotation process**]{Data annotation is the categorization and labeling of data for AI applications,.} and the respective [guidelines](#annotators-guidelines) for the dataset.
+This section describes the [**data annotation process**]{Data annotation is the categorization and labeling of data for AI applications,.} and the [annotators guidelines](#annotators-guidelines) for the dataset.
 
 ## Annotation Process
 
 We use [qualified annotators](#who-are-qualified-annotators) to annotate the dataset. The annotators are trained by the authors of the dataset.
 
-Each sentence is tagged by at least three qualified annotators.
-
 ### Annotation Agreement
 
-Pending
+Each comment is tagged by two juddges, if they disagree, a third judge will be asked to decide the annotation.
 
 ## Who are qualified annotators?
 
@@ -22,46 +20,110 @@ A qualified annotator must have the following attributes:
 
 ## Annotation Guidelines
 
-The annotators are required to follow the following guidelines:
+Annotators must follow the following guidelines:
 
-Hi! Welcome to the Offensive Language Identification Dataset in Brazilian Portuguese.
+---
 
-Warning! You will see several offensive phrases, be aware that they are not targeted for you. Avoid spending too many hours doing this work, your health first, ok? ❤
+Hi! Welcome to the Offensive Language Annotation Project in Brazilian Portuguese.
 
-Before starting, let's define some concepts and see some examples.
+Warning! You will see several offensive comments, be aware that they are not directed to you. Avoid spending too many consecutive hours doing this work, your health first, okay? ❤
 
-**What is negative text?**
+Before starting, let's align some concepts.
 
-A negative text is something that exposes an uncomfortable opinion or a negative sentiment, but it is not a threat.
+### What's the task you are doing?
+
+You must annotate/labeling offensive comments. The information you provide will be used to help identify offensive comments and/or better understand *haters* behavior.
+
+### What questions should you answer?
+
+For each comment, you must answer the following questions:
+
+#### Is this text toxic? (Yes/No)
+
+Is the comment offensive? By default the system will pre-select it as "Yes", if the comment is not offensive, mark it as "No".
+
+#### Which kind of toxicity it has?
+
+What kind of toxicity does the comment have? Respond with one of the options below:
+
+##### Identity Attack
+
+The comment has an attack on sexual orientation, gender identity, or gender.
+
+##### Insult
+
+The comment has an insult, insult, name calling, etc. for the purpose of humiliating or hitting a victim's weak point.
+
+##### Profanity/Obscene
+
+The comment has obscene, vulgar, pornographic, etc. words.
+
+##### Racism
+
+The comment is prejudiced or discriminatory based on the race, color or ethnicity of a person or group of people.
+
+##### Religious intolerance
+
+The comment is prejudiced or discriminatory based on the religion, cult or religious practice of a person or group of people.
+
+##### Sexism
+
+The comment is prejudiced or discriminatory based on the gender of a person or group of people.
+
+##### Xanophobia
+
+The comment is prejudiced or discriminatory towards people who are foreigners or from other cultures.
+
+#### Is there a specific target? (Individual/Group/Other)
+
+This question seeks to identify whether the toxic comment is directed at an individual, a group, or others.
+
+Check only if there is a clear target for the toxic comment.
+
+#### What words are offensive/toxic?
+
+What words are offensive or toxic? Mark words in the text that are profane, insulting, or toxic.
+
+*curse words* are words or set of words that will be profane/insulting.
 
 Example:
 
-- @USER @USER Obama wanted liberals & illegals to move into red states
-- @USER @USER @USER It’s not my fault you support gun control
+- Will take it in c@, your arr0mb@d0
 
-**What is offensive text?**
+In the sentence above, we have two *curse words* that must be marked: `will take no c@` and `arr0mb@d0`.
 
-An offensive text is something that exposes a threat or insult a person or a group of people.
+Another example:
+
+"What a silly example! You are too dumb."
+
+In the sentence above, the word `idiot` and `dumb` are examples of *curse words*.
+
+*curse words* are also considered a set of words, for example: `go to shit`.
+
+### Difference between a negative opinion and a toxic comment
+
+It's important to understand the difference between a negative opinion and a toxic comment.
+
+A **negative opinion** is a text that exposes an unpleasant opinion or fact in harsh words, usually criticizing someone's work or action, but without hurting the dignity or honor of a person or group.
 
 Examples:
 
-- @USER @USER Go home you’re drunk!!! @USER #MAGA #Trump2020 👊🇺🇸👊 URL
-- @USER Someone should'veTaken"" this piece of shit to a volcano. 😂
+- I believe that the president of the USER company does not do a good job.
+- We lost because the USER player didn't score any goals.
 
-**What is a bad sentence?**
+A **toxic comment** goes beyond freedom of expression, usually contains offensive or insulting words. It seeks to denigrate the dignity or honor of a person or group.
 
-A bad sentence contains curse words, for example:
+Examples:
 
-- What a idiot example! You're Dork!
+- The president of the USER company is an idiot and doesn't understand what is important to the company.
+- This retard doesn't know how to play pqp
 
-In the above phrase, the words `idiot` and `Dork` are examples of bad sentences. Sets of words can also be used, for example: `piece of shit`.
+### Misspellings and ways to avoid detection of toxicity
 
-**Spelling errors and ways to avoid detection of toxicity**
+Users may mistype words or substitute characters to avoid detection of toxicity. In this case, you should interpret them as normal words, but they won't be corrected.
 
-Misspellings should be interpreted as its own word, but it will not be fixed.
+You should follow through with the tags in the same way, capturing the words as if they were correct.
 
-Sometimes, users try to spell the curse words wrong to avoid detection of toxicity. For example:
+---
 
-- M@therfucker! You're a piece of sh1t!
-
-You should follow the annotation in the same way as if the user wrote the sentence correctly.
+If you have any questions, you can contact Douglas Trajano.

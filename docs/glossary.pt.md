@@ -1,6 +1,6 @@
 ---
-title: Glossary
-summary: A glossary of terms used in the Toxicity Detection project.
+title: Glossário
+summary: Um glossário de termos usados no projeto de detecção de toxidade.
 ---
 
 Many different terms are used in the literature that we need to know about. This page is a collection of terms definitions that are used in the Toxicity Detection project.
