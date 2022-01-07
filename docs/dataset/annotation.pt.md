@@ -48,7 +48,9 @@ Qual o tipo de toxicidade o comentário possui? Responda com uma das opções ab
 
 ##### Identity Attack
 
-O comentário possui ataque a orientação sexual, identidade de gênero, ou gênero.
+O comentário possui ataque a orientação sexual ou a identidade de gênero.
+
+> Cuidado para não confundir com [sexismo](#sexism).
 
 ##### Insult
 
@@ -100,7 +102,11 @@ Na frase acima, a palavra `idiota` e `burro` são exemplos de *curse words*.
 
 Também são consideradas *curse words* conjunto de palavras, por exemplo: `vai a merda`.
 
-### Diferença entre uma opinião negativa e um comentário tóxico
+Não selecione palavras como "seu", "sua", "é", etc.
+
+### Perguntas frequentes
+
+#### Diferença entre uma opinião negativa e um comentário tóxico
 
 É importante entender a diferença entre uma opinião negativa e um comentário tóxico.
 
@@ -108,8 +114,9 @@ Uma **opinião negativa** é um texto que expõem uma opinião ou fato desagrad�
 
 Exemplos:
 
-- Eu acredito que o presidente da empresa USER não faz um bom trabalho.
-- Perdemos, pois o jogador USER não fez nenhum gol.
+- USER Agora é " estupro" mesmo com a mulher dizendo que quis e gostou. Eu avisei que esse dia ia chegar.
+- Moro conseguiu o que queria: eleger Bolsonaro em troca de um ministério. O que aconteceu depois foi "briga de quadrilha", na opinião do advogado Kakay. Por tudo isso, ele considera o ex-juiz "a própria fake news". Veja na última HASHTAG do ano! HASHTAG URL
+- USER Crime é invadir a casa dos outros.
 
 Um **comentário tóxico** extrapola a liberdade de expressão, normalmente contém palavras ofensivas ou insultantes. Procura denegrir a dignidade ou a honra de uma pessoa ou grupo.
 
@@ -118,11 +125,24 @@ Exemplos:
 - O presidente da empresa USER é um idiota e não entende o que é importante para a empresa.
 - Esse retardado não sabe jogar pqp
 
-### Erros ortográficos e formas de evitar a detecção de toxicidade
+#### Erros ortográficos e formas de evitar a detecção de toxicidade
 
-Os usuários podem digitar palavras errôneamente ou substituindo caracteres para evitar a detecção de toxicidade. Neste caso, você deve interpretar como palavras normais, mas não serão corrigidas. 
+Os usuários podem digitar palavras errôneamente ou substituindo caracteres para evitar a detecção de toxicidade. Neste caso, você deve interpretar como palavras normais. 
 
 Você deve seguir com as marcações da mesma forma, capturando as palavras como se estivessem corretas.
+
+#### O texto é ilegível, o que fazer?
+
+Se o texto for ilegível ou os processos de anonimização de dados removeram parte importante do texto, você pode clicar no botão "Skip" para pular o comentário.
+
+Exemplo:
+
+- USER HASHTAG
+- USER f
+
+#### É possível voltar em um comentário tóxico já anotado?
+
+Não é possível.
 
 ---
 
