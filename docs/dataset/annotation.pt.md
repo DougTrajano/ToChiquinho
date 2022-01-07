@@ -123,7 +123,7 @@ Um **comentário tóxico** extrapola a liberdade de expressão, normalmente cont
 Exemplos:
 
 - O presidente da empresa USER é um idiota e não entende o que é importante para a empresa.
-- Esse retardado não sabe jogar pqp
+- Esse cara não sabe jogar pqp
 
 #### Erros ortográficos e formas de evitar a detecção de toxicidade
 
