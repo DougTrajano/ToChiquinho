@@ -17,13 +17,29 @@ Um tipo de linguagem que é usado para atacar um indivíduo diretamente.[^1]
 
 ## Categorias
 
-### Identity Attack
+### Body
 
-Comentários negativos ou de incitação ao ódio dirigidos a alguém por causa de sua identidade de gênero, orientação sexual.[^2]
+Discurso de ódio com base em características físicas do corpo, como obesidade, altura, etc.[^4]
+
+### Health
+
+Discurso de ódio com base nas condições de saúde, como deficiência física, etc.[^4]
+
+### Gender Attack
+
+Comentários negativos ou de incitação ao ódio por causa de sua identidade de gênero ou orientação sexual.[^2]
+
+### Ideology
+
+Discurso de ódio com base em ideologias, como feminismo, esquerda política, etc.[^4]
 
 ### Insult
 
 Comentário que insulta ou irrita alguém ou algum grupo de pessoas.[^2]
+
+### Other-Lifestyle
+
+Comentários ofensivos com base em hábitos de vida, como vegetariano, vegano, fumante, etc.[^4]
 
 ### Profanity (a.k.a obscene)
 
