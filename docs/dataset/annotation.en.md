@@ -6,9 +6,9 @@ This section describes the [**data annotation process**]{Data annotation is the 
 
 We use [qualified annotators](#who-are-qualified-annotators) to annotate the dataset. The annotators are trained by the authors of the dataset.
 
-### Annotation Agreement
+### Inter-annotator agreement
 
-Each comment is tagged by two juddges, if they disagree, a third judge will be asked to decide the annotation.
+The inter-annotator agreement varies depending on the task. Basically, each comment will be tagged by two judges, if they disagree, a third annotator will be used to decide the annotation.
 
 ## Who are qualified annotators?
 
@@ -46,13 +46,29 @@ Is the comment offensive? By default the system will pre-select it as "Yes", if 
 
 What kind of toxicity does the comment have? Respond with one of the options below:
 
+##### Body
+
+Hate speech based on body, such as fat, thin, tall or short people.
+
+##### Health
+
+Hate speech based on health conditions, such as against disabled people.
+
 ##### Identity Attack
 
-The comment has an attack on sexual orientation, gender identity, or gender.
+Negative or hateful comments targeting someone because of their gender identity, sexual orientation.
+
+##### Ideology
+
+Hate speech based on a person's ideas, such as feminist or left wing ideology.
 
 ##### Insult
 
 The comment has an insult, insult, name calling, etc. for the purpose of humiliating or hitting a victim's weak point.
+
+##### Other-Lifestyle
+
+Hate speech based on life habits, such as vegetarian, vegan, etc.
 
 ##### Profanity/Obscene
 
@@ -74,7 +90,7 @@ The comment is prejudiced or discriminatory based on the gender of a person or g
 
 The comment is prejudiced or discriminatory towards people who are foreigners or from other cultures.
 
-#### Is there a specific target? (Individual/Group/Other)
+#### There's a specific target?
 
 This question seeks to identify whether the toxic comment is directed at an individual, a group, or others.
 
@@ -90,17 +106,19 @@ Example:
 
 - Will take it in c@, your arr0mb@d0
 
-In the sentence above, we have two *curse words* that must be marked: `will take no c@` and `arr0mb@d0`.
+In the comment above, we have two *curse words* that must be marked: `will take no c@` and `arr0mb@d0`.
 
 Another example:
 
-"What a silly example! You are too dumb."
+"Que exemplo idiota! Você é burro demais."
 
-In the sentence above, the word `idiot` and `dumb` are examples of *curse words*.
+In the comment above, the word `idiota` and `burro` are examples of *curse words*.
 
 *curse words* are also considered a set of words, for example: `go to shit`.
 
-### Difference between a negative opinion and a toxic comment
+### Frequently Asked Questions
+
+#### Difference between a negative opinion and a toxic comment
 
 It's important to understand the difference between a negative opinion and a toxic comment.
 
@@ -108,21 +126,37 @@ A **negative opinion** is a text that exposes an unpleasant opinion or fact in h
 
 Examples:
 
-- I believe that the president of the USER company does not do a good job.
-- We lost because the USER player didn't score any goals.
+- USER Agora é " estupro" mesmo com a mulher dizendo que quis e gostou. Eu avisei que esse dia ia chegar.
+- Moro conseguiu o que queria: eleger Bolsonaro em troca de um ministério. O que aconteceu depois foi "briga de quadrilha", na opinião do advogado Kakay. Por tudo isso, ele considera o ex-juiz "a própria fake news". Veja na última HASHTAG do ano! HASHTAG URL
+- USER Crime é invadir a casa dos outros.
+- USER Você não é homem de assumir teu erro, perder faz parte do esporte. Agora insultar e trazer o racismo pra nossas vidas não, eu não estou de acordo. EU NÃO TE RESPEITO
 
 A **toxic comment** goes beyond freedom of expression, usually contains offensive or insulting words. It seeks to denigrate the dignity or honor of a person or group.
 
 Examples:
 
-- The president of the USER company is an idiot and doesn't understand what is important to the company.
-- This retard doesn't know how to play pqp
+- O presidente da empresa USER é um idiota e não entende o que é importante para a empresa.
+- Esse cara não sabe jogar pqp
 
-### Misspellings and ways to avoid detection of toxicity
+#### Misspellings and ways to avoid detection of toxicity
 
 Users may mistype words or substitute characters to avoid detection of toxicity. In this case, you should interpret them as normal words, but they won't be corrected.
 
 You should follow through with the tags in the same way, capturing the words as if they were correct.
+
+#### The text is ilegible, what should I do?
+
+If the text is ilegible or the anonimization process removed context of the text, you can click on the "Skip" button to skip the comment.
+
+Exemplo:
+
+- USER HASHTAG
+- USER f
+- 💐💐💐 URL
+
+#### Can I review an labeled comment?
+
+It's not possible to review a comment that has been labeled.
 
 ---
 

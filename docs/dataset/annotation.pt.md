@@ -6,9 +6,9 @@ Essa seção contém o [**processo de anotação dos dados**]{Anotação dos dad
 
 Nós usamos anotadores qualificados para anotar os dados. Os anotadores foram treinados pelo autor do dataset.
 
-### Concordância entre os anotadores
+### Acordo entre anotadores
 
-Cada comentário é avaliado por dois anotadores, caso haja discordância entre os anotadores, um terceiro anotador é usado para avaliar o comentário.
+O acordo entre os anotadores varia de acordo com a tarefa. Basicamente, cada comentário será rotulado por dois anotadores, caso eles discordam, um terceiro anotador será usado para decidir a anotação.
 
 ## Quem é um anotador qualificado?
 
@@ -46,15 +46,31 @@ O comentário é ofensivo? Por padrão, o sistema pré-selecionará como "Yes" (
 
 Qual o tipo de toxicidade o comentário possui? Responda com uma das opções abaixo:
 
+##### Body
+
+Discurso de ódio com base no corpo, como obesidade, altura, etc.
+
+##### Health
+
+Comentário ofensivo com base na saúde, deficiências físicas, etc.
+
 ##### Identity Attack
 
 O comentário possui ataque a orientação sexual ou a identidade de gênero.
 
 > Cuidado para não confundir com [sexismo](#sexism).
 
+##### Ideology
+
+Comentário ofensivo com base nas ideias de uma pessoa ou grupo de pessoas, como contra ideologia feminista, esquerda política, etc.
+
 ##### Insult
 
 O comentário possui um insulto, injúria, xingamento, etc. com o propósito de humilhar ou atingir um ponto fraco da vítima.
+
+##### Other-Lifestyle
+
+Discurso de ódio com base em hábitos de vida, como vegetariano, vegano, fumante, etc.
 
 ##### Profanity/Obscene
 
@@ -76,7 +92,7 @@ O comentário é preconceituoso ou discriminatório com base no gênero de uma p
 
 O comentário é preconceituoso ou discriminatório com pessoas que são estrangeiras ou de outras culturas.
 
-#### There's a specific target? (Individual/Group/Other)
+#### There's a specific target?
 
 Essa pergunta procura identificar se o comentário tóxico é direcionado a um indivíduo, um grupo ou a outros.
 
@@ -117,6 +133,7 @@ Exemplos:
 - USER Agora é " estupro" mesmo com a mulher dizendo que quis e gostou. Eu avisei que esse dia ia chegar.
 - Moro conseguiu o que queria: eleger Bolsonaro em troca de um ministério. O que aconteceu depois foi "briga de quadrilha", na opinião do advogado Kakay. Por tudo isso, ele considera o ex-juiz "a própria fake news". Veja na última HASHTAG do ano! HASHTAG URL
 - USER Crime é invadir a casa dos outros.
+- USER Você não é homem de assumir teu erro, perder faz parte do esporte. Agora insultar e trazer o racismo pra nossas vidas não, eu não estou de acordo. EU NÃO TE RESPEITO
 
 Um **comentário tóxico** extrapola a liberdade de expressão, normalmente contém palavras ofensivas ou insultantes. Procura denegrir a dignidade ou a honra de uma pessoa ou grupo.
 
@@ -139,6 +156,7 @@ Exemplo:
 
 - USER HASHTAG
 - USER f
+- 💐💐💐 URL
 
 #### É possível voltar em um comentário tóxico já anotado?
 
