@@ -130,10 +130,10 @@ Uma **opinião negativa** é um texto que expõem uma opinião ou fato desagrad�
 
 Exemplos:
 
-- USER Agora é " estupro" mesmo com a mulher dizendo que quis e gostou. Eu avisei que esse dia ia chegar.
+- USER Agora é "estupro" mesmo com a mulher dizendo que quis e gostou. Eu avisei que esse dia ia chegar.
 - Moro conseguiu o que queria: eleger Bolsonaro em troca de um ministério. O que aconteceu depois foi "briga de quadrilha", na opinião do advogado Kakay. Por tudo isso, ele considera o ex-juiz "a própria fake news". Veja na última HASHTAG do ano! HASHTAG URL
 - USER Crime é invadir a casa dos outros.
-- USER Você não é homem de assumir teu erro, perder faz parte do esporte. Agora insultar e trazer o racismo pra nossas vidas não, eu não estou de acordo. EU NÃO TE RESPEITO
+- USER perder faz parte do esporte. Agora insultar e trazer o racismo pra nossas vidas não, eu não estou de acordo. EU NÃO TE RESPEITO
 
 Um **comentário tóxico** extrapola a liberdade de expressão, normalmente contém palavras ofensivas ou insultantes. Procura denegrir a dignidade ou a honra de uma pessoa ou grupo.
 
