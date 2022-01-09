@@ -17,10 +17,6 @@ A type of speech that is used to attack an individual directly.[^1]
 
 ## Categories
 
-### Body
-
-Hate speech based on body, such as fat, thin, tall or short people.[^4]
-
 ### Health
 
 Hate speech based on health conditions, such as against disabled people.[^4]
@@ -40,6 +36,10 @@ Insulting, inflammatory, or negative comment towards a person or a group of peop
 ### Other-Lifestyle
 
 Hate speech based on life habits, such as vegetarian, vegan, etc.[^4]
+
+### Physical aspects
+
+Hate speech based on physical aspects, such as fat, thin, tail or short people, etc.[^4]
 
 ### Profanity/Obscene
 

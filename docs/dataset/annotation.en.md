@@ -46,10 +46,6 @@ Is the comment offensive? By default the system will pre-select it as "Yes", if 
 
 What kind of toxicity does the comment have? Respond with one of the options below:
 
-##### Body
-
-Hate speech based on body, such as fat, thin, tall or short people.
-
 ##### Health
 
 Hate speech based on health conditions, such as against disabled people.
@@ -69,6 +65,10 @@ The comment has an insult, insult, name calling, etc. for the purpose of humilia
 ##### Other-Lifestyle
 
 Hate speech based on life habits, such as vegetarian, vegan, etc.
+
+##### Physical aspects
+
+Hate speech based on physical aspects, such as fat, thin, tail or short people, etc.
 
 ##### Profanity/Obscene
 

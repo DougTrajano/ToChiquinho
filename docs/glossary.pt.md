@@ -17,10 +17,6 @@ Um tipo de linguagem que é usado para atacar um indivíduo diretamente.[^1]
 
 ## Categorias
 
-### Body
-
-Discurso de ódio com base em características físicas do corpo, como obesidade, altura, etc.[^4]
-
 ### Health
 
 Discurso de ódio com base nas condições de saúde, como deficiência física, etc.[^4]
@@ -40,6 +36,10 @@ Comentário que insulta ou irrita alguém ou algum grupo de pessoas.[^2]
 ### Other-Lifestyle
 
 Comentários ofensivos com base em hábitos de vida, como vegetariano, vegano, fumante, etc.[^4]
+
+### Physical aspects
+
+Discurso de ódio com base em características físicas, como gordofobia, tamanhismo, etc.[^4]
 
 ### Profanity (a.k.a obscene)
 

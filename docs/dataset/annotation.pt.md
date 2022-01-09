@@ -46,10 +46,6 @@ O comentário é ofensivo? Por padrão, o sistema pré-selecionará como "Yes" (
 
 Qual o tipo de toxicidade o comentário possui? Responda com uma das opções abaixo:
 
-##### Body
-
-Discurso de ódio com base no corpo, como obesidade, altura, etc.
-
 ##### Health
 
 Comentário ofensivo com base na saúde, deficiências físicas, etc.
@@ -71,6 +67,10 @@ O comentário possui um insulto, injúria, xingamento, etc. com o propósito de 
 ##### Other-Lifestyle
 
 Discurso de ódio com base em hábitos de vida, como vegetariano, vegano, fumante, etc.
+
+##### Physical aspects
+
+Discurso de ódio com base em características físicas, como gordofobia, tamanhismo, etc.
 
 ##### Profanity/Obscene
 
