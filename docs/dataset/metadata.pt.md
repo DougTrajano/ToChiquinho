@@ -6,7 +6,22 @@ Nós forneceremos alguns metadados do dataset para auxiliar em futuras análises
 
 Para cada anotador qualificado, nós coletamos as seguintes informações:
 
-Pendente
+- **Annotator ID**: O ID do anotador.
+- **Age**: A idade do anotador.
+- **Gender**: O gênero do anotador.
+    - Male
+    - Female
+    - Other
+- **Education Level**: O nível de educação do anotador.
+    - Primary School
+    - Secondary School
+    - Bachelor's degree
+    - Master's degree
+    - Doctoral degree
+- **Annotator Type**: O tipo do anotador.
+    - Volunteer
+    - Researcher
+    - Contract Worker
 
 Essa informação pode ser usada para ajudar a entender o perfil do anotador, mantendo a anonimidade do mesmo.
 

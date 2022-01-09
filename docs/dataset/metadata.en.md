@@ -6,7 +6,22 @@ We provide some metadata for the dataset to help further analysis.
 
 For each qualified annotator, we asked him/her to provide the following information:
 
-Pending
+- **Annotator ID**: the annotator's unique ID.
+- **Age**: The age of the annotator.
+- **Gender**: The gender of the annotator.
+    - Male
+    - Female
+    - Other
+- **Education Level**: The education level of the annotator.
+    - Primary School
+    - Secondary School
+    - Bachelor's degree
+    - Master's degree
+    - Doctoral degree
+- **Annotator Type**: The type of the annotator.
+    - Volunteer
+    - Researcher
+    - Contract Worker
 
 This information can be used to provide a better understanding of the annotator profile, maintaining the anonymity of the annotator
 
@@ -22,4 +37,3 @@ For each sentence, we collect contextual information based on the social media p
     - Government
     - News
     - Politics
-  
