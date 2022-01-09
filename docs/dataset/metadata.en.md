@@ -25,7 +25,7 @@ For each qualified annotator, we asked him/her to provide the following informat
 
 This information can be used to provide a better understanding of the annotator profile, maintaining the anonymity of the annotator
 
-## Text
+## Texts
 
 For each sentence, we collect contextual information based on the social media posts.
 
