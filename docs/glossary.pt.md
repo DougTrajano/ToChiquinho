@@ -37,7 +37,7 @@ Comentário que insulta ou irrita alguém ou algum grupo de pessoas.[^2]
 
 Comentários ofensivos com base em hábitos de vida, como vegetariano, vegano, fumante, etc.[^4]
 
-### Physical aspects
+### Physical Aspects
 
 Discurso de ódio com base em características físicas, como gordofobia, tamanhismo, etc.[^4]
 
@@ -49,7 +49,7 @@ Palavrões, palavras de baixo calão, ou outra linguagem obscena ou profana.[^2]
 
 Pensamentos preconceituosos e ações discriminatórias baseadas na diferença de raça/etnia.[^3]
 
-### Religious intolerance
+### Religious Intolerance
 
 Pensamentos preconceituosos e ações discriminatórias baseadas na religião, cultos ou prática religiosa.[^4]
 

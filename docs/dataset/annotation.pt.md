@@ -6,9 +6,11 @@ Essa seção contém o [**processo de anotação dos dados**]{Anotação dos dad
 
 Nós usamos anotadores qualificados para anotar os dados. Os anotadores foram treinados pelo autor do dataset.
 
-### Acordo entre anotadores
+### Concordância entre anotadores
 
 O acordo entre os anotadores varia de acordo com a tarefa. Basicamente, cada comentário será rotulado por dois anotadores, caso eles discordam, um terceiro anotador será usado para decidir a anotação.
+
+Iremos disponibilizar a estatística de Kappa que mede a concordância entre os anotadores.
 
 ## Quem é um anotador qualificado?
 
@@ -17,6 +19,13 @@ Um anotador qualificado precisa ter as seguintes características:
 - **Inglês básico**, já que a ferramenta de anotação é feita em Inglês.
 - **Português nativo**, já que os textos do dataset são em Português do Brasil.
 - Bom conhecimento sobre linguagem ofensiva (em Português) e como identificá-la. Os conceitos serão explicados em X.
+
+Os anotadores serão treinados pelo curso [Comunicação Não Violenta - FECAP](https://www.fecap.br/curta-duracao/comunicacao-nao-violenta-1/) com o seguinte conteúdo programático:
+
+- Diferenças entre negatividade e toxicidade na comunicação e no comportamento;
+- Pessoas e comportamentos tóxicos;
+- Comportamento e comunicação assertiva;
+- Comunicação não violenta, consciência e não julgamento.
 
 ## Diretrizes para anotadores
 
@@ -50,7 +59,7 @@ Qual o tipo de toxicidade o comentário possui? Responda com uma das opções ab
 
 Comentário ofensivo com base na saúde, deficiências físicas, etc.
 
-##### Identity Attack
+##### Gender Attack
 
 O comentário possui ataque a orientação sexual ou a identidade de gênero.
 
@@ -68,7 +77,7 @@ O comentário possui um insulto, injúria, xingamento, etc. com o propósito de 
 
 Discurso de ódio com base em hábitos de vida, como vegetariano, vegano, fumante, etc.
 
-##### Physical aspects
+##### Physical Aspects
 
 Discurso de ódio com base em características físicas, como gordofobia, tamanhismo, etc.
 
@@ -80,7 +89,7 @@ O comentário possui palavras obscenas, vulgar, pornográficas, etc.
 
 O comentário é preconceituoso ou discriminatório com base na raça, cor ou etnia de uma pessoa ou grupo de pessoas.
 
-##### Religious intolerance
+##### Religious Intolerance
 
 O comentário é preconceituoso ou discriminatório com base na religião, culto ou prática religiosa de uma pessoa ou grupo de pessoas.
 

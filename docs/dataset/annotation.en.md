@@ -10,6 +10,8 @@ We use [qualified annotators](#who-are-qualified-annotators) to annotate the dat
 
 The inter-annotator agreement varies depending on the task. Basically, each comment will be tagged by two judges, if they disagree, a third annotator will be used to decide the annotation.
 
+We will provide the Kappa statistic that measures the agreement between the annotators.
+
 ## Who are qualified annotators?
 
 A qualified annotator must have the following attributes:
@@ -17,6 +19,13 @@ A qualified annotator must have the following attributes:
 - **Basic English** as it has the language used in the annotation tool.
 - **Native Portuguese** as the texts presented in the dataset are in Brazilian Portuguese.
 - A good understanding of offensive language (in Portuguese) and how to detect it. The concepts will be explained below.
+
+Note takers will be trained by the course [Comunicação Não Violenta - FECAP](https://www.fecap.br/curta-duracao/comunicacao-nao-violenta-1/) with the following syllabus:
+
+- Differences between negativity and toxicity in communication and behavior;
+- Toxic people and behavior;
+- Assertive behavior and communication;
+- Non-violent communication, awareness and non-judgment.
 
 ## Annotation Guidelines
 
@@ -50,7 +59,7 @@ What kind of toxicity does the comment have? Respond with one of the options bel
 
 Hate speech based on health conditions, such as against disabled people.
 
-##### Identity Attack
+##### Gender Attack
 
 Negative or hateful comments targeting someone because of their gender identity, sexual orientation.
 
@@ -66,7 +75,7 @@ The comment has an insult, insult, name calling, etc. for the purpose of humilia
 
 Hate speech based on life habits, such as vegetarian, vegan, etc.
 
-##### Physical aspects
+##### Physical Aspects
 
 Hate speech based on physical aspects, such as fat, thin, tail or short people, etc.
 
@@ -78,7 +87,7 @@ The comment has obscene, vulgar, pornographic, etc. words.
 
 The comment is prejudiced or discriminatory based on the race, color or ethnicity of a person or group of people.
 
-##### Religious intolerance
+##### Religious Intolerance
 
 The comment is prejudiced or discriminatory based on the religion, cult or religious practice of a person or group of people.
 
@@ -86,7 +95,7 @@ The comment is prejudiced or discriminatory based on the religion, cult or relig
 
 The comment is prejudiced or discriminatory based on the gender of a person or group of people.
 
-##### Xanophobia
+##### Xenophobia
 
 The comment is prejudiced or discriminatory towards people who are foreigners or from other cultures.
 
