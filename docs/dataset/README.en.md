@@ -1,6 +1,6 @@
 ---
 title: OLID-BR
-summary: Offensive Language Identification Dataset in Brazilian Portuguese.
+summary: Offensive Language Identification Dataset for Brazilian Portuguese.
 ---
 
 # OLID-BR
@@ -31,11 +31,11 @@ We use the [[Perspective API](https://www.perspectiveapi.com/)]{Perspective API 
 
 **Which kind of offense does it contain?**
 
-These categories are tagged by our annotators.
+The following labels was tagged by our annotators:
 
-`Identity Attack`, `Insult`, `Profane`, `Racism`, `Sexism`, `Sexually Explicit`, and `Xenophobia`.
+`Health`, `Gender Attack`, `Ideology`, `Insult`, `Other-Lifestyle`, `Physical Aspects`, `Profanity/Obscene`, `Racism`, `Religious Intolerance`, `Sexism`, and `Xenophobia`.
 
-See the [glossary](../glossary.md) for detailed explanation.
+See the [Glossary](../glossary.en.md) for detailed explanation.
 
 ### Offense target identification
 
@@ -54,14 +54,16 @@ This level is used to detect if an offensive sentence is targeted to a person or
 
 ### Offensive spans identification
 
-As toxic span we define a sequence of words that attribute to the text's toxicity. Consider, for example, the following text:
+As toxic span we define a sequence of words that attribute to the text's toxicity.
 
-> "This is a `stupid` example, so thank you for nothing `a!@#!@.`"
+For example, let's consider the following text:
+
+> "USER `Canalha` URL"
 
 The toxic spans are:
 
 ```python
-["stupid", "a!@#!@."]
+[5, 6, 7, 8, 9, 10, 11, 12, 13]
 ```
 
 [^1]: Zampieri et al. "Predicting the type and target of offensive posts in social media." NAACL 2019.

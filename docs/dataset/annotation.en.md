@@ -81,7 +81,7 @@ Hate speech based on physical aspects, such as fat, thin, tail or short people, 
 
 ##### Profanity/Obscene
 
-The comment has obscene, vulgar, pornographic, etc. words.
+The comment has obscene, vulgar, pornographic, etc.
 
 ##### Racism
 

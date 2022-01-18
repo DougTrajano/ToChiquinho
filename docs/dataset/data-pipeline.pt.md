@@ -13,6 +13,12 @@ Nós queremos coletar comentários de várias fontes, como:
 
 Para cada fonte, definimos um conjunto de perfis públicos que queremos coletar comentários.
 
+Adicionalmente, vamos usar comentários de outros datasets, como:
+
+- [rogersdepelle/OffComBR: Here we provide a data set of web comments which have been annotated for hate speech.](https://github.com/rogersdepelle/OffComBR)
+- [paulafortuna/Portuguese-Hate-Speech-Dataset: A Hierarchically-Labeled Portuguese Hate Speech Dataset](https://github.com/paulafortuna/Portuguese-Hate-Speech-Dataset)
+- [LaCAfe/Dataset-Hatespeech: Hate Speech Detection Dataset](https://github.com/LaCAfe/Dataset-Hatespeech)
+
 ## Arquitetura
 
 O seguinte diagrama mostra a arquitetura da [**pipeline de dados**]{A data pipeline é uma série de processos de processamento de dados.}.

@@ -1,11 +1,11 @@
 ---
 title: OLID-BR
-summary: Offensive Language Identification Dataset in Brazilian Portuguese.
+summary: Offensive Language Identification Dataset for Brazilian Portuguese.
 ---
 
 # OLID-BR
 
-OLID-BR contém uma coleção de frases anotadas em português brasileiro usando um modelo de anotação que abrange os seguintes níveis:
+OLID-BR contém uma coleção de comentários em Português do Brasil anotados que abrangem os seguintes níveis:
 
 - [[Offensive content detection](#offensive-content-detection)]{Detect offensive content in sentences and categorize it.|top-right}
 - [[Offense target identification](#offense-target-identification)]{Detect if an offensive sentence is targeted to a person or group of people.|top-right}
@@ -24,44 +24,46 @@ Este nível é usado para detectar conteúdo ofensivo em uma frase.
 
 #### Este texto é ofensivo?
 
-We use the [[Perspective API](https://www.perspectiveapi.com/)]{Perspective API is the product of a collaborative research effort by Jigsaw and Google's Counter Abuse Technology team.|top-right} to detect if the sentence contains offensive content with double-check by our [qualified annotators](annotation.md#who-are-qualified-annotators).
+Nós utilizamos a [[Perspective API](https://www.perspectiveapi.com/)]{A Perspective API é o produto de um esforço de pesquisa colaborativo da Jigsaw e da equipe de tecnologia de combate ao abuso do Google.|top-right} para detectar se um comentário é ofensivo ou não. Adicionalmente, nossos anotadores reclassificaram comentários identificados como ofensivos incorretamente.
 
-- `OFF` Offensive: Inappropriate language, insults, or threats.
-- `NOT` Not offensive: No offense or profanity.
+- `OFF`: O comentário é ofensivo.
+- `NOT`: O comentário não é ofensivo.
 
 #### Qual tipo de ofensa o texto contém?
 
-These categories are tagged by our annotators.
+Os rótulos abaixo foram anotados pelos nossos anotadores.
 
-`Identity Attack`, `Insult`, `Profane`, `Racism`, `Religious intolerance`, `Sexism`, and `Xenophobia`.
+`Health`, `Gender Attack`, `Ideology`, `Insult`, `Other-Lifestyle`, `Physical Aspects`, `Profanity/Obscene`, `Racism`, `Religious Intolerance`, `Sexism` e `Xenophobia`.
 
-See the [glossary](../glossary.md) for detailed explanation.
+Veja [Glossary](../glossary.pt.md) para maiores informações.
 
 ### Offense target identification
 
-This level is used to detect if an offensive sentence is targeted to a person or group of people.
+Este nível é usado para detectar se um comentário ofensivo é direcionado a um indivíduo, grupo de pessoas ou outros.
 
 #### Este comentário ofensivo é direcionado a alguém?
 
-- `TIN` Targeted Insult: Targeted insult or threat towards an individual, a group or other.
-- `UNT` Untargeted: Non-targeted profanity and swearing.
+- `TIN`: O comentário é direcionado a um indivíduo, grupo de pessoas ou outros.
+- `UNT`: O comentário não é direcionado.
 
 #### Qual o alvo do comentário ofensivo?
 
-- `IND` The offense targets an individual, often defined as “cyberbullying”.
-- `GRP` The offense targets a group of people based on ethnicity, gender, sexual
-- `OTH` The target can belong to other categories, such as an organization, an event, an issue, etc.
+- `IND`: O comentário é direcionado a um indivíduo. Também conhecido como *Cyberbullying*.
+- `GRP`: O comentário é direcionado a um grupo de pessoas. Também conhecido como *Hate Speech*.
+- `OTH`: O comentário é direcionado a outras categorias, como uma organização, um evento, etc.
 
 ### Offensive spans identification
 
-As toxic span we define a sequence of words that attribute to the text's toxicity. Consider, for example, the following text:
+Os *toxic spans* fornecem uma lista com os caracteres de um determinado comentário que são considerados ofensivos.
 
-> "Esse é um exemplo `estúpido`, então obrigado por nada `a!@#!@.`"
+Por exemplo, vamos considerar o comentário:
 
-The toxic spans are:
+> "USER `Canalha` URL"
+
+Os toxic spans são:
 
 ```python
-["estúpido", "a!@#!@."]
+[5, 6, 7, 8, 9, 10, 11, 12, 13]
 ```
 
 [^1]: Zampieri et al. "Predicting the type and target of offensive posts in social media." NAACL 2019.
