@@ -57,7 +57,7 @@ Prejudiced thoughts and discriminatory actions based on the religion, cult or re
 
 Prejudiced thoughts and discriminatory actions based on difference in sex/gender, usually by men against women (a.k.a misogyny).[^3]
 
-### Xanophobia
+### Xenophobia
 
 The fear or hatred of foreigners.[^3]
 
