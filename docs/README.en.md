@@ -16,6 +16,7 @@ So, we want to ensure healthy online communication between people. You can expos
 ## Proposed deliverables
 
 - OLID-BR Dataset
-- Toxicity Detection Model
-- Toxicity Target Detection Model
-- Curse Word Detection Model
+- Toxicity Sub-Type Detection Model
+- Toxicity Target Classification Model
+- Toxicity Target Type Identification Model
+- Toxic Spans Detection Model

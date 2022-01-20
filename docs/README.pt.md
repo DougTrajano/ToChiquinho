@@ -16,6 +16,7 @@ Então, queremos garantir uma comunicação saudável online entre as pessoas. V
 ## Entregáveis propostos
 
 - OLID-BR Dataset
-- Toxicity Detection Model
-- Toxicity Target Detection Model
-- Curse Word Detection Model
+- Toxicity Sub-Type Detection Model
+- Toxicity Target Classification Model
+- Toxicity Target Type Identification Model
+- Toxic Spans Detection Model
