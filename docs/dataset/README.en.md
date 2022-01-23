@@ -33,7 +33,7 @@ We use the [[Perspective API](https://www.perspectiveapi.com/)]{Perspective API 
 
 The following labels was tagged by our annotators:
 
-`Health`, `Gender Attack`, `Ideology`, `Insult`, `Other-Lifestyle`, `Physical Aspects`, `Profanity/Obscene`, `Racism`, `Religious Intolerance`, `Sexism`, and `Xenophobia`.
+`Health`, `Ideology`, `Insult`, `LGBTQphobia`, `Other-Lifestyle`, `Physical Aspects`, `Profanity/Obscene`, `Racism`, `Religious Intolerance`, `Sexism`, and `Xenophobia`.
 
 See the [Glossary](../glossary.en.md) for detailed explanation.
 

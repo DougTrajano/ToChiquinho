@@ -33,7 +33,7 @@ Nós utilizamos a [[Perspective API](https://www.perspectiveapi.com/)]{A Perspec
 
 Os rótulos abaixo foram anotados pelos nossos anotadores.
 
-`Health`, `Gender Attack`, `Ideology`, `Insult`, `Other-Lifestyle`, `Physical Aspects`, `Profanity/Obscene`, `Racism`, `Religious Intolerance`, `Sexism` e `Xenophobia`.
+`Health`, `Ideology`, `Insult`, `LGBTQphobia`, `Other-Lifestyle`, `Physical Aspects`, `Profanity/Obscene`, `Racism`, `Religious Intolerance`, `Sexism` e `Xenophobia`.
 
 Veja [Glossary](../glossary.pt.md) para maiores informações.
 
