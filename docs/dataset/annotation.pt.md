@@ -59,12 +59,6 @@ Qual o tipo de toxicidade o comentário possui? Responda com uma das opções ab
 
 Comentário ofensivo com base na saúde, deficiências físicas, etc.
 
-##### Gender Attack
-
-O comentário possui ataque a orientação sexual ou a identidade de gênero.
-
-> Cuidado para não confundir com [sexismo](#sexism).
-
 ##### Ideology
 
 Comentário ofensivo com base nas ideias de uma pessoa ou grupo de pessoas, como contra ideologia feminista, esquerda política, etc.
@@ -72,6 +66,14 @@ Comentário ofensivo com base nas ideias de uma pessoa ou grupo de pessoas, como
 ##### Insult
 
 O comentário possui um insulto, injúria, xingamento, etc. com o propósito de humilhar ou atingir um ponto fraco da vítima.
+
+##### LGBTQphobia
+
+O comentário possui ataque a orientação sexual ou a identidade de gênero.
+
+Inclui afobia, bifobia, homofobia, lesbofobia, transfobia e outras fobias relacionadas à sexualidade.
+
+> Cuidado para não confundir com [sexismo](#sexism).
 
 ##### Other-Lifestyle
 

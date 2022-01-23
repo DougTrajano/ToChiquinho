@@ -59,10 +59,6 @@ What kind of toxicity does the comment have? Respond with one of the options bel
 
 Hate speech based on health conditions, such as against disabled people.
 
-##### Gender Attack
-
-Negative or hateful comments targeting someone because of their gender identity, sexual orientation.
-
 ##### Ideology
 
 Hate speech based on a person's ideas, such as feminist or left wing ideology.
@@ -70,6 +66,14 @@ Hate speech based on a person's ideas, such as feminist or left wing ideology.
 ##### Insult
 
 The comment has an insult, insult, name calling, etc. for the purpose of humiliating or hitting a victim's weak point.
+
+##### LGBTQphobia
+
+Negative or hateful comments targeting someone because of their gender identity, sexual orientation. 
+
+It includes aphobia, biphobia, homophobia, lesbophobia, transphobia, and other sexuality-related phobias.
+
+> Cuidado para não confundir com [sexismo](#sexismo).
 
 ##### Other-Lifestyle
 

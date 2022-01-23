@@ -21,10 +21,6 @@ Um tipo de linguagem que é usado para atacar um indivíduo diretamente.[^1]
 
 Discurso de ódio com base nas condições de saúde, como deficiência física, etc.[^4]
 
-### Gender Attack
-
-Comentários negativos ou de incitação ao ódio por causa de sua identidade de gênero ou orientação sexual.[^2]
-
 ### Ideology
 
 Discurso de ódio com base em ideologias, como feminismo, esquerda política, etc.[^4]
@@ -32,6 +28,10 @@ Discurso de ódio com base em ideologias, como feminismo, esquerda política, et
 ### Insult
 
 Comentário que insulta ou irrita alguém ou algum grupo de pessoas.[^2]
+
+### LGBTQphobia
+
+Comentários negativos ou de incitação ao ódio por causa de sua identidade de gênero ou orientação sexual.[^2]
 
 ### Other-Lifestyle
 

@@ -21,10 +21,6 @@ A type of speech that is used to attack an individual directly.[^1]
 
 Hate speech based on health conditions, such as against disabled people.[^4]
 
-### Gender Attack
-
-Negative or hateful comments targeting someone because of their gender identity, sexual orientation.[^2]
-
 ### Ideology
 
 Hate speech based on a person's ideas, such as feminist or left wing ideology.[^4]
@@ -32,6 +28,10 @@ Hate speech based on a person's ideas, such as feminist or left wing ideology.[^
 ### Insult
 
 Insulting, inflammatory, or negative comment towards a person or a group of people.[^2]
+
+### LGBTQphobia
+
+Negative or hateful comments targeting someone because of their gender identity, sexual orientation.[^2]
 
 ### Other-Lifestyle
 
