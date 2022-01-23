@@ -24,7 +24,7 @@ Additionally, we will use comments from others datasets, such as:
 The following diagram shows the architecture of the [**data pipeline**]{A data pipeline is a series of data processing steps.}.
 
 <figure>
-  <img src="../images/ingestion-pipeline.png"/>
+  <img src="../images/data-pipeline.png"/>
   <figcaption>Architecture - Image by author.</figcaption>
 </figure>
 

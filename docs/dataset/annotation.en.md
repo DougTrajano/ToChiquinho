@@ -73,7 +73,7 @@ Negative or hateful comments targeting someone because of their gender identity,
 
 It includes aphobia, biphobia, homophobia, lesbophobia, transphobia, and other sexuality-related phobias.
 
-> Cuidado para não confundir com [sexismo](#sexismo).
+> Be careful to don't confuse it with [sexism](#sexism).
 
 ##### Other-Lifestyle
 
