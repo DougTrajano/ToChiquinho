@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: ToChiquinho
 summary: Toxicity Detection for text in Brazilian Portuguese
 ---
 

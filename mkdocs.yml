@@ -1,12 +1,12 @@
 # Project information
-site_name: Toxicity detection
-site_description: My master's thesis about toxicity detection on text messages.
-site_url: https://github.com/DougTrajano/pucrs-toxicity-detection
+site_name: ToChiquinho
+site_description: Toxicity Detection System for Brazilian Portuguese
+site_url: https://github.com/DougTrajano/ToChiquinho
 site_author: Douglas Trajano
 
 # Repository
-repo_name: pucrs-toxicity-detection
-repo_url: https://github.com/DougTrajano/pucrs-toxicity-detection
+repo_name: ToChiquinho
+repo_url: https://github.com/DougTrajano/ToChiquinho
 edit_uri: ""
 
 # Other
@@ -43,18 +43,8 @@ theme:
     - toc.integrate
 
 nav:
-  - Overview: README.en.md
-  - Dataset:
-    - OLID-BR: dataset/README.en.md
-    - OLID-EN: dataset/olid.en.md
-    - Annotation: dataset/annotation.en.md
-    - Data Sample: dataset/data-sample.en.md
-    - Data Pipeline: dataset/data-pipeline.en.md
-    - Download: dataset/download.en.md
-    - Metadata: dataset/metadata.en.md
-    - Publications: dataset/publications.en.md
-  - ML Models: ml-models/README.en.md
-  - Glossary: glossary.en.md
+  - Overview: index.en.md
+  - ML Models: ml-models.en.md
 
 plugins:
   - tooltips

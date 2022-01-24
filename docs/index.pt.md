@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: ToChiquinho
 summary: Toxicity Detection para textos em Português do Brasil
 ---
 
