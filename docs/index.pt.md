@@ -1,22 +1,26 @@
 ---
 title: ToChiquinho
-summary: Toxicity Detection para textos em Português do Brasil
+summary: Detecção de toxidade para texto em Português do Brasil
 ---
 
-Bem-vindo ao projeto de detecção de toxidade de texto!
+ToChiquinho é uma ferramenta para detectar toxidade em texto em Português do Brasil. Ela é baseada em vários modelos treinados no conjunto de dados [OLID-BR](https://dougtrajano.github.io/olid-br/).
 
-Esse projeto é parte de um trabalho de mestrado sobre a detecção de toxidade de texto em Português do Brasil.
+ToChiquinho fornece vários métodos para detectar toxidade em texto como:
+
+- **Toxicity Type Detection**: Detecta o tipo de toxidade no texto.
+- **Toxicity Target Classification**: Detecta se o texto é direcionado ou não.
+- **Toxicity Target Type Identification**: Identifica o tipo de alvo no texto (individual, grupo, ou outro).
+- **Toxic Spans Detection**: Detecta as áreas de toxidade no texto.
+
+## Arquitetura
+
+<figure>
+  <img src="images/toxicity-system.png"/>
+  <figcaption>Arquitetura do ToChiquinho</figcaption>
+</figure>
 
 ## Motivação
 
-Hoje, vivemos em um mundo onde o internet está se tornando mais e mais importante para nossas vidas.
+Hoje em dia, vivemos em um mundo onde o internet se torna mais e mais importante para nossas vidas.
 
-Então, queremos garantir uma comunicação saudável online entre as pessoas. Você pode expor sua opinião, mas ela deve ser respeitada com outras pessoas.
-
-## Entregáveis propostos
-
-- OLID-BR Dataset
-- Toxicity Sub-Type Detection Model
-- Toxicity Target Classification Model
-- Toxicity Target Type Identification Model
-- Toxic Spans Detection Model
+Então, queremos garantir que a comunicação online seja saudável. Você pode expor sua opinião, mas deve ser respeitoso com outras pessoas.
