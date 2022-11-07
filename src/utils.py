@@ -2,34 +2,34 @@ import os
 import json
 import pandas as pd
 import numpy as np
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 from kaggle.api.kaggle_api_extended import KaggleApi
 from collections.abc import MutableMapping
 
-
 def download_dataset(
-        output_files: str | List[str] = "train.csv") -> Dict[str, Dict | pd.DataFrame]:
+        output_files: Union[str, List[str]] = "train.csv",
+        dataset_files: List[str] = [
+            "olidbr.csv.zip",
+            "train.csv",
+            "test.csv",
+            "train_metadata.csv",
+            "test_metadata.csv",
+            "additional_data.json",
+            "train.json",
+            "test.json"
+        ]) -> Dict[str, Union[Dict, pd.DataFrame]]:
     """Download dataset from Kaggle.
 
     Args:
     - output_files: List of files to be outputted.
+    - dataset_files: List of files to be downloaded and deleted.
 
     Returns:
     - A dictionary with the output files as keys and the content as values.
     """
-    files = [
-        "olidbr.csv.zip",
-        "train.csv",
-        "test.csv",
-        "train_metadata.csv",
-        "test_metadata.csv",
-        "additional_data.json",
-        "train.json",
-        "test.json"
-    ]
 
     # Download OLID-BR dataset
-    for file in files:
+    for file in dataset_files:
         if not os.path.exists(file):
             print(f"Downloading OLID-BR from Kaggle.")
             kaggle = KaggleApi()
@@ -47,12 +47,11 @@ def download_dataset(
             raise ValueError(f"File {file} is not supported.")
 
     # Delete files
-    for file in files:
+    for file in dataset_files:
         if os.path.exists(file):
             os.remove(file)
 
     return result
-
 
 def compute_pos_weight(y: np.ndarray) -> List[float]:
     """Compute positive weight for class imbalance.
