@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.settings import Settings
+from .settings import Settings
 
 args = Settings()
 

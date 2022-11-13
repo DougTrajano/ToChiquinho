@@ -44,19 +44,21 @@ theme:
 
 nav:
   - Overview: index.en.md
-  - ML Models: ml-models.en.md
+  - ML Models:
+    - Toxicity Type Detection: models/toxicity_type_detection.en.md
+    - Toxicity Target Classification: models/toxicity_target_classification.en.md
 
 plugins:
   - tooltips
   - search
   - section-index
-  - git-revision-date-localized
   - i18n:
       default_language: en
       languages:
         en: english
         pt: portuguese
       material_alternate: false
+  - git-revision-date-localized
 
 extra:
   version:
