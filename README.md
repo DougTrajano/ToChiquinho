@@ -1,5 +1,7 @@
 # ToChiquinho
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DougTrajano_ToChiquinho&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DougTrajano_ToChiquinho)
+
 ToChiquinho is a toxicity detection system for Brazilian Portuguese texts based on the [OLID-BR](https://github.com/DougTrajano/olid-br/) dataset.
 
 ## Usage
