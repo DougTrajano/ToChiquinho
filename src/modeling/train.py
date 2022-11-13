@@ -140,9 +140,6 @@ def train(args: Arguments):
 
         # Evaluate on validation set
         val_scores = trainer.evaluate(metric_key_prefix="val_")
-        # val_scores = {
-        #     k.replace("eval_", "val_"):v for k, v in val_scores.items() if "eval_" in k
-        # }
         _logger.info(f"Validation scores: {val_scores}")
         # mlflow.log_metrics(val_scores)
         
@@ -151,10 +148,6 @@ def train(args: Arguments):
             eval_dataset=encoded_dataset["test"],
             metric_key_prefix="test_"
         )
-        
-        test_scores = {
-            k.replace("eval_", "test_"):v for k, v in test_scores.items() if "eval_" in k
-        }
         _logger.info(f"Test scores: {test_scores}")
         _logger.info(f"Test F1-score: {test_scores['test_f1']}")
         # mlflow.log_metrics(test_scores)

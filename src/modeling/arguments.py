@@ -93,28 +93,28 @@ class Arguments:
     adam_beta2: Optional[float] = field(
         default=0.999,
         metadata={
-            "help": "The beta1 parameter for the Adam optimizer."
+            "help": "The beta2 parameter for the Adam optimizer."
         }
     )
 
     adam_epsilon: Optional[float] = field(
         default=1e-8,
         metadata={
-            "help": "The beta1 parameter for the Adam optimizer."
+            "help": "The epsilon parameter for the Adam optimizer."
         }
     )
 
     learning_rate: Optional[float] = field(
         default=5e-5,
         metadata={
-            "help": "The beta1 parameter for the Adam optimizer."
+            "help": "The learning rate for the Adam optimizer."
         }
     )
 
     weight_decay: Optional[float] = field(
         default=0.0,
         metadata={
-            "help": "The beta1 parameter for the Adam optimizer."
+            "help": "The weight decay for the Adam optimizer."
         }
     )
 
