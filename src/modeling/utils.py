@@ -131,7 +131,7 @@ def save_mlflow_checkpoint(
         f.write(mlflow_run_id)
         _logger.info(f"Saved MLFLOW_RUN_ID {mlflow_run_id} to {path}.")
 
-def read_mlflow_checkpoint(
+def resume_mlflow_checkpoint(
         checkpoint_dir: str,
         file_name: str = "mlflow_run_id.txt") -> Union[str, None]:
     """Read the MLFLOW_RUN_ID from the checkpoint directory.

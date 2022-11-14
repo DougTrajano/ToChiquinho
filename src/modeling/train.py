@@ -22,7 +22,7 @@ from utils import (
     compute_metrics,
     prep_checkpoint_dir,
     save_mlflow_checkpoint,
-    read_mlflow_checkpoint,
+    resume_mlflow_checkpoint,
     get_sagemaker_job_name
 )
 
@@ -44,14 +44,19 @@ def train(args: Arguments):
     if job_name:
         args.checkpoint_dir = os.path.join(args.checkpoint_dir, job_name)
 
-    if read_mlflow_checkpoint(args.checkpoint_dir):
+    if resume_mlflow_checkpoint(args.checkpoint_dir):
         _logger.info("Resuming MLflow from checkpoint.")
-        os.environ["MLFLOW_RUN_ID"] = read_mlflow_checkpoint(args.checkpoint_dir)
-        if "MLFLOW_NESTED_RUN" in os.environ:
-            del os.environ["MLFLOW_NESTED_RUN"]
-            _logger.info("Deleted MLFLOW_NESTED_RUN from os.environ.")
+        os.environ["MLFLOW_RUN_ID"] = resume_mlflow_checkpoint(args.checkpoint_dir)
 
-    with mlflow.start_run(nested=bool(os.environ.get("MLFLOW_NESTED_RUN"))):
+    nested_run = bool(
+        os.environ.get("MLFLOW_RUN_ID")
+        and not resume_mlflow_checkpoint(args.checkpoint_dir)
+    )
+
+    if os.environ.get("MLFLOW_RUN_ID"):
+        mlflow.start_run()
+        
+    with mlflow.start_run(nested=nested_run):
         # Save MLflow run ID to checkpointing directory.
         save_mlflow_checkpoint(
             mlflow_run_id=mlflow.active_run().info.run_id,
