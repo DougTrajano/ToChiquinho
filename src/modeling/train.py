@@ -139,14 +139,14 @@ def train(args: Arguments):
         )
 
         # Evaluate on validation set
-        val_scores = trainer.evaluate(metric_key_prefix="val_")
+        val_scores = trainer.evaluate(metric_key_prefix="val")
         _logger.info(f"Validation scores: {val_scores}")
         # mlflow.log_metrics(val_scores)
         
         # Evaluate on test set
         test_scores = trainer.evaluate(
             eval_dataset=encoded_dataset["test"],
-            metric_key_prefix="test_"
+            metric_key_prefix="test"
         )
         _logger.info(f"Test scores: {test_scores}")
         _logger.info(f"Test F1-score: {test_scores['test_f1']}")
