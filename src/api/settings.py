@@ -8,7 +8,7 @@ class Settings(BaseSettings):
         "Toxicity Detection system", description="API description")
     API_PORT: int = Field(80, description="API port")
     API_HEALTHCHECK_PATH: str = Field(
-        "/healthcheck", description="API healthcheck path")
+        "/health", description="API healthcheck path")
     API_TASK: str = Field("all", description="API task that will be served")
 
     API_ROUTE_TOXICITY_ENDPOINT: str = Field(
