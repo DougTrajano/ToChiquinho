@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+temp/
+
 # C extensions
 *.so
 
@@ -174,3 +176,8 @@ terraform.rc
 *.iml
 out
 gen
+
+# simpletransformers cache
+notebooks/cache_dir
+notebooks/outputs
+notebooks/runs
