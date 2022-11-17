@@ -11,4 +11,5 @@ app = FastAPI(
 
 @app.get(args.API_HEALTHCHECK_PATH)
 def health():
+    """Healthcheck endpoint"""
     return {"STATUS": "OK"}
