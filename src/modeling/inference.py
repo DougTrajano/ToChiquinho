@@ -4,7 +4,6 @@ from typing import Union
 from transformers import EvalPrediction
 from transformers.trainer_utils import PredictionOutput
 
-
 def predict(
         predictions: Union[EvalPrediction, PredictionOutput, np.ndarray],
         return_proba: bool = False,
@@ -25,13 +24,20 @@ def predict(
         else:
             predictions = predictions.predictions
 
-    # first, apply sigmoid on predictions which are of shape (batch_size, num_labels)
-    sigmoid = torch.nn.Sigmoid()
-    probs: np.ndarray = sigmoid(torch.Tensor(predictions))
+    # Check if the predictions are binary
+    if predictions.shape[1] == 2:
+        act_func = torch.nn.Softmax(dim=1)
+    else:
+        # first, apply sigmoid on predictions which are of shape (batch_size, num_labels)
+        act_func = torch.nn.Sigmoid()
 
+    probs: np.ndarray = act_func(torch.Tensor(predictions))
+            
     if return_proba:
         return probs
     else:
+        if predictions.shape[1] == 2:
+            return np.array(probs[:, 1] > threshold, dtype=int)
         # use threshold to turn them into integer predictions
         y_pred = np.zeros(probs.shape)
         y_pred[np.where(probs >= threshold)] = 1

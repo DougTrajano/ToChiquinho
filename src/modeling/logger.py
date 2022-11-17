@@ -5,6 +5,9 @@ import logging
 def setup_logger(name: str = __name__) -> logging.Logger:
     """Setup logger.
 
+    Args:
+    - name: The name of the logger.
+    
     Returns:
     - logger: The logger.
     """
