@@ -11,7 +11,6 @@ from transformers import (
 
 # Custom code
 from .base import Experiment
-from arguments import Arguments
 from inference import predict
 from models import ToxicityTypeForSequenceClassification
 from logger import setup_logger
@@ -63,13 +62,13 @@ class ToxicityTargetClassification(Experiment):
         mlflow.log_param("class_weights", class_weights)
 
         _logger.info(f"Initializing model from {pretrained_model_name_or_path}.")
-        model = ToxicityTypeForSequenceClassification.from_pretrained(
+        self.model = ToxicityTypeForSequenceClassification.from_pretrained(
             pretrained_model_name_or_path,
             num_labels=len(self.classes),
             weight=torch.Tensor(class_weights).to(self.device)
         ).to(self.device)
-        mlflow.log_text(str(model), "model_summary.txt")
-        return model
+        mlflow.log_text(str(self.model), "model_summary.txt")
+        return self.model
 
     def prepare_dataset(self, dataset: Union[datasets.Dataset, datasets.DatasetDict]):
         """Prepare the dataset.
