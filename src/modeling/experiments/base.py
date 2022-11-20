@@ -7,6 +7,7 @@ import warnings
 from typing import Union
 from transformers import (
     AutoTokenizer,
+    EarlyStoppingCallback,
     PreTrainedModel,
     Trainer,
     TrainingArguments,
@@ -133,7 +134,23 @@ class Experiment(object):
         Returns:
         - The prepared dataset.
         """
-        warnings.warn("prepare_dataset() not implemented.")
+        _logger.info(f"Preparing dataset.")
+
+        # Concatenate the train and validation sets to create a new train set.
+        if (
+            self.args.concat_validation_set
+            and self.args.eval_dataset != "validation"
+            and "train" in dataset.keys()
+            and "validation" in dataset.keys()
+        ):
+            _logger.info(f"Concatenating validation set to train set.")
+            self.dataset["train"] = datasets.concatenate_datasets(
+                [
+                    self.dataset["train"],
+                    self.dataset["validation"]
+                ]
+            )
+
         return dataset
 
     def prep_checkpoint_dir(self, checkpoint_dir: str) -> bool:
@@ -236,6 +253,7 @@ class Experiment(object):
                 overwrite_output_dir=True,
                 evaluation_strategy="epoch",
                 save_strategy="epoch",
+                save_total_limit=5,
                 load_best_model_at_end=True,
                 metric_for_best_model="f1",
                 learning_rate=self.args.learning_rate,
@@ -243,6 +261,8 @@ class Experiment(object):
                 adam_beta1=self.args.adam_beta1,
                 adam_beta2=self.args.adam_beta2,
                 adam_epsilon=self.args.adam_epsilon,
+                label_smoothing_factor=self.args.label_smoothing_factor,
+                optim=self.args.optim,
                 per_device_train_batch_size=self.args.batch_size,
                 per_device_eval_batch_size=self.args.batch_size,
                 num_train_epochs=self.args.num_train_epochs,
@@ -253,24 +273,20 @@ class Experiment(object):
                 model=self.model,
                 args=trainer_args,
                 train_dataset=self.dataset["train"],
-                eval_dataset=self.dataset["validation"],
+                eval_dataset=self.dataset[self.args.eval_dataset],
                 tokenizer=self.tokenizer,
                 compute_metrics=lambda p: compute_metrics(p, threshold=self.args.threshold),
+                callbacks=[
+                    EarlyStoppingCallback(early_stopping_patience=self.args.early_stopping_patience)
+                ]
             )
 
             trainer.train(
                 resume_from_checkpoint=self.resume_from_checkpoint
             )
 
-            # Evaluate on validation set
-            val_scores = trainer.evaluate(metric_key_prefix="val")
-            _logger.info(f"Validation scores: {val_scores}")
-            
-            # Evaluate on test set
-            test_scores = trainer.evaluate(
-                eval_dataset=self.dataset["test"],
-                metric_key_prefix="test"
-            )
-
-            _logger.info(f"Test scores: {test_scores}")
-            _logger.info(f"Test F1-score: {test_scores['test_f1']}")
+            # Evaluate model
+            mlflow.log_param("eval_dataset", self.args.eval_dataset)
+            scores = trainer.evaluate()
+            _logger.info(f"Scores ({self.args.eval_dataset} set): {scores}")
+            _logger.info(f"eval_f1_weighted: {scores['eval_f1']}")

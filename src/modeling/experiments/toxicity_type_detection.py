@@ -6,7 +6,8 @@ from typing import Union
 from sklearn.metrics import classification_report
 from transformers import (
     Trainer,
-    TrainingArguments
+    TrainingArguments,
+    EarlyStoppingCallback
 )
 
 # Custom code
@@ -94,7 +95,7 @@ class ToxicityTypeDetection(Experiment):
         Returns:
         - The prepared dataset.
         """
-        _logger.info(f"Dataset preparation started.")
+        super().prepare_dataset(dataset)
 
         self.labels = [
             label for label in self.dataset["train"].features.keys() if label not in ["text"]
@@ -138,6 +139,7 @@ class ToxicityTypeDetection(Experiment):
                 overwrite_output_dir=True,
                 evaluation_strategy="epoch",
                 save_strategy="epoch",
+                save_total_limit=5,
                 load_best_model_at_end=True,
                 metric_for_best_model="f1",
                 learning_rate=self.args.learning_rate,
@@ -145,6 +147,8 @@ class ToxicityTypeDetection(Experiment):
                 adam_beta1=self.args.adam_beta1,
                 adam_beta2=self.args.adam_beta2,
                 adam_epsilon=self.args.adam_epsilon,
+                label_smoothing_factor=self.args.label_smoothing_factor,
+                optim=self.args.optim,
                 per_device_train_batch_size=self.args.batch_size,
                 per_device_eval_batch_size=self.args.batch_size,
                 num_train_epochs=self.args.num_train_epochs,
@@ -155,33 +159,29 @@ class ToxicityTypeDetection(Experiment):
                 model=self.model,
                 args=trainer_args,
                 train_dataset=self.dataset["train"],
-                eval_dataset=self.dataset["validation"],
+                eval_dataset=self.dataset[self.args.eval_dataset],
                 tokenizer=self.tokenizer,
                 compute_metrics=lambda p: compute_metrics(p, threshold=self.args.threshold),
+                callbacks=[
+                    EarlyStoppingCallback(early_stopping_patience=self.args.early_stopping_patience)
+                ]
             )
 
             trainer.train(
                 resume_from_checkpoint=self.resume_from_checkpoint
             )
 
-            # Evaluate on validation set
-            val_scores = trainer.evaluate(metric_key_prefix="val")
-            _logger.info(f"Validation scores: {val_scores}")
-            
-            # Evaluate on test set
-            test_scores = trainer.evaluate(
-                eval_dataset=self.dataset["test"],
-                metric_key_prefix="test"
-            )
-
-            _logger.info(f"Test scores: {test_scores}")
-            _logger.info(f"Test F1-score: {test_scores['test_f1']}")
+            # Evaluate model
+            mlflow.log_param("eval_dataset", self.args.eval_dataset)
+            scores = trainer.evaluate()
+            _logger.info(f"Scores ({self.args.eval_dataset} set): {scores}")
+            _logger.info(f"eval_f1_weighted: {scores['eval_f1']}")
 
             # Classification Report
             _logger.info(f"Computing classification report.")
-            preds = trainer.predict(self.dataset["test"])
+            preds = trainer.predict(self.dataset[self.args.eval_dataset])
             report = classification_report(
-                y_true=self.dataset["test"]["labels"],
+                y_true=self.dataset[self.args.eval_dataset]["labels"],
                 y_pred=predict(preds, threshold=self.args.threshold),
                 target_names=self.labels,
                 digits=4, zero_division=0

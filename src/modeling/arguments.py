@@ -52,6 +52,27 @@ class Arguments:
         },
     )
 
+    concat_validation_set: Optional[bool] = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to concatenate the validation set to the training set. "
+                "This is useful for training on the entire dataset."
+                "This is only used if the eval_dataset is not set to 'validation'."
+            )
+        }
+    )
+
+    eval_dataset: Optional[str] = field(
+        default="test",
+        metadata={
+            "help": (
+                "The dataset to use for evaluation. "
+                "This can be either 'test' or 'validation'."
+            )
+        }
+    )
+
     max_seq_length: Optional[int] = field(
         default=512,
         metadata={
@@ -118,10 +139,31 @@ class Arguments:
         }
     )
 
+    label_smoothing_factor: Optional[float] = field(
+        default=0.0,
+        metadata={
+            "help": "The label smoothing factor to use for the loss."
+        }
+    )
+
+    optim: Optional[str] = field(
+        default="adamw_hf",
+        metadata={
+            "help": "The optimizer to use for training."
+        }
+    )
+
     threshold: Optional[float] = field(
         default=0.5,
         metadata={
             "help": "The threshold to use to convert the model's output to a label."
+        }
+    )
+
+    early_stopping_patience: Optional[int] = field(
+        default=1,
+        metadata={
+            "help": "The number of epochs to wait before stopping if the validation loss does not improve."
         }
     )
 
@@ -131,3 +173,10 @@ class Arguments:
             "help": "The seed to use for random number generation."
         }
     )
+
+    def __post_init__(self):
+        if self.eval_dataset not in ["test", "validation"]:
+            raise ValueError(
+                f"Invalid value for eval_dataset: {self.eval_dataset}. "
+                "This must be either 'test' or 'validation'."
+            )

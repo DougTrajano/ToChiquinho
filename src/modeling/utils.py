@@ -28,6 +28,7 @@ def compute_pos_weight(
         positives = y[:, i].sum()
         negatives = len(y[:, i]) - positives
         pos_weight.append(negatives / positives)
+    _logger.debug(f"Positive weight: {pos_weight}")
     return pos_weight
 
 def remaining_args_to_env(args: List[str]):
@@ -44,4 +45,5 @@ def remaining_args_to_env(args: List[str]):
                 args[arg].startswith("--")
                 and args[arg] != "--MLFLOW_TAGS"
             ):
+                _logger.debug(f"Converting argument {args[arg].strip('--')} to environment variable.")
                 os.environ[args[arg].strip("--")] = args[arg+1]
