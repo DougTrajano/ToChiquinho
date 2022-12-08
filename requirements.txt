@@ -2,7 +2,7 @@ fastapi[all]==0.87.0
 simpletransformers==0.63.9
 pandas==1.5.1
 numpy==1.23.5
-tensorflow==2.10.0
+tensorflow==2.11.0
 tensorflow-gpu==2.11.0
 datasets==2.7.1
 transformers==4.24.0
