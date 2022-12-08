@@ -4,7 +4,7 @@ pandas==1.5.1
 numpy==1.23.4
 tensorflow==2.10.0
 tensorflow-gpu==2.10.0
-datasets==2.6.1
+datasets==2.7.1
 transformers==4.24.0
 tokenizers==0.13.2
 kaggle==1.5.12
