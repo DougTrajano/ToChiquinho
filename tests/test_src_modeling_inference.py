@@ -1,4 +1,5 @@
 import pytest
+import torch
 import numpy as np
 from transformers.trainer_utils import PredictionOutput
 from src.modeling.inference import predict
@@ -109,10 +110,13 @@ TESTS = [
                 0, 0, 0, 1, 0, 0
             ]
         ),
-        "multi-class"
+        "binary"
     )
 ]
 
 @pytest.mark.parametrize("predictions, expected, problem_type", TESTS)
 def test_predict(predictions, expected, problem_type):
     assert np.array_equal(predict(predictions, problem_type=problem_type), expected), "The predictions are not correct."
+    if problem_type == "multi-label":
+        assert type(predict(predictions, return_proba=True, problem_type=problem_type)) == torch.Tensor, "Predictions should be a numpy array."
+
