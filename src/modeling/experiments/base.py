@@ -3,7 +3,6 @@ import json
 import torch
 import mlflow
 import datasets
-import warnings
 from typing import Union
 from transformers import (
     AutoTokenizer,

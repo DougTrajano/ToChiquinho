@@ -19,14 +19,19 @@ if __name__ == "__main__":
     
     experiment_name = os.environ.get("MLFLOW_EXPERIMENT_NAME")
     if experiment_name == "toxicity-type-detection":
-        _logger.info("Running toxicity-type-detection experiment.")
+        _logger.info(f"Running {experiment_name} experiment.")
         from experiments.toxicity_type_detection import ToxicityTypeDetection
         experiment = ToxicityTypeDetection(args)
         experiment.run()
     elif experiment_name == "toxicity-target-classification":
-        _logger.info("Running toxicity-target-classification experiment.")
+        _logger.info(f"Running {experiment_name} experiment.")
         from experiments.toxicity_target_classification import ToxicityTargetClassification
         experiment = ToxicityTargetClassification(args)
+        experiment.run()
+    elif experiment_name == "toxicity-target-type-identification":
+        _logger.info(f"Running {experiment_name} experiment.")
+        from experiments.toxicity_target_type_identification import ToxicityTargetTypeIdentification
+        experiment = ToxicityTargetTypeIdentification(args)
         experiment.run()
     else:
         _logger.error(f"Invalid experiment name: {experiment_name}.")
