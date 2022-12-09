@@ -13,12 +13,12 @@ def test_compute_metrics():
 
     labels = np.array(
         [
-            [0., 1., 0., 0., 1., 0., 0., 0., 0., 1.],
-            [0., 1., 0., 0., 1., 0., 0., 1., 0., 1.]
+            [0, 1, 0, 0, 1, 0, 0, 0, 0, 1],
+            [0, 1, 0, 0, 1, 0, 0, 1, 0, 1]
         ]
     )
 
-    metrics = compute_metrics(EvalPrediction(predictions=preds, label_ids=labels))
+    metrics = compute_metrics(EvalPrediction(predictions=preds, label_ids=labels), problem_type="multi-label")
     assert metrics == {
         "accuracy": 1.0,
         "f1": 1.0,

@@ -12,6 +12,7 @@ from transformers import (
 
 # Custom code
 from .base import Experiment
+from arguments import Arguments
 from inference import predict
 from models import ToxicityTypeForSequenceClassification
 from logger import setup_logger
@@ -40,6 +41,19 @@ def preprocess_data(examples, tokenizer, max_seq_length):
 class ToxicityTargetClassification(Experiment):
     name = "toxicity-target-classification"
 
+    def __init__(self, args: Arguments):
+        """Initialize the experiment.
+        
+        Args:
+        - args: The arguments of the experiment.
+        """
+        super().__init__(args)
+        self.classes = {
+            0: "UNTARGETED",
+            1: "TARGETED"
+        }
+        _logger.debug(f"Classes: {self.classes}")
+
     def init_model(self, pretrained_model_name_or_path: str):
         """Initialize the model.
         
@@ -49,10 +63,7 @@ class ToxicityTargetClassification(Experiment):
         Returns:
         - The initialized model.
         """
-        self.classes = {
-            0: "UNTARGETED",
-            1: "TARGETED"
-        }
+        _logger.info(f"Computing class weights for classes: {self.classes}.")
 
         # Compute class weights
         class_weights = compute_class_weight(

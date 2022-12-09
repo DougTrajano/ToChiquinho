@@ -161,7 +161,8 @@ class ToxicityTypeDetection(Experiment):
                 train_dataset=self.dataset["train"],
                 eval_dataset=self.dataset[self.args.eval_dataset],
                 tokenizer=self.tokenizer,
-                compute_metrics=lambda p: compute_metrics(p, threshold=self.args.threshold),
+                compute_metrics=lambda p: compute_metrics(
+                    p, threshold=self.args.threshold, problem_type="multi-label"),
                 callbacks=[
                     EarlyStoppingCallback(early_stopping_patience=self.args.early_stopping_patience)
                 ]
@@ -182,7 +183,10 @@ class ToxicityTypeDetection(Experiment):
             preds = trainer.predict(self.dataset[self.args.eval_dataset])
             report = classification_report(
                 y_true=self.dataset[self.args.eval_dataset]["labels"],
-                y_pred=predict(preds, threshold=self.args.threshold),
+                y_pred=predict(
+                    preds,
+                    threshold=self.args.threshold,
+                    problem_type="multi-label"),
                 target_names=self.labels,
                 digits=4, zero_division=0
             )
