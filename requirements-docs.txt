@@ -6,4 +6,4 @@ mkdocs-material==8.5.10
 mkdocs-material-extensions==1.1.1
 mkdocs-section-index==0.3.4
 mkdocs-tooltips==0.1.0
-mkdocs-static-i18n==0.50
+mkdocs-static-i18n==0.53
