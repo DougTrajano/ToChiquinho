@@ -2,7 +2,7 @@ import pytest
 import torch
 import numpy as np
 from transformers.trainer_utils import PredictionOutput
-from src.modeling.inference import predict
+from src.ml.inference import predict
 
 TESTS = [
     (

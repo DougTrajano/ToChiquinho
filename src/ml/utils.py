@@ -42,7 +42,7 @@ def remaining_args_to_env(args: List[str]):
                 args[arg].startswith("--")
                 and args[arg] != "--MLFLOW_TAGS"
             ):
-                os.environ[args[arg].strip("--")] = args[arg+1]
+                os.environ[args[arg].strip("--").upper()] = args[arg+1]
 
 def remove_checkpoints(
         bucket_name: str,

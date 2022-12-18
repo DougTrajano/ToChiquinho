@@ -1,7 +1,7 @@
 import numpy as np
 import numpy as np
 from transformers import EvalPrediction
-from src.modeling.metrics import compute_metrics
+from src.ml.metrics.utils import compute_metrics
 
 def test_compute_metrics():
     preds = np.array(
