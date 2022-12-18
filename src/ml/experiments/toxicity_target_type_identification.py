@@ -1,4 +1,4 @@
-from arguments import Arguments
+from arguments import TrainingArguments
 from logger import setup_logger
 from experiments.toxicity_target_classification import (
     ToxicityTargetClassification
@@ -9,7 +9,7 @@ _logger = setup_logger(__name__)
 class ToxicityTargetTypeIdentification(ToxicityTargetClassification):
     name = "toxicity-target-type-identification"
 
-    def __init__(self, args: Arguments):
+    def __init__(self, args: TrainingArguments):
         """Initialize the experiment.
         
         Args:

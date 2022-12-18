@@ -1,9 +1,10 @@
 import os
+import json
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Any, Dict, Optional
 
 @dataclass
-class Arguments:
+class TrainingArguments:
     data_dir: Optional[str] = field(
         default=os.environ.get("SM_CHANNEL_TRAINING"),
         metadata={
@@ -149,7 +150,11 @@ class Arguments:
     optim: Optional[str] = field(
         default="adamw_hf",
         metadata={
-            "help": "The optimizer to use for training."
+            "help": (
+                "The optimizer to use for training. "
+                "When training a HuggingFace based model, the default is 'adamw_hf'. "
+                "When training a Spacy based model, the default is 'SGD'."
+            )
         }
     )
 
@@ -161,7 +166,7 @@ class Arguments:
     )
 
     early_stopping_patience: Optional[int] = field(
-        default=1,
+        default=None,
         metadata={
             "help": "The number of epochs to wait before stopping if the validation loss does not improve."
         }
@@ -174,9 +179,145 @@ class Arguments:
         }
     )
 
+    dropout: Optional[float] = field(
+        default=0.1,
+        metadata={
+            "help": (
+                "The dropout to use for the model. "
+                "This is only used in ToxicSpansDetection model."
+            )
+        }
+    )
+
     def __post_init__(self):
         if self.eval_dataset not in ["test", "validation"]:
             raise ValueError(
                 f"Invalid value for eval_dataset: {self.eval_dataset}. "
                 "This must be either 'test' or 'validation'."
             )
+
+
+@dataclass
+class NotebookArguments:
+    num_train_epochs: Optional[int] = field(
+        default=10,
+        metadata={
+            "help": "Number of training epochs",
+        }
+    )
+
+    early_stopping_patience: Optional[int] = field(
+        default=2,
+        metadata={
+            "help": "Early stopping patience",
+        }
+    )
+
+    batch_size: Optional[int] = field(
+        default=8,
+        metadata={
+            "help": "Batch size for training and evaluation."
+        }
+    )
+    
+    validation_split: Optional[float] = field(
+        default=0.2,
+        metadata={
+            "help": "The percentage of the training set to use as validation set."
+        }
+    )
+    
+    seed: Optional[int] = field(
+        default=1993,
+        metadata={
+            "help": "The seed to use for random number generation."
+        }
+    )
+
+    mlflow_tracking_uri: Optional[str] = field(
+        default=os.environ.get("MLFLOW_TRACKING_URI"),
+        repr=False,
+        metadata={
+            "help": "The URI of the MLFlow tracking server."
+        }
+    )
+
+    mlflow_experiment_name: Optional[str] = field(
+        default=os.environ.get("MLFLOW_EXPERIMENT_NAME", "Default"),
+        metadata={
+            "help": "The name of the MLFlow experiment."
+        }
+    )
+
+    mlflow_tags: Optional[Dict[str, Any]] = field(
+        default=None,
+        metadata={
+            "help": "The tags to use for the MLFlow run."
+        }
+    )
+    
+    mlflow_tracking_username: Optional[str] = field(
+        default=None,
+        repr=False,
+        metadata={
+            "help": "The username to use to authenticate with the MLFlow tracking server."
+        }
+    )
+
+    mlflow_tracking_password: Optional[str] = field(
+        default=None,
+        repr=False,
+        metadata={
+            "help": "The password to use to authenticate with the MLFlow tracking server."
+        }
+    )
+
+    mlflow_run_id: Optional[str] = field(
+        default=os.environ.get("MLFLOW_RUN_ID"),
+        repr=False,
+        metadata={
+            "help": "The ID of the MLFlow run."
+        }
+    )
+
+    sagemaker_tuning_job_name: Optional[str] = field(
+        default=None,
+        repr=False,
+        metadata={
+            "help": "The name of the SageMaker hyperparameter tuning job."
+        }
+    )
+
+    sagemaker_execution_role_arn: Optional[str] = field(
+        default=None,
+        repr=False,
+        metadata={
+            "help": "The ARN of the SageMaker execution role."
+        }
+    )
+
+    aws_profile_name: Optional[str] = field(
+        default="default",
+        repr=False,
+        metadata={
+            "help": "The name of the AWS profile to use."
+        }
+    )
+
+    def __post_init__(self):
+        if self.mlflow_tracking_uri is not None:
+            os.environ["MLFLOW_TRACKING_URI"] = self.mlflow_tracking_uri
+        if self.mlflow_experiment_name is not None:
+            os.environ["MLFLOW_EXPERIMENT_NAME"] = self.mlflow_experiment_name
+        if self.mlflow_tracking_username is not None:
+            os.environ["MLFLOW_TRACKING_USERNAME"] = self.mlflow_tracking_username
+        if self.mlflow_tracking_password is not None:
+            os.environ["MLFLOW_TRACKING_PASSWORD"] = self.mlflow_tracking_password        
+        if self.mlflow_run_id is not None:
+            os.environ["MLFLOW_RUN_ID"] = self.mlflow_run_id
+        
+        if isinstance(self.mlflow_tags, dict):
+            self.mlflow_tags = json.dumps(self.mlflow_tags)
+            os.environ["MLFLOW_TAGS"] = self.mlflow_tags
+        elif self.mlflow_tags is not None:
+            raise ValueError("The mlflow_tags parameter must be a dictionary.")

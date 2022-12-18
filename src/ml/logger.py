@@ -11,10 +11,14 @@ def setup_logger(name: str = __name__) -> logging.Logger:
     Returns:
     - logger: The logger.
     """
-    LOG_LEVEL = int(os.environ.get("SM_LOG_LEVEL", logging.INFO))
+    log_level = os.environ.get("SM_LOG_LEVEL", logging.INFO)
+    try:
+        log_level = int(log_level)
+    except:
+        pass
 
     logger = logging.getLogger(name)
-    logger.setLevel(LOG_LEVEL)
+    logger.setLevel(log_level)
 
     # Check if the logger already has a StreamHandler
     if len(logger.handlers) > 0:
@@ -23,7 +27,7 @@ def setup_logger(name: str = __name__) -> logging.Logger:
                 return logger
 
     handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(LOG_LEVEL)
+    handler.setLevel(log_level)
 
     formatter = logging.Formatter(
         fmt="%(asctime)s :: %(levelname)s :: %(module)s :: %(funcName)s :: %(message)s",

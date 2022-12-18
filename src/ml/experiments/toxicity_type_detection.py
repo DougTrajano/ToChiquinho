@@ -1,58 +1,62 @@
 import torch
 import mlflow
 import datasets
+import numpy as np
 from typing import Union
 from sklearn.metrics import classification_report
-from sklearn.utils.class_weight import compute_class_weight
 from transformers import (
     Trainer,
-    TrainingArguments,
+    TrainingArguments as HfTrainingArguments,
     EarlyStoppingCallback
 )
 
 # Custom code
 from .base import Experiment
-from arguments import Arguments
 from inference import predict
-from models import ToxicityTypeForSequenceClassification
+from models.bert import ToxicityTypeForSequenceClassification
 from logger import setup_logger
-from metrics import compute_metrics
+from metrics.utils import compute_metrics
+from utils import compute_pos_weight
 
 _logger = setup_logger(__name__)
 
-def preprocess_data(examples, tokenizer, max_seq_length):
+def preprocess_data(examples, tokenizer, max_seq_length, labels):
     """Preprocess the data.
-
     Args:
     - examples: The examples to preprocess.
     - tokenizer: The tokenizer to use.
     - max_seq_length: The maximum sequence length.
     - labels: The possible labels for the classification task.
-
     Returns:
     - The preprocessed examples.
     """
-    return tokenizer(
-        examples["text"],
+    # take a batch of texts
+    text = examples["text"]
+
+    # encode them
+    encoding = tokenizer(
+        text,
+        padding="max_length",
         truncation=True,
         max_length=max_seq_length
     )
 
-class ToxicityTargetClassification(Experiment):
-    name = "toxicity-target-classification"
+    # add labels
+    labels_batch = {k: examples[k] for k in examples.keys() if k in labels}
 
-    def __init__(self, args: Arguments):
-        """Initialize the experiment.
-        
-        Args:
-        - args: The arguments of the experiment.
-        """
-        super().__init__(args)
-        self.classes = {
-            0: "UNTARGETED",
-            1: "TARGETED"
-        }
-        _logger.debug(f"Classes: {self.classes}")
+    # create numpy array of shape (batch_size, num_labels)
+    labels_matrix = np.zeros((len(text), len(labels)))
+
+    # fill numpy array
+    for idx, label in enumerate(labels):
+        labels_matrix[:, idx] = labels_batch[label]
+
+    encoding["labels"] = labels_matrix.tolist()
+
+    return encoding
+
+class ToxicityTypeDetection(Experiment):
+    name = "toxicity-target-classification"
 
     def init_model(self, pretrained_model_name_or_path: str):
         """Initialize the model.
@@ -63,26 +67,26 @@ class ToxicityTargetClassification(Experiment):
         Returns:
         - The initialized model.
         """
-        _logger.info(f"Computing class weights for classes: {self.classes}.")
-
-        # Compute class weights
-        class_weights = compute_class_weight(
-            class_weight="balanced",
-            classes=list(self.classes.keys()),
-            y=self.dataset["train"]["label"]
-        ).tolist()
-        mlflow.log_param("class_weights", class_weights)
+        pos_weight = compute_pos_weight(self.dataset["train"]["labels"])
+        mlflow.log_param("pos_weight", pos_weight)
 
         _logger.info(f"Initializing model from {pretrained_model_name_or_path}.")
+        
         self.model = ToxicityTypeForSequenceClassification.from_pretrained(
             pretrained_model_name_or_path,
-            num_labels=len(self.classes),
-            weight=torch.Tensor(class_weights).to(self.device)
+            problem_type="multi_label_classification",
+            num_labels=len(self.labels),
+            id2label={idx:label for idx, label in enumerate(self.labels)},
+            label2id={label:idx for idx, label in enumerate(self.labels)},
+            pos_weight=torch.Tensor(pos_weight)
         ).to(self.device)
         mlflow.log_text(str(self.model), "model_summary.txt")
         return self.model
 
-    def prepare_dataset(self, dataset: Union[datasets.Dataset, datasets.DatasetDict]):
+    def prepare_dataset(
+        self,
+        dataset: Union[datasets.Dataset, datasets.DatasetDict]
+    ) -> Union[datasets.Dataset, datasets.DatasetDict]:
         """Prepare the dataset.
 
         Args:
@@ -92,17 +96,22 @@ class ToxicityTargetClassification(Experiment):
         - The prepared dataset.
         """
         super().prepare_dataset(dataset)
-        
+
+        self.labels = [
+            label for label in self.dataset["train"].features.keys() if label not in ["text"]
+        ]
+
         dataset = dataset.map(
             preprocess_data,
-            remove_columns=["text"],
             batched=True,
+            remove_columns=dataset["train"].column_names,
             fn_kwargs={
                 "tokenizer": self.tokenizer,
-                "max_seq_length": self.args.max_seq_length
+                "max_seq_length": self.args.max_seq_length,
+                "labels": self.labels
             }
         )
-
+        _logger.info(f"Dataset preparation finished.")
         return dataset
 
     def run(self):
@@ -120,12 +129,12 @@ class ToxicityTargetClassification(Experiment):
             self.dataset = self.load_dataset()
             self.dataset = self.slice_dataset(self.dataset)
             self.dataset = self.prepare_dataset(self.dataset)
-
+            
             self.init_model(self.args.model_name)
 
             self.dataset.set_format("torch")
 
-            trainer_args = TrainingArguments(
+            trainer_args = HfTrainingArguments(
                 output_dir=self.args.checkpoint_dir,
                 overwrite_output_dir=True,
                 evaluation_strategy="epoch",
@@ -152,10 +161,11 @@ class ToxicityTargetClassification(Experiment):
                 train_dataset=self.dataset["train"],
                 eval_dataset=self.dataset[self.args.eval_dataset],
                 tokenizer=self.tokenizer,
-                compute_metrics=lambda p: compute_metrics(p, threshold=self.args.threshold),
+                compute_metrics=lambda p: compute_metrics(
+                    p, threshold=self.args.threshold, problem_type="multi-label"),
                 callbacks=[
                     EarlyStoppingCallback(early_stopping_patience=self.args.early_stopping_patience)
-                ]
+                ] if self.args.early_stopping_patience is not None else None
             )
 
             trainer.train(
@@ -172,9 +182,12 @@ class ToxicityTargetClassification(Experiment):
             _logger.info(f"Computing classification report.")
             preds = trainer.predict(self.dataset[self.args.eval_dataset])
             report = classification_report(
-                y_true=self.dataset[self.args.eval_dataset]["label"],
-                y_pred=predict(preds, threshold=self.args.threshold),
-                target_names=self.classes.values(),
+                y_true=self.dataset[self.args.eval_dataset]["labels"],
+                y_pred=predict(
+                    preds,
+                    threshold=self.args.threshold,
+                    problem_type="multi-label"),
+                target_names=self.labels,
                 digits=4, zero_division=0
             )
 

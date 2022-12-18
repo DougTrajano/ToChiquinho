@@ -9,21 +9,21 @@ from transformers import (
     EarlyStoppingCallback,
     PreTrainedModel,
     Trainer,
-    TrainingArguments,
+    TrainingArguments as HfTrainingArguments,
     set_seed
 )
 
 # Custom code
-from arguments import Arguments
+from arguments import TrainingArguments
 from logger import setup_logger
-from metrics import compute_metrics
+from metrics.utils import compute_metrics
 
 _logger = setup_logger(__name__)
 
 class Experiment(object):
-    name = "Experiment"
+    name = "base-experiment"
 
-    def __init__(self, args: Arguments):
+    def __init__(self, args: TrainingArguments):
         """Initialize the experiment.
         
         Args:
@@ -57,9 +57,11 @@ class Experiment(object):
             os.environ.get("MLFLOW_RUN_ID")
             and not self.resume_mlflow_checkpoint(self.args.checkpoint_dir)
         )
-
-        if os.environ.get("MLFLOW_RUN_ID"):
+        _logger.debug(f"Nested run: {self.nested_run}")
+        
+        if os.environ.get("MLFLOW_RUN_ID") and self.nested_run:
             mlflow.start_run()
+            _logger.debug(f"Starting mlflow run: {mlflow.active_run().info.run_id}")
 
     def init_model(self, pretrained_model_name_or_path: str):
         """Initialize the model.
@@ -247,7 +249,7 @@ class Experiment(object):
 
             self.dataset.set_format("torch")
 
-            trainer_args = TrainingArguments(
+            trainer_args = HfTrainingArguments(
                 output_dir=self.args.checkpoint_dir,
                 overwrite_output_dir=True,
                 evaluation_strategy="epoch",
@@ -277,7 +279,7 @@ class Experiment(object):
                 compute_metrics=lambda p: compute_metrics(p, threshold=self.args.threshold),
                 callbacks=[
                     EarlyStoppingCallback(early_stopping_patience=self.args.early_stopping_patience)
-                ]
+                ] if self.args.early_stopping_patience is not None else None
             )
 
             trainer.train(
