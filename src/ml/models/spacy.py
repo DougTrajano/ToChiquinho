@@ -190,7 +190,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
         _logger.debug("Optimizer initialized.")
         return optimizer
 
-    def load_model_from_checkpoint(self, checkpoint_dir: str, metrics_dir: str):
+    def load_model_from_checkpoint(self, checkpoint_dir: str, metrics_dir: str = None):
         """Loads the model from the checkpoint directory.
 
         Args:
@@ -218,7 +218,11 @@ class ToxicSpansDetectionModel(BaseEstimator):
 
         # Load metrics
         _logger.debug("Loading metrics from checkpoint.")
-        metrics_dir = Path(metrics_dir)
+        if metrics_dir:
+            metrics_dir = Path(metrics_dir)
+        else:
+            metrics_dir = checkpoint_dir
+
         with open(metrics_dir / "metrics.json", "r") as f:
             metrics = json.load(f)
             self.losses = metrics["losses"]
@@ -358,8 +362,10 @@ class ToxicSpansDetectionModel(BaseEstimator):
                 optimizer = self._model.begin_training(sgd=optimizer)
 
             for epoch in range(epochs):
-                random.shuffle(training_data)
+                _logs = {}
                 losses = {}
+                
+                random.shuffle(training_data)
                 batches = spacy.util.minibatch(
                     items=training_data,
                     size=spacy.util.compounding(
@@ -378,14 +384,18 @@ class ToxicSpansDetectionModel(BaseEstimator):
                         examples.append(example)
                     self._model.update(examples, drop=dropout, losses=losses, sgd=optimizer)
                 self.losses.append(losses["ner"])
-                _logger.info(f"Epoch {epoch+1} Loss: {losses['ner']:.2f}")
+                _logs["loss"] = f"{losses['ner']:.2f}"
 
                 if epoch % eval_every == 0:
                     self.saved_models[epoch] = self._model
                     self.train_scores.append(self.score(X, y))
+                    _logs["train_f1"] = f"{self.train_scores[-1]:.4f}"
                     if X_val and y_val:
                         self.val_scores.append(self.score(X_val, y_val))
+                        _logs["val_f1"] = f"{self.val_scores[-1]:.4f}"
                     self.save(f"{checkpoint_dir}/model_{epoch+1}")
+
+                _logger.info(f"Epoch {epoch+1}/{epochs}. {_logs}.")
 
                 if X_val and y_val and early_stopping_patience:
                     if self.early_stopping(
@@ -399,8 +409,8 @@ class ToxicSpansDetectionModel(BaseEstimator):
             _logger.debug("Loading best model at end of training.")
             self.best_epoch = np.argmax(self.val_scores)
             self._model = self.load_model_from_checkpoint(
-                f"{checkpoint_dir}/model_{self.best_epoch+1}",
-                metrics_dir=latest_checkpoint_dir
+                checkpoint_dir=f"{checkpoint_dir}/model_{self.best_epoch+1}",
+                metrics_dir=self.get_latest_checkpoint(checkpoint_dir)
             )
 
             _logger.info(

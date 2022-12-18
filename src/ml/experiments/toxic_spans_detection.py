@@ -23,6 +23,12 @@ class ToxicSpansDetection(Experiment):
             _logger.info("Using GPU")
             torch.set_default_tensor_type("torch.cuda.FloatTensor")
 
+        if self.args.optim == "adamw_hf":
+            _logger.debug("Replacing 'adamw_hf' with 'adamw'.")
+            self.args.optim = "adam"
+        else:
+            self.args.optim
+
     def init_model(self) -> ToxicSpansDetectionModel:
         self.model = ToxicSpansDetectionModel(
             spacy_model=self.args.model_name,
@@ -55,7 +61,7 @@ class ToxicSpansDetection(Experiment):
                 early_stopping_patience=self.args.early_stopping_patience,
                 epochs=self.args.num_train_epochs,
                 dropout=self.args.dropout,
-                optim="adam" if self.args.optim == "adamw_hf" else self.args.optim,
+                optim=self.args.optim,
                 learning_rate=self.args.learning_rate,
                 adam_beta1=self.args.adam_beta1,
                 adam_beta2=self.args.adam_beta2,
