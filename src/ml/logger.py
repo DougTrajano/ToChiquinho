@@ -12,10 +12,8 @@ def setup_logger(name: str = __name__) -> logging.Logger:
     - logger: The logger.
     """
     log_level = os.environ.get("SM_LOG_LEVEL", logging.INFO)
-    try:
+    if isinstance(log_level, str) and log_level.isdigit():
         log_level = int(log_level)
-    except Exception as e:
-        pass
 
     logger = logging.getLogger(name)
     logger.setLevel(log_level)

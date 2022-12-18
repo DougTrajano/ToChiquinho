@@ -2,7 +2,7 @@ import os
 import json
 import random
 import numpy as np
-from typing import List, Union
+from typing import List, Union, Set
 
 import spacy
 import string
@@ -60,7 +60,7 @@ def fix_spans(spans: List[int],
             cleaned.extend(range(begin, end + 1))
     return cleaned
 
-def spans_to_ents(doc: Doc, spans: List[int], label: str):
+def spans_to_ents(doc: Doc, spans: Set[int], label: str):
   """Converts span indicies into spacy entity labels.
   
   Args:
@@ -396,13 +396,15 @@ class ToxicSpansDetectionModel(BaseEstimator):
 
                 _logger.info(f"Epoch {epoch+1}/{epochs}. {_logs}.")
 
-                if x_val and y_val and early_stopping_patience:
-                    if self.early_stopping(
+                if (
+                    x_val and y_val
+                    and early_stopping_patience
+                    and self.early_stopping(
                         scores=self.val_scores,
-                        patience=early_stopping_patience
-                    ):
-                        _logger.info(f"Early stopping at epoch {epoch+1}.")
-                        break
+                        patience=early_stopping_patience)
+                ):
+                    _logger.info(f"Early stopping at epoch {epoch+1}.")
+                    break
 
         if load_best_model_at_end and len(self.val_scores) > 1:
             _logger.debug("Loading best model at end of training.")
