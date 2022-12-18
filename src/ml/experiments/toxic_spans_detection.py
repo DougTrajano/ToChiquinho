@@ -29,9 +29,9 @@ class ToxicSpansDetection(Experiment):
         else:
             self.args.optim
 
-    def init_model(self) -> ToxicSpansDetectionModel:
+    def init_model(self, pretrained_model_name_or_path: str = "pt_core_news_lg") -> ToxicSpansDetectionModel:
         self.model = ToxicSpansDetectionModel(
-            spacy_model=self.args.model_name,
+            spacy_model=pretrained_model_name_or_path,
             toxic_label="TOXIC"
         )
         return self.model
@@ -50,12 +50,12 @@ class ToxicSpansDetection(Experiment):
             self.dataset = self.slice_dataset(self.dataset)
             self.dataset = self.prepare_dataset(self.dataset)
 
-            self.init_model()
+            self.init_model(self.args.model_name)
 
             self.model.fit(
-                X=self.dataset["train"]["text"],
+                x=self.dataset["train"]["text"],
                 y=self.dataset["train"]["toxic_spans"],
-                X_val=self.dataset[self.args.eval_dataset]["text"],
+                x_val=self.dataset[self.args.eval_dataset]["text"],
                 y_val=self.dataset[self.args.eval_dataset]["toxic_spans"],
                 eval_every=1,
                 early_stopping_patience=self.args.early_stopping_patience,

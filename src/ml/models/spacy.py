@@ -8,7 +8,6 @@ import spacy
 import string
 import itertools
 import warnings
-# from spacy import displacy
 from pathlib import Path
 from spacy.tokens import Doc
 from spacy.training.example import Example
@@ -180,7 +179,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
                 L2=weight_decay
             )
         else:
-            _logger.warning(f"Optimizer {optimizer} not supported. Using SGD.")
+            _logger.warning(f"Optimizer {optim} not supported. Using SGD.")
             _logger.debug("Initializing SGD optimizer.")
             from thinc.optimizers import SGD
             optimizer = SGD(
@@ -289,8 +288,8 @@ class ToxicSpansDetectionModel(BaseEstimator):
         return latest_checkpoint
 
     def fit(
-        self, X: List[str], y: List[int],
-        X_val: List[str] = None, y_val: List[int] = None,
+        self, x: List[str], y: List[int],
+        x_val: List[str] = None, y_val: List[int] = None,
         eval_every: int = 1, early_stopping_patience: int = None,
         epochs: int = 30, dropout: float = 0.1,
         optim: str = "sgd", learning_rate: float = 0.001,
@@ -320,7 +319,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
         """
         _logger.info("Training ToxicSpansDetection model.")
 
-        if X_val is None or y_val is None:
+        if x_val is None or y_val is None:
             warnings.warn(
                 "No validation data provided. "
                 "Early stopping will not be used. "
@@ -328,7 +327,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
             )
 
         training_data = []
-        for _, (text, spans) in enumerate(zip(X, y)):
+        for _, (text, spans) in enumerate(zip(x, y)):
             doc = self.nlp(text)
             ents = spans_to_ents(doc, set(spans), self.toxic_label)
             training_data.append((doc.text, {"entities": ents}))
@@ -388,16 +387,16 @@ class ToxicSpansDetectionModel(BaseEstimator):
 
                 if epoch % eval_every == 0:
                     self.saved_models[epoch] = self._model
-                    self.train_scores.append(self.score(X, y))
+                    self.train_scores.append(self.score(x, y))
                     _logs["train_f1"] = f"{self.train_scores[-1]:.4f}"
-                    if X_val and y_val:
-                        self.val_scores.append(self.score(X_val, y_val))
+                    if x_val and y_val:
+                        self.val_scores.append(self.score(x_val, y_val))
                         _logs["val_f1"] = f"{self.val_scores[-1]:.4f}"
                     self.save(f"{checkpoint_dir}/model_{epoch+1}")
 
                 _logger.info(f"Epoch {epoch+1}/{epochs}. {_logs}.")
 
-                if X_val and y_val and early_stopping_patience:
+                if x_val and y_val and early_stopping_patience:
                     if self.early_stopping(
                         scores=self.val_scores,
                         patience=early_stopping_patience

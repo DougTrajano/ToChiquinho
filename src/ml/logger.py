@@ -14,7 +14,7 @@ def setup_logger(name: str = __name__) -> logging.Logger:
     log_level = os.environ.get("SM_LOG_LEVEL", logging.INFO)
     try:
         log_level = int(log_level)
-    except:
+    except Exception as e:
         pass
 
     logger = logging.getLogger(name)
