@@ -1,7 +1,12 @@
 import numpy as np
 import numpy as np
 from transformers import EvalPrediction
-from src.modeling.metrics import compute_metrics
+from src.ml.metrics.utils import compute_metrics
+from src.ml.metrics.spans import (
+    precision_score,
+    recall_score,
+    f1_score
+)
 
 def test_compute_metrics():
     preds = np.array(
@@ -25,3 +30,12 @@ def test_compute_metrics():
         "precision": 1.0,
         "recall": 1.0,
     }
+
+def test_precision_score():
+    assert precision_score([[0, 1, 4, 5]], [[0, 1, 6]]) == 0.6666666666666666
+
+def test_recall_score():
+    assert recall_score([[0, 1, 4, 5]], [[0, 1, 6]]) == 0.5
+
+def test_f1_score():
+    assert f1_score([[0, 1, 4, 5]], [[0, 1, 6]]) == 0.5714285714285715

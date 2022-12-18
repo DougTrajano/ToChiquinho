@@ -20,7 +20,7 @@ def predict(
     Returns:
     - The predicted labels.
     """
-    if problem_type and problem_type not in ["binary", "multi-class", "multi-label"]:
+    if problem_type not in ["binary", "multi-class", "multi-label"]:
         raise ValueError(
             f"Invalid problem type: {problem_type}. "
             "It must be one of 'binary', 'multi-class' or 'multi-label'."
