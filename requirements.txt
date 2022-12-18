@@ -1,6 +1,6 @@
 boto3==1.26.32
 datasets==2.7.1
-fastapi[all]==0.87.0
+fastapi[all]==0.88.0
 kaggle==1.5.12
 matplotlib==3.5.3
 mlflow==2.0.1
