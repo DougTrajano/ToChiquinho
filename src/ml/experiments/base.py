@@ -107,14 +107,16 @@ class Experiment(object):
         Returns:
         - The sliced dataset.
         """
-        _logger.info(f"Slicing dataset.")
-
         max_samples = {
             "train": self.args.max_train_samples,
             "validation": self.args.max_val_samples,
             "test": self.args.max_test_samples
         }
 
+        if not any(max_samples.values()):
+            return dataset
+
+        _logger.info(f"Slicing dataset.")
         for key, value in max_samples.items():
             if value is not None:
                 dataset[key] = dataset[key].select(range(value))
@@ -152,6 +154,10 @@ class Experiment(object):
                 ]
             )
 
+            # Drop validation
+            
+
+        _logger.info(f"Dataset: {dataset}")
         return dataset
 
     def prep_checkpoint_dir(self, checkpoint_dir: str) -> bool:
@@ -276,7 +282,7 @@ class Experiment(object):
                 train_dataset=self.dataset["train"],
                 eval_dataset=self.dataset[self.args.eval_dataset],
                 tokenizer=self.tokenizer,
-                compute_metrics=lambda p: compute_metrics(p, threshold=self.args.threshold),
+                compute_metrics=lambda p: compute_metrics(p, threshold=self.args.threshold, problem_type="multi-class"),
                 callbacks=[
                     EarlyStoppingCallback(early_stopping_patience=self.args.early_stopping_patience)
                 ] if self.args.early_stopping_patience is not None else None

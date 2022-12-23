@@ -360,6 +360,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
             else:
                 optimizer = self._model.begin_training(sgd=optimizer)
 
+            self._trained_epochs = 0
             for epoch in range(epochs):
                 _logs = {}
                 losses = {}
@@ -395,6 +396,8 @@ class ToxicSpansDetectionModel(BaseEstimator):
                     self.save(f"{checkpoint_dir}/model_{epoch+1}")
 
                 _logger.info(f"Epoch {epoch+1}/{epochs}. {_logs}.")
+                
+                self._trained_epochs += 1
 
                 if (
                     x_val and y_val
@@ -408,14 +411,14 @@ class ToxicSpansDetectionModel(BaseEstimator):
 
         if load_best_model_at_end and len(self.val_scores) > 1:
             _logger.debug("Loading best model at end of training.")
-            self.best_epoch = np.argmax(self.val_scores)
+            self.best_epoch = np.argmax(self.val_scores)+1
             self._model = self.load_model_from_checkpoint(
-                checkpoint_dir=f"{checkpoint_dir}/model_{self.best_epoch+1}",
+                checkpoint_dir=f"{checkpoint_dir}/model_{self.best_epoch}",
                 metrics_dir=self.get_latest_checkpoint(checkpoint_dir)
             )
 
             _logger.info(
-                f"Best model found at epoch {self.best_epoch+1} with "
+                f"Best model found at epoch {self.best_epoch} with "
                 f"F1-score (validation set) {self.val_scores[self.best_epoch]:.4f}."
             )
 
