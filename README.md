@@ -4,6 +4,12 @@
 
 ToChiquinho is a toxicity detection system for Brazilian Portuguese texts based on the [OLID-BR](https://github.com/DougTrajano/olid-br/) dataset.
 
+## Modeling features
+
+- Early stopping policy (patience).
+- Imbalanced dataset handling.
+- Hyperparameter optimization (Bayesian optimization).
+
 ## Usage
 
 ToChiquinho is available as a Docker image. To run it, you need to have Docker installed on your machine.

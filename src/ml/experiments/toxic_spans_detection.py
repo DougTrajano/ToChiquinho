@@ -76,6 +76,7 @@ class ToxicSpansDetection(Experiment):
                     "eval_dataset": self.args.eval_dataset,
                     "early_stopping_patience": self.args.early_stopping_patience,
                     "num_train_epochs": self.args.num_train_epochs,
+                    "trained_epochs": self.model._trained_epochs,
                     "best_epoch": self.model.best_epoch,
                     "dropout": self.args.dropout,
                     "optim": self.args.optim,

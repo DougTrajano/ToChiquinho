@@ -104,7 +104,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
 
         self.losses = []
         self.train_scores = []
-        self.val_scores = []
+        self.eval_scores = []
         self.saved_models = {}
 
         sns.set_theme(
@@ -226,7 +226,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
             metrics = json.load(f)
             self.losses = metrics["losses"]
             self.train_scores = metrics["train_scores"]
-            self.val_scores = metrics["val_scores"]
+            self.eval_scores = metrics["eval_scores"]
 
         return self._model
         
@@ -253,7 +253,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
                 {
                     "losses": self.losses,
                     "train_scores": self.train_scores,
-                    "val_scores": self.val_scores,
+                    "eval_scores": self.eval_scores,
                 }, f
             )
 
@@ -360,6 +360,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
             else:
                 optimizer = self._model.begin_training(sgd=optimizer)
 
+            self._trained_epochs = 0
             for epoch in range(epochs):
                 _logs = {}
                 losses = {}
@@ -390,33 +391,34 @@ class ToxicSpansDetectionModel(BaseEstimator):
                     self.train_scores.append(self.score(x, y))
                     _logs["train_f1"] = f"{self.train_scores[-1]:.4f}"
                     if x_val and y_val:
-                        self.val_scores.append(self.score(x_val, y_val))
-                        _logs["val_f1"] = f"{self.val_scores[-1]:.4f}"
+                        self.eval_scores.append(self.score(x_val, y_val))
+                        _logs["eval_f1"] = f"{self.eval_scores[-1]:.4f}"
                     self.save(f"{checkpoint_dir}/model_{epoch+1}")
 
                 _logger.info(f"Epoch {epoch+1}/{epochs}. {_logs}.")
+                
+                self._trained_epochs += 1
 
                 if (
                     x_val and y_val
                     and early_stopping_patience
                     and self.early_stopping(
-                        scores=self.val_scores,
+                        scores=self.eval_scores,
                         patience=early_stopping_patience)
                 ):
                     _logger.info(f"Early stopping at epoch {epoch+1}.")
                     break
 
-        if load_best_model_at_end and len(self.val_scores) > 1:
+        if load_best_model_at_end and len(self.eval_scores) > 1:
             _logger.debug("Loading best model at end of training.")
-            self.best_epoch = np.argmax(self.val_scores)
+            self.best_epoch = np.argmax(self.eval_scores)+1
             self._model = self.load_model_from_checkpoint(
-                checkpoint_dir=f"{checkpoint_dir}/model_{self.best_epoch+1}",
-                metrics_dir=self.get_latest_checkpoint(checkpoint_dir)
+                checkpoint_dir=f"{checkpoint_dir}/model_{self.best_epoch}"
             )
 
             _logger.info(
-                f"Best model found at epoch {self.best_epoch+1} with "
-                f"F1-score (validation set) {self.val_scores[self.best_epoch]:.4f}."
+                f"Best model found at epoch {self.best_epoch} with "
+                f"F1-score (validation set) {self.eval_scores[self.best_epoch-1]:.4f}."
             )
 
     def early_stopping(self, scores: List[float], patience: int = 1) -> bool:
@@ -528,12 +530,15 @@ class ToxicSpansDetectionModel(BaseEstimator):
         """
         _logger.debug("Plotting scores.")
         fig = plt.figure(figsize=(10, 5))
-        plt.plot(self.train_scores, label="Train")
-        plt.plot(self.val_scores, label="Validation")
+        plt.plot(self.train_scores, label=f"{ylabel} (train)")
+        plt.plot(self.eval_scores, label=f"{ylabel} (validation)")
         plt.xticks(
             ticks=[int(i) for i in range(len(self.train_scores))],
             labels=[int(i+1) for i in range(len(self.train_scores))]
         )
+
+        plt.ylim(0, 1)
+        
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
         plt.legend()

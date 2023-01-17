@@ -179,3 +179,29 @@ class ToxicityTargetClassification(Experiment):
             )
 
             mlflow.log_text(report, "classification_report.txt")
+
+            # Plot metrics
+            _logger.info(f"Plotting metrics.")
+            mlflow.log_figure(
+                figure=self.plot_hf_metrics(
+                    log_history=trainer.state.log_history
+                ),
+                artifact_file="metrics.png"
+            )
+
+            # Plot loss
+            _logger.info(f"Plotting loss.")
+            mlflow.log_figure(
+                figure=self.plot_hf_metrics(
+                    log_history=trainer.state.log_history,
+                    metrics=["loss"],
+                    xtitle="Loss",
+                    ytitle="Epoch"
+                ),
+                artifact_file="loss.png"
+            )
+
+            mlflow.log_dict(
+                dictionary=trainer.state.log_history,
+                artifact_file="log_history.json"
+            )
