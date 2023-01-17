@@ -3,7 +3,9 @@ import json
 import torch
 import mlflow
 import datasets
-from typing import Union
+import matplotlib.pyplot as plt
+from collections import OrderedDict
+from typing import Union, Dict, List
 from transformers import (
     AutoTokenizer,
     EarlyStoppingCallback,
@@ -235,6 +237,63 @@ class Experiment(object):
         env = json.loads(env)
         return env.get("job_name")
 
+    def plot_hf_metrics(
+        self,
+        log_history: List[Dict[str, float]],
+        metrics: Dict[str, str] = {
+            "eval_accuracy": "Accuracy",
+            "eval_f1": "F1-score",
+            "eval_precision": "Precision",
+            "eval_recall": "Recall"
+        },
+        xtitle: str = "Epoch",
+        ytitle: str = "Scores") -> plt.Figure:
+        """Plot the Hugging Face metrics.
+
+        Args:
+        - log_history: The Hugging Face log history.
+        - metrics: The metrics to plot (key: metric name, value: plot title).
+        - xtitle: The x-axis title.
+        - ytitle: The y-axis title.
+
+        Returns:
+        - The plot.
+        """
+        _logger.debug(
+            {
+                "log_history": log_history,
+                "metrics": metrics,
+                "xtitle": xtitle,
+                "ytitle": ytitle
+            }
+        )
+
+        # Prepare the metrics
+        _metrics = OrderedDict()
+        for item in log_history:
+            epoch = int(item["epoch"])
+            for key, value in item.items():
+                if key in metrics:
+                    if epoch not in _metrics:
+                        _metrics[epoch] = {}
+                    _metrics[epoch][key] = value
+
+        fig = plt.figure(figsize=(10, 6))
+        for key, value in metrics.items():
+            data = [_metrics[i][key] for i in _metrics if key in _metrics[i]]
+            if len(data) == 0:
+                raise ValueError(
+                    f"{key} is not in the metrics. Metrics: {_metrics}.")
+            plt.plot(data, label=value)
+
+        plt.xticks(range(len(_metrics)), range(1, len(_metrics) + 1))
+        plt.ylim(0, 1)
+        plt.xlabel(xtitle)
+        plt.ylabel(ytitle)
+        plt.legend()
+
+        return fig
+
     def run(self):
         """Run the training."""
         self.init_experiment()
@@ -297,3 +356,29 @@ class Experiment(object):
             scores = trainer.evaluate()
             _logger.info(f"Scores ({self.args.eval_dataset} set): {scores}")
             _logger.info(f"eval_f1_weighted: {scores['eval_f1']}")
+
+            # Plot metrics
+            _logger.info(f"Plotting scores.")
+            mlflow.log_figure(
+                figure=self.plot_hf_metrics(
+                    log_history=trainer.state.log_history
+                ),
+                artifact_file="scores.png"
+            )
+
+            # Plot loss
+            _logger.info(f"Plotting losses.")
+            mlflow.log_figure(
+                figure=self.plot_hf_metrics(
+                    log_history=trainer.state.log_history,
+                    metrics={"eval_loss": "Loss"},
+                    xtitle="Epoch",
+                    ytitle="Loss"
+                ),
+                artifact_file="losses.png"
+            )
+
+            mlflow.log_dict(
+                dictionary=trainer.state.log_history,
+                artifact_file="log_history.json"
+            )

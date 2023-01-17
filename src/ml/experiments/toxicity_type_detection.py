@@ -192,3 +192,29 @@ class ToxicityTypeDetection(Experiment):
             )
 
             mlflow.log_text(report, "classification_report.txt")
+
+            # Plot metrics
+            _logger.info(f"Plotting scores.")
+            mlflow.log_figure(
+                figure=self.plot_hf_metrics(
+                    log_history=trainer.state.log_history
+                ),
+                artifact_file="scores.png"
+            )
+
+            # Plot loss
+            _logger.info(f"Plotting losses.")
+            mlflow.log_figure(
+                figure=self.plot_hf_metrics(
+                    log_history=trainer.state.log_history,
+                    metrics={"eval_loss": "Loss"},
+                    xtitle="Epoch",
+                    ytitle="Loss"
+                ),
+                artifact_file="losses.png"
+            )
+
+            mlflow.log_dict(
+                dictionary=trainer.state.log_history,
+                artifact_file="log_history.json"
+            )

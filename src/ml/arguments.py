@@ -92,7 +92,7 @@ class TrainingArguments:
     )
 
     num_train_epochs: Optional[int] = field(
-        default=5,
+        default=30,
         metadata={
             "help": "The number of epochs to train the model. An epoch is an iteration over the entire training set."
         }
@@ -200,7 +200,7 @@ class TrainingArguments:
 @dataclass
 class NotebookArguments:
     num_train_epochs: Optional[int] = field(
-        default=10,
+        default=30,
         metadata={
             "help": "Number of training epochs",
         }
