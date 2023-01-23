@@ -15,7 +15,7 @@ spacymoji==3.0.1
 https://github.com/explosion/spacy-models/releases/download/pt_core_news_lg-3.4.0/pt_core_news_lg-3.4.0.tar.gz
 tensorflow-gpu==2.10.0
 tensorflow==2.10.0
-thinc==8.1.1
+thinc==8.1.7
 tokenizers==0.13.2
 torch==1.13.0
 torchaudio==0.13.0
