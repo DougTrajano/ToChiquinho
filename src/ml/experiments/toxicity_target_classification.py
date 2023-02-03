@@ -194,7 +194,7 @@ class ToxicityTargetClassification(Experiment):
             mlflow.log_figure(
                 figure=self.plot_hf_metrics(
                     log_history=trainer.state.log_history,
-                    metrics=["loss"],
+                    metrics={"eval_loss": "Loss"},
                     xtitle="Loss",
                     ytitle="Epoch"
                 ),
@@ -205,3 +205,5 @@ class ToxicityTargetClassification(Experiment):
                 dictionary=trainer.state.log_history,
                 artifact_file="log_history.json"
             )
+        
+        _logger.info(f"Experiment completed.")

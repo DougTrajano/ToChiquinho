@@ -20,7 +20,12 @@ if __name__ == "__main__":
     remaining_args_to_env(remaining_args)
 
     experiment_name = os.environ.get("MLFLOW_EXPERIMENT_NAME")
-    if experiment_name == "toxicity-type-detection":
+    if experiment_name == "toxic-comment-classification":
+        _logger.info(f"Running {experiment_name} experiment.")
+        from experiments.toxic_comment_classification import ToxicCommentClassification
+        experiment = ToxicCommentClassification(args)
+        experiment.run()
+    elif experiment_name == "toxicity-type-detection":
         _logger.info(f"Running {experiment_name} experiment.")
         from experiments.toxicity_type_detection import ToxicityTypeDetection
         experiment = ToxicityTypeDetection(args)

@@ -218,3 +218,5 @@ class ToxicityTypeDetection(Experiment):
                 dictionary=trainer.state.log_history,
                 artifact_file="log_history.json"
             )
+
+        _logger.info(f"Experiment completed.")
