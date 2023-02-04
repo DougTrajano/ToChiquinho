@@ -21,6 +21,13 @@ services:
     container_name: service
     build:
       context: .
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
     ports:
       - ${PORT-80}:${PORT-80}
     depends_on:

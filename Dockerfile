@@ -1,7 +1,12 @@
 FROM python:3.10.8-slim
 
 WORKDIR /app
-COPY . /app/
+
+COPY /src /app/src
+COPY /requirements-api.txt /app
+
+RUN pip install --upgrade pip && \
+    pip install -r requirements-api.txt
 
 ENV PORT 8080
 
