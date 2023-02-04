@@ -4,9 +4,11 @@ WORKDIR /app
 
 COPY /src /app/src
 COPY /requirements-api.txt /app
+COPY /requirements-ml.txt /app
 
 RUN pip install --upgrade pip && \
-    pip install -r requirements-api.txt
+    pip install -r requirements-api.txt && \
+    pip install -r requirements-ml.txt
 
 ENV PORT 8080
 
