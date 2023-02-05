@@ -131,3 +131,5 @@ class ToxicSpansDetection(Experiment):
                     np.array(self.dataset[self.args.eval_dataset]["toxic_spans"][0])
                 )
             )
+
+        _logger.info(f"Experiment completed.")

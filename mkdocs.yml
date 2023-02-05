@@ -45,8 +45,12 @@ theme:
 nav:
   - Overview: index.en.md
   - ML Models:
+    - Toxic Comment Classification: models/toxic_comment_classification.en.md
     - Toxicity Type Detection: models/toxicity_type_detection.en.md
     - Toxicity Target Classification: models/toxicity_target_classification.en.md
+    - Toxicity Target Type Identification: models/toxicity_target_type_identification.en.md
+    - Toxic Spans Detection: models/toxic_spans_detection.en.md
+  - Getting Started: getting_started.en.md
 
 plugins:
   - tooltips
