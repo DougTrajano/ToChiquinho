@@ -7,14 +7,10 @@ on:
         description: AWS region
         required: true
         default: us-east-1
-      ecr-registry:
-        description: ECR registry name
-        required: true
-        default: public.ecr.aws/t9j8s4z8
       ecr-repository:
         description: ECR repository name
         required: true
-        default: mlflow
+        default: sagemaker-transformers
       pytorch-version:
         description: PyTorch version
         required: true
@@ -55,7 +51,6 @@ jobs:
       - name: Create Amazon ECR repository
         id: create-ecr-repository
         env:
-          ECR_REGISTRY: ${{ github.event.inputs.ecr-registry }}
           ECR_REPOSITORY: ${{ github.event.inputs.ecr-repository }}
         run: |
           aws ecr describe-repositories --repository-names $ECR_REPOSITORY --region us-east-1 > /dev/null 2>&1
@@ -65,15 +60,16 @@ jobs:
             aws ecr create-repository --repository-name $ECR_REPOSITORY --region us-east-1 --image-scanning-configuration scanOnPush=true
           fi
 
-          echo "::set-output name=repository-url::$ECR_REGISTRY/$ECR_REPOSITORY"
-
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY: ${{ github.event.inputs.ecr-registry }}
           ECR_REPOSITORY: ${{ github.event.inputs.ecr-repository }}
           IMAGE_TAG: ${{ github.event.inputs.pytorch-version }}-${{ github.event.inputs.pytorch-processor }}-${{ github.event.inputs.python-version }}
         run: |
+          account=$(aws sts get-caller-identity --query Account --output text)
+          
+          ECR_REGISTRY=$(aws ecr describe-repositories --repository-names $ECR_REPOSITORY --region us-east-1 --query 'repositories[0].repositoryUri' --output text)
+
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
