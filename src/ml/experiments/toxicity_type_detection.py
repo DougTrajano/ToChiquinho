@@ -1,3 +1,4 @@
+import os
 import torch
 import mlflow
 import datasets
@@ -6,7 +7,7 @@ from typing import Union
 from sklearn.metrics import classification_report
 from transformers import (
     Trainer,
-    TrainingArguments as HfTrainingArguments,
+    TrainingArguments,
     EarlyStoppingCallback
 )
 
@@ -134,13 +135,16 @@ class ToxicityTypeDetection(Experiment):
 
             self.dataset.set_format("torch")
 
-            trainer_args = HfTrainingArguments(
+            trainer_args = TrainingArguments(
                 output_dir=self.args.checkpoint_dir,
                 overwrite_output_dir=True,
                 evaluation_strategy="epoch",
                 save_strategy="epoch",
                 save_total_limit=5,
                 load_best_model_at_end=True,
+                push_to_hub=self.args.push_to_hub,
+                hub_token=os.environ.get("HUGGINGFACE_HUB_TOKEN"),
+                hub_model_id=self.args.hub_model_id,
                 metric_for_best_model="f1",
                 learning_rate=self.args.learning_rate,
                 weight_decay=self.args.weight_decay,
@@ -218,5 +222,9 @@ class ToxicityTypeDetection(Experiment):
                 dictionary=trainer.state.log_history,
                 artifact_file="log_history.json"
             )
+
+            if self.args.push_to_hub:
+                _logger.info(f"Saving model.")
+                trainer.push_to_hub()
 
         _logger.info(f"Experiment completed.")

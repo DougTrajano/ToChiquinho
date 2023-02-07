@@ -5,11 +5,10 @@ from transformers import BertForSequenceClassification
 from transformers.modeling_outputs import SequenceClassifierOutput
 from transformers.models.bert.modeling_bert import (
     BERT_INPUTS_DOCSTRING,
-    _TOKENIZER_FOR_DOC,
     _CHECKPOINT_FOR_SEQUENCE_CLASSIFICATION,
-    _CONFIG_FOR_DOC,
     _SEQ_CLASS_EXPECTED_OUTPUT,
-    _SEQ_CLASS_EXPECTED_LOSS
+    _SEQ_CLASS_EXPECTED_LOSS,
+    _CONFIG_FOR_DOC
 )
 from transformers.utils import (
     add_start_docstrings_to_model_forward,
@@ -25,7 +24,6 @@ class ToxicityTypeForSequenceClassification(BertForSequenceClassification):
 
     @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
-        processor_class=_TOKENIZER_FOR_DOC,
         checkpoint=_CHECKPOINT_FOR_SEQUENCE_CLASSIFICATION,
         output_type=SequenceClassifierOutput,
         config_class=_CONFIG_FOR_DOC,

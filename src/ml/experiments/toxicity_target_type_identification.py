@@ -1,15 +1,15 @@
-from arguments import TrainingArguments
+from arguments import TrainScriptArguments
 from logger import setup_logger
-from experiments.toxicity_target_classification import (
-    ToxicityTargetClassification
+from experiments.toxic_comment_classification import (
+    ToxicCommentClassification
 )
 
 _logger = setup_logger(__name__)
 
-class ToxicityTargetTypeIdentification(ToxicityTargetClassification):
+class ToxicityTargetTypeIdentification(ToxicCommentClassification):
     name = "toxicity-target-type-identification"
 
-    def __init__(self, args: TrainingArguments):
+    def __init__(self, args: TrainScriptArguments):
         """Initialize the experiment.
         
         Args:
@@ -22,4 +22,5 @@ class ToxicityTargetTypeIdentification(ToxicityTargetClassification):
             1: "GRP",
             2: "OTH"
         }
+        
         _logger.debug(f"Classes: {self.classes}")

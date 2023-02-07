@@ -4,6 +4,7 @@ import spacy
 import numpy as np
 from .base import Experiment
 from logger import setup_logger
+from arguments import TrainScriptArguments
 from models.spacy import ToxicSpansDetectionModel
 from metrics.spans import (
     precision_score,
@@ -16,7 +17,7 @@ _logger = setup_logger(__name__)
 class ToxicSpansDetection(Experiment):
     name = "toxic-spans-detection"
 
-    def __init__(self, args):
+    def __init__(self, args: TrainScriptArguments):
         super().__init__(args)
         spacy.util.fix_random_seed(self.args.seed)
         if spacy.prefer_gpu():

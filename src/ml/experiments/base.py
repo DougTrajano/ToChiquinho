@@ -11,12 +11,12 @@ from transformers import (
     EarlyStoppingCallback,
     PreTrainedModel,
     Trainer,
-    TrainingArguments as HfTrainingArguments,
+    TrainingArguments,
     set_seed
 )
 
 # Custom code
-from arguments import TrainingArguments
+from arguments import TrainScriptArguments
 from logger import setup_logger
 from metrics.utils import compute_metrics
 
@@ -25,7 +25,7 @@ _logger = setup_logger(__name__)
 class Experiment(object):
     name = "base-experiment"
 
-    def __init__(self, args: TrainingArguments):
+    def __init__(self, args: TrainScriptArguments):
         """Initialize the experiment.
         
         Args:
@@ -154,10 +154,7 @@ class Experiment(object):
                     self.dataset["train"],
                     self.dataset["validation"]
                 ]
-            )
-
-            # Drop validation
-            
+            )          
 
         _logger.info(f"Dataset: {dataset}")
         return dataset
@@ -314,13 +311,16 @@ class Experiment(object):
 
             self.dataset.set_format("torch")
 
-            trainer_args = HfTrainingArguments(
+            trainer_args = TrainingArguments(
                 output_dir=self.args.checkpoint_dir,
                 overwrite_output_dir=True,
                 evaluation_strategy="epoch",
                 save_strategy="epoch",
                 save_total_limit=5,
                 load_best_model_at_end=True,
+                push_to_hub=self.args.push_to_hub,
+                hub_token=os.environ.get("HUGGINGFACE_HUB_TOKEN"),
+                hub_model_id=self.args.hub_model_id,
                 metric_for_best_model="f1",
                 learning_rate=self.args.learning_rate,
                 weight_decay=self.args.weight_decay,
@@ -332,6 +332,7 @@ class Experiment(object):
                 per_device_train_batch_size=self.args.batch_size,
                 per_device_eval_batch_size=self.args.batch_size,
                 num_train_epochs=self.args.num_train_epochs,
+                report_to=["mlflow"],
                 seed=self.args.seed
             )
 
