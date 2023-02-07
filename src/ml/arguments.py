@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
 @dataclass
-class TrainingArguments:
+class TrainScriptArguments:
     data_dir: Optional[str] = field(
         default=os.environ.get("SM_CHANNEL_TRAINING"),
         metadata={
@@ -53,6 +53,26 @@ class TrainingArguments:
         },
     )
 
+    push_to_hub: Optional[bool] = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to push the model to the Hugging Face hub when and after training. "
+                "This is only used if the model is a Hugging Face model."
+            )
+        }
+    )
+
+    hub_model_id: Optional[str] = field(
+        default=None,
+        metadata={
+            "help": (
+                "The model id to use when pushing the model to the Hugging Face hub. "
+                "This is only used if the model is a Hugging Face model."
+            )
+        }
+    )
+
     concat_validation_set: Optional[bool] = field(
         default=False,
         metadata={
@@ -87,7 +107,10 @@ class TrainingArguments:
     model_name: Optional[str] = field(
         default="neuralmind/bert-base-portuguese-cased",
         metadata={
-            "help": "The name of the model to use. It must be a model name or a path to a directory containing model weights."
+            "help": (
+                "The name of the model to use. "
+                "It must be a model name or a path to a directory containing model weights."
+            )
         }
     )
 
@@ -301,6 +324,14 @@ class NotebookArguments:
         repr=False,
         metadata={
             "help": "The name of the AWS profile to use."
+        }
+    )
+
+    huggingface_hub_token: Optional[str] = field(
+        default=None,
+        repr=False,
+        metadata={
+            "help": "The token to use to authenticate with the HuggingFace Hub."
         }
     )
 

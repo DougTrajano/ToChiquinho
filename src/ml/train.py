@@ -1,5 +1,5 @@
 import os
-from arguments import TrainingArguments
+from arguments import TrainScriptArguments
 from logger import setup_logger
 from transformers import HfArgumentParser
 from utils import remaining_args_to_env
@@ -8,8 +8,10 @@ _logger = setup_logger(__name__)
 
 if __name__ == "__main__":
     _logger.info("Starting training script.")
+
+    os.environ["WANDB_DISABLED"] = "true"
     
-    parser = HfArgumentParser((TrainingArguments))
+    parser = HfArgumentParser((TrainScriptArguments))
     args, remaining_args = parser.parse_args_into_dataclasses(
         return_remaining_strings=True
     )

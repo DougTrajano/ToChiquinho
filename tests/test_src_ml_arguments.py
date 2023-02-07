@@ -1,8 +1,8 @@
-from src.ml.arguments import TrainingArguments, NotebookArguments
+from src.ml.arguments import TrainScriptArguments, NotebookArguments
 
 def test_training_arguments():
-    args = TrainingArguments()
-    assert type(args) == TrainingArguments
+    args = TrainScriptArguments()
+    assert type(args) == TrainScriptArguments
 
 def test_notebook_arguments():
     args = NotebookArguments()
