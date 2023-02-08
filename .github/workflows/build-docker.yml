@@ -55,6 +55,7 @@ jobs:
           AWS_REGION: ${{ github.event.inputs.aws-region }}
         run: |
           echo "Checking if ECR repository $ECR_REPOSITORY exists.."
+          set +e
           output=$(aws ecr describe-repositories --region $AWS_REGION --repository-names $ECR_REPOSITORY 2>&1)
           exit_code=$?
           if [ $exit_code -ne 0 ]; then
@@ -69,7 +70,8 @@ jobs:
           else
             echo "Repository $ECR_REPOSITORY already exists."
           fi
-          
+          set -e
+
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
