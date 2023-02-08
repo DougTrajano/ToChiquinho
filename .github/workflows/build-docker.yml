@@ -52,14 +52,24 @@ jobs:
         id: create-ecr-repository
         env:
           ECR_REPOSITORY: ${{ github.event.inputs.ecr-repository }}
+          AWS_REGION: ${{ github.event.inputs.aws-region }}
         run: |
-          aws ecr describe-repositories --repository-names $ECR_REPOSITORY > /dev/null 2>&1
-          
-          if [ $? -ne 0 ]
-          then
-            aws ecr create-repository --repository-name $ECR_REPOSITORY --region us-east-1 --image-scanning-configuration scanOnPush=true
+          echo "Checking if ECR repository $ECR_REPOSITORY exists.."
+          output=$(aws ecr describe-repositories --region $AWS_REGION --repository-names $ECR_REPOSITORY 2>&1)
+          exit_code=$?
+          if [ $exit_code -ne 0 ]; then
+            if echo ${output} | grep -q RepositoryNotFoundException; then
+              echo "Repository $ECR_REPOSITORY does not exist, creating.."
+              aws ecr create-repository --repository-name $ECR_REPOSITORY --region $AWS_REGION --image-scanning-configuration scanOnPush=true
+              echo "Repository $ECR_REPOSITORY created successfully."
+            else
+              >&2 echo ${output}
+              exit $exit_code
+            fi
+          else
+            echo "Repository $ECR_REPOSITORY already exists."
           fi
-
+          
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
