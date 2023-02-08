@@ -45,6 +45,10 @@ See more in the [Environment variables](#environment-variables) section.
 
 See the [GitHub Releases](https://github.com/DougTrajano/ToChiquinho/releases) page for a history of notable changes to this project.
 
+## Contributing
+
+Contributions are welcome! Please open a pull request and include a detailed description of your changes.
+
 ## License
 
-The project is licensed under the [Apache 2.0 License](LICENSE).
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.

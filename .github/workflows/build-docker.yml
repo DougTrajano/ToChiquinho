@@ -54,13 +54,13 @@ jobs:
           ECR_REPOSITORY: ${{ github.event.inputs.ecr-repository }}
           AWS_REGION: ${{ github.event.inputs.aws-region }}
         run: |
-          echo "Checking if ECR repository $ECR_REPOSITORY exists.."
+          echo "Checking if ECR repository $ECR_REPOSITORY exists."
           set +e
           output=$(aws ecr describe-repositories --region $AWS_REGION --repository-names $ECR_REPOSITORY 2>&1)
           exit_code=$?
           if [ $exit_code -ne 0 ]; then
             if echo ${output} | grep -q RepositoryNotFoundException; then
-              echo "Repository $ECR_REPOSITORY does not exist, creating.."
+              echo "Repository $ECR_REPOSITORY does not exist, creating it."
               aws ecr create-repository --repository-name $ECR_REPOSITORY --region $AWS_REGION --image-scanning-configuration scanOnPush=true
               echo "Repository $ECR_REPOSITORY created successfully."
             else
@@ -81,10 +81,10 @@ jobs:
         run: |
           IMAGE_URI=$(aws ecr describe-repositories --repository-names $ECR_REPOSITORY --region $AWS_REGION --query 'repositories[0].repositoryUri' --output text)
 
-          echo "Building image $IMAGE_URI:$IMAGE_TAG.."
+          echo "Building image $IMAGE_URI:$IMAGE_TAG."
           docker build -t $IMAGE_URI:$IMAGE_TAG .
           echo "Image built successfully."
 
-          echo "Pushing image $IMAGE_URI:$IMAGE_TAG.."
+          echo "Pushing image $IMAGE_URI:$IMAGE_TAG."
           docker push $IMAGE_URI:$IMAGE_TAG
           echo "Image pushed successfully."

@@ -319,6 +319,13 @@ class NotebookArguments:
         }
     )
 
+    sagemaker_image_uri: Optional[str] = field(
+        default="215993976552.dkr.ecr.us-east-1.amazonaws.com/sagemaker-transformers:1.12.0-gpu-py38",
+        metadata={
+            "help": "The URI of the SageMaker image."
+        }
+    )
+
     aws_profile_name: Optional[str] = field(
         default="default",
         repr=False,
