@@ -77,12 +77,19 @@ jobs:
         env:
           ECR_REPOSITORY: ${{ github.event.inputs.ecr-repository }}
           AWS_REGION: ${{ github.event.inputs.aws-region }}
-          IMAGE_TAG: ${{ github.event.inputs.pytorch-version }}-${{ github.event.inputs.pytorch-processor }}-${{ github.event.inputs.python-version }}
+          PYTORCH_VERSION: ${{ github.event.inputs.pytorch-version }}
+          PYTORCH_PROCESSOR: ${{ github.event.inputs.pytorch-processor }}
+          PYTHON_VERSION: ${{ github.event.inputs.python-version }}
         run: |
+          IMAGE_TAG=${PYTORCH_VERSION}-${PYTORCH_PROCESSOR}-${PYTHON_VERSION}
           IMAGE_URI=$(aws ecr describe-repositories --repository-names $ECR_REPOSITORY --region $AWS_REGION --query 'repositories[0].repositoryUri' --output text)
 
           echo "Building image $IMAGE_URI:$IMAGE_TAG."
-          docker build -t $IMAGE_URI:$IMAGE_TAG .
+          docker build -t $IMAGE_URI:$IMAGE_TAG . \
+            --build-arg PYTORCH_VERSION=$PYTORCH_VERSION \
+            --build-arg PYTORCH_PROCESSOR=$PYTORCH_PROCESSOR \
+            --build-arg PYTHON_VERSION=$PYTHON_VERSION
+            
           echo "Image built successfully."
 
           echo "Pushing image $IMAGE_URI:$IMAGE_TAG."
