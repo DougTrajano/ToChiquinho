@@ -12,5 +12,5 @@ spacy[cuda-autodetect]==3.4.1
 spacymoji==3.0.1
 thinc==8.1.7
 tokenizers==0.13.2
-transformers==4.26.0
+transformers==4.26.1
 huggingface_hub==0.12.0
