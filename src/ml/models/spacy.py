@@ -446,11 +446,11 @@ class ToxicSpansDetectionModel(BaseEstimator):
         else:
             return False
 
-    def _predict(self, X: str) -> List[int]: 
+    def _predict(self, text: str) -> List[int]: 
         """Predicts the toxic spans for a given text.
 
         Args:
-        - X: the text.
+        - text: the text.
 
         Returns:
         - the toxic spans as a list of integers.
@@ -459,42 +459,42 @@ class ToxicSpansDetectionModel(BaseEstimator):
             raise ValueError("Model not trained or loaded yet.")
             
         preds = []
-        doc = self._model(X)
+        doc = self._model(text)
         for ent in doc.ents:
             preds.extend(range(ent.start_char, ent.end_char))
         return preds
 
-    def predict(self, X: Union[List[str], str]) -> Union[List[int], List[List[int]]]:
+    def predict(self, x: Union[List[str], str]) -> Union[List[int], List[List[int]]]:
         """Predicts the labels.
         
         Args:
-        - X: the list of texts or a single text.
+        - x: the list of texts or a single text.
 
         Returns:
         - the toxic spans as a list of integers or a list of lists of integers.
         """
-        if isinstance(X, (list, tuple, np.ndarray)):
+        if isinstance(x, (list, tuple, np.ndarray)):
             preds = []
-            for x in X:
-                preds.append(self._predict(x))
+            for text in x:
+                preds.append(self._predict(text))
             return preds
         elif isinstance(X, str):
-            return self._predict(X)
+            return self._predict(x)
         else:
             raise ValueError("X must be a list of strings or a single string.")
         
-    def score(self, X: List[str], y: List[int]):
+    def score(self, x: List[str], y: List[int]):
         """Scores the model using the F1-score.
         
         Args:
-        - X: the list of texts.
+        - x: the list of texts.
         - y: the list of labels.
 
         Returns:
         - the F1 score.
         """
         _logger.debug("Scoring model.")
-        y_pred = self.predict(X)
+        y_pred = self.predict(x)
         score = f1_score(y, y_pred)
         _logger.debug(f"F1-score: {score:.4f}")
         return score

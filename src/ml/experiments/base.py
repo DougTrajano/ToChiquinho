@@ -278,7 +278,7 @@ class Experiment(object):
         },
         xtitle: str = "Epoch",
         ytitle: str = "Scores",
-        ylim: Tuple[float, float] = (0.0, 1.0)) -> plt.Figure:
+        ylim: Union[Tuple[float, float], None] = (0.0, 1.0)) -> plt.Figure:
         """Plot the Hugging Face metrics.
 
         Args:
@@ -332,6 +332,7 @@ class Experiment(object):
     def add_sm_patterns_to_gitignore(
         self,
         repo: Repository,
+        gitignore_path: str = ".gitignore",
         patterns: List[str] = [
             "*.sagemaker-uploading",
             "*.sagemaker-uploaded"
@@ -341,11 +342,11 @@ class Experiment(object):
         Args:
         - repo: The Model Repository.
         """
-        _logger.debug(f"Adding SageMaker Checkpointing patterns to {repo.local_dir}/.gitignore.")
+        _logger.debug(f"Adding SageMaker Checkpointing patterns to {repo.local_dir}/{gitignore_path}.")
 
         # Check if .gitignore exists
-        if os.path.exists(os.path.join(repo.local_dir, ".gitignore")):
-            with open(os.path.join(repo.local_dir, ".gitignore"), "r") as f:
+        if os.path.exists(os.path.join(repo.local_dir, gitignore_path)):
+            with open(os.path.join(repo.local_dir, gitignore_path), "r") as f:
                 current_content = f.read()
         else:
             current_content = ""
@@ -354,23 +355,23 @@ class Experiment(object):
         content = current_content
         for pattern in patterns:
             if pattern not in content:
-                _logger.debug(f"Adding {pattern} to .gitignore.")
+                _logger.debug(f"Adding {pattern} to {repo.local_dir}/{gitignore_path}.")
                 if content.endswith("\n"):
                     content += pattern
                 else:
                     content += f"\n{pattern}"
 
-        with open(os.path.join(repo.local_dir, ".gitignore"), "w") as f:
+        with open(os.path.join(repo.local_dir, gitignore_path), "w") as f:
             _logger.debug(f"Writing .gitignore file. Content: {content}")
             f.write(content)
 
-        repo.git_add(".gitignore")
+        repo.git_add(gitignore_path)
 
         # avoid race condition with git status
         time.sleep(1)
 
         if not repo.is_repo_clean():
-            repo.git_commit("Add *.sagemaker patterns to .gitignore.")
+            repo.git_commit(f"Add *.sagemaker patterns to {gitignore_path}.")
             repo.git_push()
 
     def run(self):

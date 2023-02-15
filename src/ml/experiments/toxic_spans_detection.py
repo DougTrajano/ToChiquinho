@@ -96,7 +96,7 @@ class ToxicSpansDetection(Experiment):
 
             # Evaluate model
             preds = self.model.predict(
-                X=self.dataset[self.args.eval_dataset]["text"]
+                x=self.dataset[self.args.eval_dataset]["text"]
             )
 
             scores = {
