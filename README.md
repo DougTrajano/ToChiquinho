@@ -36,10 +36,35 @@ See more in the [Environment variables](#environment-variables) section.
 
 ## Environment variables
 
+The following environment variables are needed to run the Jupyter Notebooks.
 
-| Variable | Description | Default |
-|----------|-------------|---------|
+| Variable | Description |
+|----------|-------------|
+| `MLFLOW_TRACKING_URI` | The URI of the MLflow tracking server. |
+| `MLFLOW_TRACKING_USERNAME` | The username of the MLflow tracking server. |
+| `MLFLOW_TRACKING_PASSWORD` | The password of the MLflow tracking server. |
+| `HUGGINGFACE_HUB_USERNAME` | The username of the Hugging Face Hub. |
+| `HUGGINGFACE_HUB_TOKEN` | The token of the Hugging Face Hub. |
+| `AWS_PROFILE` | The AWS profile to be used. |
+| `SAGEMAKER_EXECUTION_ROLE_ARN` | The ARN of the SageMaker execution role. |
 
+> **Note**: Some variables can be passed to the SageMaker training jobs.
+
+The following environment variables are needed to run the training jobs.
+
+| Variable | Description |
+|----------|-------------|
+| `MLFLOW_TRACKING_URI` | The URI of the MLflow tracking server. |
+| `MLFLOW_EXPERIMENT_NAME` | The name of the MLflow experiment. |
+| `MLFLOW_TRACKING_USERNAME` | The username of the MLflow tracking server. |
+| `MLFLOW_TRACKING_PASSWORD` | The password of the MLflow tracking server. |
+| `MLFLOW_TAGS` | The tags to be added to the MLflow run. |
+| `MLFLOW_FLATTEN_PARAMS` | Whether to flatten the parameters. |
+| `MLFLOW_RUN_ID` | The ID of the MLflow run. If set, a child run will be created. |
+| `HF_MLFLOW_LOG_ARTIFACTS` | Whether to log artifacts to MLflow. |
+| `HUGGINGFACE_HUB_TOKEN` | The token of the Hugging Face Hub. |
+| `SM_TRAINING_ENV` | The JSON string of the SageMaker training environment. |
+| `TOKENIZERS_PARALLELISM` | Whether to use parallelism for tokenizers. |
 
 ## Changelog
 
