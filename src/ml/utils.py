@@ -4,7 +4,31 @@ import boto3
 import torch
 import numpy as np
 from typing import List, Union
+from collections.abc import MutableMapping
 
+
+def flatten_dict(
+    obj: MutableMapping,
+    parent_key: str = '',
+    sep: str ='_') -> MutableMapping:
+    """Flatten a nested dictionary.
+
+    Args:
+    - obj (MutableMapping): The dictionary to be flattened.
+    - parent_key (str, optional): The parent key. Defaults to ''.
+    - sep (str, optional): The separator. Defaults to '_'.
+
+    Returns:
+    MutableMapping: The flattened dictionary.
+    """
+    items = []
+    for k, v in obj.items():
+        new_key = parent_key + sep + k if parent_key else k
+        if isinstance(v, MutableMapping):
+            items.extend(flatten_dict(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
 
 def compute_pos_weight(
     y: Union[np.ndarray, List[List[int]], torch.Tensor]
@@ -65,4 +89,4 @@ def remove_checkpoints(
         print("No checkpoints found.")
     elif response[0]["ResponseMetadata"]["HTTPStatusCode"] == 200:
         count = len(response[0]["Deleted"])
-        print(f"Deleted {count} checkpoints.")
+        print(f"Deleted {count} checkpoints from {bucket_name}/{checkpoint_prefix}.")

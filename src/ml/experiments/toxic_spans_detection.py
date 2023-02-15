@@ -6,6 +6,7 @@ from .base import Experiment
 from logger import setup_logger
 from arguments import TrainScriptArguments
 from models.spacy import ToxicSpansDetectionModel
+from utils import flatten_dict
 from metrics.spans import (
     precision_score,
     recall_score,
@@ -50,6 +51,10 @@ class ToxicSpansDetection(Experiment):
             self.dataset = self.load_dataset()
             self.dataset = self.slice_dataset(self.dataset)
             self.dataset = self.prepare_dataset(self.dataset)
+            
+            dataset_stats = self.get_dataset_stats(self.dataset)
+            if mlflow.active_run():
+                mlflow.log_params(flatten_dict(dataset_stats))
 
             self.init_model(self.args.model_name)
 

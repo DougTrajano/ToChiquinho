@@ -16,10 +16,17 @@ class TrainScriptArguments:
         }
     )
 
-    checkpoint_dir: Optional[str] = field(
+    output_dir: Optional[str] = field(
         default="/opt/ml/checkpoints",
         metadata={
-            "help": "The path the model checkpoints will be saved to."
+            "help": "The path to the output directory where the model predictions and checkpoints will be written."
+        }
+    )
+
+    model_dir: Optional[str] = field(
+        default=os.environ.get("SM_MODEL_DIR", "/opt/ml/model"),
+        metadata={
+            "help": "The path the model will be saved to."
         }
     )
 
@@ -280,7 +287,7 @@ class NotebookArguments:
     )
     
     mlflow_tracking_username: Optional[str] = field(
-        default=None,
+        default=os.environ.get("MLFLOW_TRACKING_USERNAME"),
         repr=False,
         metadata={
             "help": "The username to use to authenticate with the MLFlow tracking server."
@@ -288,7 +295,7 @@ class NotebookArguments:
     )
 
     mlflow_tracking_password: Optional[str] = field(
-        default=None,
+        default=os.environ.get("MLFLOW_TRACKING_PASSWORD"),
         repr=False,
         metadata={
             "help": "The password to use to authenticate with the MLFlow tracking server."
@@ -335,7 +342,7 @@ class NotebookArguments:
     )
 
     huggingface_hub_token: Optional[str] = field(
-        default=None,
+        default=os.environ.get("HUGGINGFACE_HUB_TOKEN"),
         repr=False,
         metadata={
             "help": "The token to use to authenticate with the HuggingFace Hub."

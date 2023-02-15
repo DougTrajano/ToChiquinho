@@ -6,6 +6,12 @@ from utils import remaining_args_to_env
 
 _logger = setup_logger(__name__)
 
+# Monkey patching huggingface_hub.repository.files_to_be_staged
+# Add --exclude-standard to git ls-files command
+from patched_repository import patched_files_to_be_staged
+from huggingface_hub import repository
+repository.files_to_be_staged = patched_files_to_be_staged
+
 if __name__ == "__main__":
     _logger.info("Starting training script.")
 

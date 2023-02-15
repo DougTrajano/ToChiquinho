@@ -1,11 +1,15 @@
 import os
+import time
 import json
 import torch
 import mlflow
 import datasets
+import numpy as np
 import matplotlib.pyplot as plt
 from collections import OrderedDict
-from typing import Union, Dict, List
+from typing import Union, Dict, List, Tuple
+from huggingface_hub.repository import Repository
+from transformers.trainer_utils import get_last_checkpoint
 from transformers import (
     AutoTokenizer,
     EarlyStoppingCallback,
@@ -17,8 +21,10 @@ from transformers import (
 
 # Custom code
 from arguments import TrainScriptArguments
+from environments import EnvironmentVariables
 from logger import setup_logger
 from metrics.utils import compute_metrics
+from utils import flatten_dict
 
 _logger = setup_logger(__name__)
 
@@ -32,8 +38,25 @@ class Experiment(object):
         - args: The arguments.
         """
         self.args = args
+        self.env = EnvironmentVariables()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.job_name = self.get_sagemaker_job_name()
+        self.job_name = self.env.SM_TRAINING_ENV.get("job_name") if self.env.SM_TRAINING_ENV else None
+
+        if self.job_name:
+            self.args.output_dir = os.path.join(self.args.output_dir, self.job_name)
+
+        self.model_output_dir = f"{self.args.output_dir}/model"
+        self.prep_output_dir(self.args.output_dir)
+
+        _logger.debug(
+            {
+                "args": self.args,
+                "device": self.device,
+                "job_name": self.job_name
+            }
+        )
+
+        _logger.info(f"Experiment {self.name} initialized.")
 
     def __str__(self):
         """String representation of the experiment."""
@@ -45,23 +68,17 @@ class Experiment(object):
 
         set_seed(self.args.seed)
 
-        self.resume_from_checkpoint = self.prep_checkpoint_dir(self.args.checkpoint_dir)
-        _logger.info(f"Resume from checkpoint: {self.resume_from_checkpoint}")
- 
-        if self.job_name:
-            self.args.checkpoint_dir = os.path.join(self.args.checkpoint_dir, self.job_name)
-
-        if self.resume_mlflow_checkpoint(self.args.checkpoint_dir):
+        if self.resume_mlflow_checkpoint(self.args.output_dir):
             _logger.info("Resuming MLflow from checkpoint.")
-            os.environ["MLFLOW_RUN_ID"] = self.resume_mlflow_checkpoint(self.args.checkpoint_dir)
+            self.env.MLFLOW_RUN_ID = self.resume_mlflow_checkpoint(self.args.output_dir)
 
         self.nested_run = bool(
-            os.environ.get("MLFLOW_RUN_ID")
-            and not self.resume_mlflow_checkpoint(self.args.checkpoint_dir)
+            self.env.MLFLOW_RUN_ID
+            and not self.resume_mlflow_checkpoint(self.args.output_dir)
         )
         _logger.debug(f"Nested run: {self.nested_run}")
         
-        if os.environ.get("MLFLOW_RUN_ID") and self.nested_run:
+        if self.env.MLFLOW_RUN_ID and self.nested_run:
             mlflow.start_run()
             _logger.debug(f"Starting mlflow run: {mlflow.active_run().info.run_id}")
 
@@ -91,7 +108,12 @@ class Experiment(object):
         - The tokenizer.
         """
         _logger.info(f"Initializing tokenizer from {pretrained_model_name_or_path}.")
+        
+        # Disable parallelism to avoid OOM errors.
+        self.env.TOKENIZERS_PARALLELISM = False
+
         self.tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path)
+        
         return self.tokenizer
 
     def load_dataset(self):
@@ -154,51 +176,72 @@ class Experiment(object):
                     self.dataset["train"],
                     self.dataset["validation"]
                 ]
-            )          
-
+            )
+            
         _logger.info(f"Dataset: {dataset}")
         return dataset
 
-    def prep_checkpoint_dir(self, checkpoint_dir: str) -> bool:
-        """Prepare the checkpoint directory.
+    def get_dataset_stats(self, dataset: Union[datasets.Dataset, datasets.DatasetDict]):
+        """Get the dataset statistics (e.g. length, average qty words, etc.).
 
         Args:
-        - checkpoint_dir: The checkpoint directory.
+        - dataset: The dataset.
 
         Returns:
-        - True if we are resuming training, False otherwise.
+        - The dataset statistics as a dictionary.
         """
-        resume_from_checkpoint = False
-        if os.path.isdir(checkpoint_dir):
-            _logger.info(f"Checkpointing directory {checkpoint_dir} exists.")
-            if len(os.listdir(checkpoint_dir)) == 0:
-                _logger.info(f"Checkpointing directory {checkpoint_dir} is empty.")
-            else:
-                # Check if there "checkpoint-*" folders in the checkpointing directory.
-                if len([f for f in os.listdir(checkpoint_dir) if f.startswith("checkpoint-")]) > 0:
-                    _logger.info(f"Checkpointing directory {checkpoint_dir} contains checkpoint-* folders.")
-                    resume_from_checkpoint = True
-        else:
-            _logger.info(f"Creating checkpointing directory {checkpoint_dir}.")
-            os.mkdir(checkpoint_dir)
-        return resume_from_checkpoint
+        _logger.info(f"Getting dataset statistics.")
+
+        def compute_stats(examples):
+            return {
+                "min_length": min([len(x) for x in examples["text"]]),
+                "max_length": max([len(x) for x in examples["text"]]),
+                "avg_length": round(np.mean([len(x) for x in examples["text"]]), 2),
+                "min_words": min([len(x.split()) for x in examples["text"]]),
+                "max_words": max([len(x.split()) for x in examples["text"]]),
+                "avg_words": round(np.mean([len(x.split()) for x in examples["text"]]), 2),
+            }
+
+        dataset_stats = {
+            split: compute_stats(dataset[split]) for split in dataset.keys()
+        }
+
+        _logger.info(f"Dataset statistics: {dataset_stats}")
+        return dataset_stats
+
+    def prep_output_dir(self, output_dir: str) -> bool:
+        """Prepare the output directory.
+
+        Args:
+        - output_dir: The output directory.
+
+        """
+        # Create the output directory if it doesn't exist.
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+            _logger.info(f"Created output directory {output_dir}.")
+
+        # Create the model subdirectory if it doesn't exist.
+        if not os.path.exists(self.model_output_dir):
+            os.makedirs(self.model_output_dir)
+            _logger.info(f"Created model directory {self.model_output_dir}.")
 
     def save_mlflow_checkpoint(
         self,
         mlflow_run_id: str,
-        checkpoint_dir: str,
+        output_dir: str,
         file_name: str = "mlflow_run_id.txt") -> None:
         """Save the MLFLOW_RUN_ID to the checkpoint directory.
 
         Args:
         - mlflow_run_id: The MLFLOW_RUN_ID.
-        - checkpoint_dir: The checkpoint directory.
+        - output_dir: The output directory.
         - file_name: The file name to save the MLFLOW_RUN_ID.
         """
-        if not os.path.isdir(checkpoint_dir):
-            os.mkdir(checkpoint_dir)
+        if not os.path.isdir(output_dir):
+            os.mkdir(output_dir)
 
-        path = os.path.join(checkpoint_dir, file_name)
+        path = os.path.join(output_dir, file_name)
         
         with open(path, "w") as f:
             f.write(mlflow_run_id)
@@ -206,33 +249,23 @@ class Experiment(object):
 
     def resume_mlflow_checkpoint(
         self,
-        checkpoint_dir: str,
+        output_dir: str,
         file_name: str = "mlflow_run_id.txt") -> Union[str, None]:
         """Read the MLFLOW_RUN_ID from the checkpoint directory.
 
         Args:
-        - checkpoint_dir: The checkpoint directory.
+        - output_dir: The output directory.
         - file_name: The file name to save the MLFLOW_RUN_ID.
 
         Returns:
         - The MLFLOW_RUN_ID.
         """        
-        path = os.path.join(checkpoint_dir, file_name)
+        path = os.path.join(output_dir, file_name)
         if os.path.isfile(path):
             with open(path, "r") as f:
                 mlflow_run_id = f.read()
                 _logger.info(f"Read MLFLOW_RUN_ID {mlflow_run_id} from {path}.")
                 return mlflow_run_id
-
-    def get_sagemaker_job_name(self) -> Union[str, None]:
-        """Get the Sagemaker job name.
-
-        Returns:
-        - The Sagemaker job name.
-        """
-        env = os.environ.get("SM_TRAINING_ENV", "{}")
-        env = json.loads(env)
-        return env.get("job_name")
 
     def plot_hf_metrics(
         self,
@@ -244,7 +277,8 @@ class Experiment(object):
             "eval_recall": "Recall"
         },
         xtitle: str = "Epoch",
-        ytitle: str = "Scores") -> plt.Figure:
+        ytitle: str = "Scores",
+        ylim: Tuple[float, float] = (0.0, 1.0)) -> plt.Figure:
         """Plot the Hugging Face metrics.
 
         Args:
@@ -252,6 +286,7 @@ class Experiment(object):
         - metrics: The metrics to plot (key: metric name, value: plot title).
         - xtitle: The x-axis title.
         - ytitle: The y-axis title.
+        - ylim: The y-axis limits.
 
         Returns:
         - The plot.
@@ -284,12 +319,59 @@ class Experiment(object):
             plt.plot(data, label=value)
 
         plt.xticks(range(len(_metrics)), range(1, len(_metrics) + 1))
-        plt.ylim(0, 1)
+
+        if ylim is not None:
+            plt.ylim(ylim)
+
         plt.xlabel(xtitle)
         plt.ylabel(ytitle)
         plt.legend()
 
         return fig
+
+    def add_sm_patterns_to_gitignore(
+        self,
+        repo: Repository,
+        patterns: List[str] = [
+            "*.sagemaker-uploading",
+            "*.sagemaker-uploaded"
+        ]) -> None:
+        """Add the SageMaker Checkpointing patterns to the .gitignore file in Model Repository.
+
+        Args:
+        - repo: The Model Repository.
+        """
+        _logger.debug(f"Adding SageMaker Checkpointing patterns to {repo.local_dir}/.gitignore.")
+
+        # Check if .gitignore exists
+        if os.path.exists(os.path.join(repo.local_dir, ".gitignore")):
+            with open(os.path.join(repo.local_dir, ".gitignore"), "r") as f:
+                current_content = f.read()
+        else:
+            current_content = ""
+
+        # Add the patterns to .gitignore
+        content = current_content
+        for pattern in patterns:
+            if pattern not in content:
+                _logger.debug(f"Adding {pattern} to .gitignore.")
+                if content.endswith("\n"):
+                    content += pattern
+                else:
+                    content += f"\n{pattern}"
+
+        with open(os.path.join(repo.local_dir, ".gitignore"), "w") as f:
+            _logger.debug(f"Writing .gitignore file. Content: {content}")
+            f.write(content)
+
+        repo.git_add(".gitignore")
+
+        # avoid race condition with git status
+        time.sleep(1)
+
+        if not repo.is_repo_clean():
+            repo.git_commit("Add *.sagemaker patterns to .gitignore.")
+            repo.git_push()
 
     def run(self):
         """Run the training."""
@@ -298,7 +380,7 @@ class Experiment(object):
             # Save MLflow run ID to checkpointing directory.
             self.save_mlflow_checkpoint(
                 mlflow_run_id=mlflow.active_run().info.run_id,
-                checkpoint_dir=self.args.checkpoint_dir
+                output_dir=self.args.output_dir
             )
 
             self.init_tokenizer(self.args.model_name)
@@ -307,19 +389,25 @@ class Experiment(object):
             self.dataset = self.slice_dataset(self.dataset)
             self.dataset = self.prepare_dataset(self.dataset)
 
+            # It should be done before the tokenization.
+            dataset_stats = self.get_dataset_stats(self.dataset)
+            mlflow.log_params(flatten_dict(dataset_stats))
+            
             self.init_model(self.args.model_name)
 
             self.dataset.set_format("torch")
 
             trainer_args = TrainingArguments(
-                output_dir=self.args.checkpoint_dir,
-                overwrite_output_dir=True,
+                output_dir=self.args.output_dir,
+                overwrite_output_dir=True if get_last_checkpoint(
+                    self.model_output_dir
+                ) is not None else False,
                 evaluation_strategy="epoch",
                 save_strategy="epoch",
-                save_total_limit=5,
+                save_total_limit=self.args.early_stopping_patience+1,
                 load_best_model_at_end=True,
                 push_to_hub=self.args.push_to_hub,
-                hub_token=os.environ.get("HUGGINGFACE_HUB_TOKEN"),
+                hub_token=self.env.HUGGINGFACE_HUB_TOKEN,
                 hub_model_id=self.args.hub_model_id,
                 metric_for_best_model="f1",
                 learning_rate=self.args.learning_rate,
@@ -348,9 +436,15 @@ class Experiment(object):
                 ] if self.args.early_stopping_patience is not None else None
             )
 
-            trainer.train(
-                resume_from_checkpoint=self.resume_from_checkpoint
-            )
+            # Add *.sagemaker-uploading and *.sagemaker-uploaded patterns to .gitignore.
+            self.add_sm_patterns_to_gitignore(trainer.repo)
+            
+            # check if checkpoint existing if so continue training
+            last_checkpoint = get_last_checkpoint(self.model_output_dir)
+            if last_checkpoint is not None:
+                _logger.info(f"Resuming training from checkpoint: {last_checkpoint}")
+
+            trainer.train(resume_from_checkpoint=last_checkpoint)
 
             # Evaluate model
             mlflow.log_param("eval_dataset", self.args.eval_dataset)
@@ -374,7 +468,8 @@ class Experiment(object):
                     log_history=trainer.state.log_history,
                     metrics={"eval_loss": "Loss"},
                     xtitle="Epoch",
-                    ytitle="Loss"
+                    ytitle="Loss",
+                    ylim=None
                 ),
                 artifact_file="losses.png"
             )
@@ -384,4 +479,25 @@ class Experiment(object):
                 artifact_file="log_history.json"
             )
 
+            trainer.save_model(self.args.model_dir)
+
+            if self.args.push_to_hub:
+                _logger.info("Pushing model to Hugging Face Hub.")
+                trainer.push_to_hub(
+                    blocking=True,
+                    language="pt",
+                    license="apache-2.0",
+                    tags=[
+                        "toxicity",
+                        "portuguese",
+                        "hate speech",
+                        "offensive language"
+                    ],
+                    model_name=self.args.hub_model_id,
+                    finetuned_from=self.args.model_name,
+                    tasks="text-classification",
+                    dataset="OLID-BR"
+                )
+                _logger.info("Model pushed to Hugging Face Hub.")
+                
         _logger.info(f"Experiment completed.")
