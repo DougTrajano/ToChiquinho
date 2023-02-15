@@ -1,5 +1,5 @@
 ---
-title: Classificador de Comentários Tóxicos
+title: Toxic Comment Classification
 summary: O Classificador de Comentários Tóxicos é um modelo que detecta se o texto é tóxico ou não.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Classificador do Tipo de Alvo de Comentários Tóxicos Direcionados
+title: Toxicity Target Type Identification
 summary: O Classificador do Tipo de Alvo de Comentários Tóxicos Direcionados é um modelo que classifica o tipo (individual, grupo ou outro) de um determinado texto alvo.
 ---
 

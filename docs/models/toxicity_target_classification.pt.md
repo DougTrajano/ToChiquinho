@@ -1,5 +1,5 @@
 ---
-title: Classificador de Comentários Tóxicos Direcionados
+title: Toxicity Target Classification
 summary: O Classificador de Comentários Direcionados é um modelo que classifica se um determinado texto é alvo ou não.
 ---
 

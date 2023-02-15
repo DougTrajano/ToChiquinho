@@ -1,5 +1,5 @@
 ---
-title: Classificador dos Tipos de Linguagem Tóxica
+title: Toxicity Type Detection
 summary: O Classificador dos Tipos de Linguagem Tóxica é um modelo que classifica rótulos de toxicidades predeterminados em um texto tóxico.
 ---
 

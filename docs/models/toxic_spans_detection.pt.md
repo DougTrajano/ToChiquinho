@@ -1,5 +1,5 @@
 ---
-title: Detector das partes tóxicas do texto
+title: Toxic Spans Detection
 summary: O Detector das partes tóxicas do texto é um modelo que detecta spans tóxicos em um determinado texto tóxico.
 ---
 
