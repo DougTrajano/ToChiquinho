@@ -74,6 +74,46 @@ See the [GitHub Releases](https://github.com/DougTrajano/ToChiquinho/releases) p
 
 Contributions are welcome! Please open a pull request and include a detailed description of your changes.
 
+## Development environment setup
+
+To set up the development environment, you need to have the following tools installed on your machine:
+
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Python 3.10](https://www.python.org/)
+
+Then, you can run the following commands in the root directory to install the dependencies:
+
+```bash
+pip install -r requirements-dev.txt
+pip install -r requirements-docs.txt
+pip install -r requirements.txt
+```
+
+You also need to install the [pre-commit](https://pre-commit.com/) hooks:
+
+```bash
+pre-commit install
+```
+
+### Add possible secrets to the .secrets.baseline file
+
+If you get an error when running the pre-commit hooks, you may need to add the possible secrets to the `.secrets.baseline` file. To do so, you can run the following command:
+
+```bash
+detect-secrets scan --baseline .secrets.baseline
+```
+
+For more information, see the [Yelp/detect-secrets](https://github.com/Yelp/detect-secrets).
+
+### Running the tests
+
+To run the tests, you can run the following command in the root directory:
+
+```bash
+pytest
+```
+
 ## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
