@@ -7,6 +7,7 @@ repos:
   hooks:
   - id: check-yaml
     exclude: mkdocs.yml
+  - id: detect-private-key
   - id: end-of-file-fixer
     exclude: \.(drawio|excalidraw|md)$
   - id: trailing-whitespace
@@ -19,7 +20,8 @@ repos:
   hooks:
   - id: detect-secrets
     language: python
-    # args: ['--baseline', '.secrets.baseline']
+    entry: detect-secrets-hook
+    args: ['--baseline', '.secrets.baseline']
 
 - repo: https://github.com/PabloRMira/sql_formatter
   rev: 0.6.2
