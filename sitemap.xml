@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+         <loc>https://github.com/DougTrajano/ToChiquinho/getting_started.html</loc>
+         <lastmod>2023-02-20</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://github.com/DougTrajano/ToChiquinho/en/getting_started.html"/>
+         <xhtml:link rel="alternate" hreflang="pt" href="https://github.com/DougTrajano/ToChiquinho/pt/getting_started.html"/>
+         
+    </url>
+    <url>
+         <loc>https://github.com/DougTrajano/ToChiquinho/index.html</loc>
+         <lastmod>2023-02-20</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://github.com/DougTrajano/ToChiquinho/en/index.html"/>
+         <xhtml:link rel="alternate" hreflang="pt" href="https://github.com/DougTrajano/ToChiquinho/pt/index.html"/>
+         
+    </url>
+    <url>
+         <loc>https://github.com/DougTrajano/ToChiquinho/models/toxic_comment_classification.html</loc>
+         <lastmod>2023-02-20</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://github.com/DougTrajano/ToChiquinho/en/models/toxic_comment_classification.html"/>
+         <xhtml:link rel="alternate" hreflang="pt" href="https://github.com/DougTrajano/ToChiquinho/pt/models/toxic_comment_classification.html"/>
+         
+    </url>
+    <url>
+         <loc>https://github.com/DougTrajano/ToChiquinho/models/toxic_spans_detection.html</loc>
+         <lastmod>2023-02-20</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://github.com/DougTrajano/ToChiquinho/en/models/toxic_spans_detection.html"/>
+         <xhtml:link rel="alternate" hreflang="pt" href="https://github.com/DougTrajano/ToChiquinho/pt/models/toxic_spans_detection.html"/>
+         
+    </url>
+    <url>
+         <loc>https://github.com/DougTrajano/ToChiquinho/models/toxicity_target_classification.html</loc>
+         <lastmod>2023-02-20</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://github.com/DougTrajano/ToChiquinho/en/models/toxicity_target_classification.html"/>
+         <xhtml:link rel="alternate" hreflang="pt" href="https://github.com/DougTrajano/ToChiquinho/pt/models/toxicity_target_classification.html"/>
+         
+    </url>
+    <url>
+         <loc>https://github.com/DougTrajano/ToChiquinho/models/toxicity_target_type_identification.html</loc>
+         <lastmod>2023-02-20</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://github.com/DougTrajano/ToChiquinho/en/models/toxicity_target_type_identification.html"/>
+         <xhtml:link rel="alternate" hreflang="pt" href="https://github.com/DougTrajano/ToChiquinho/pt/models/toxicity_target_type_identification.html"/>
+         
+    </url>
+    <url>
+         <loc>https://github.com/DougTrajano/ToChiquinho/models/toxicity_type_detection.html</loc>
+         <lastmod>2023-02-20</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://github.com/DougTrajano/ToChiquinho/en/models/toxicity_type_detection.html"/>
+         <xhtml:link rel="alternate" hreflang="pt" href="https://github.com/DougTrajano/ToChiquinho/pt/models/toxicity_type_detection.html"/>
+         
+    </url>
+</urlset>
