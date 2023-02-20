@@ -74,6 +74,13 @@ See the [GitHub Releases](https://github.com/DougTrajano/ToChiquinho/releases) p
 
 Contributions are welcome! Please open a pull request and include a detailed description of your changes.
 
+## Define AK/SK
+
+```bash
+export AWS_ACCESS_KEY_ID=AKIAIODFODNN7EXAMPLE
+export AWS_SECRET_ACCESS_KEY=wJblrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+```
+
 ## Development environment setup
 
 To set up the development environment, you need to have the following tools installed on your machine:
