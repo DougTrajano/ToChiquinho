@@ -16,7 +16,7 @@ from transformers import (
     PreTrainedModel,
     Trainer,
     TrainingArguments,
-    set_seed
+    set_seed,
 )
 
 # Custom code
@@ -28,22 +28,31 @@ from utils import flatten_dict
 
 _logger = setup_logger(__name__)
 
+
 class Experiment(object):
     name = "base-experiment"
 
     def __init__(self, args: TrainScriptArguments):
         """Initialize the experiment.
-        
+
         Args:
         - args: The arguments.
         """
         self.args = args
         self.env = EnvironmentVariables()
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.job_name = self.env.SM_TRAINING_ENV.get("job_name") if self.env.SM_TRAINING_ENV else None
+        self.device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu"
+        )
+        self.job_name = (
+            self.env.SM_TRAINING_ENV.get("job_name")
+            if self.env.SM_TRAINING_ENV
+            else None
+        )
 
         if self.job_name:
-            self.args.output_dir = os.path.join(self.args.output_dir, self.job_name)
+            self.args.output_dir = os.path.join(
+                self.args.output_dir, self.job_name
+            )
 
         self.model_output_dir = f"{self.args.output_dir}/model"
         self.prep_output_dir(self.args.output_dir)
@@ -52,7 +61,7 @@ class Experiment(object):
             {
                 "args": self.args,
                 "device": self.device,
-                "job_name": self.job_name
+                "job_name": self.job_name,
             }
         )
 
@@ -70,28 +79,34 @@ class Experiment(object):
 
         if self.resume_mlflow_checkpoint(self.args.output_dir):
             _logger.info("Resuming MLflow from checkpoint.")
-            self.env.MLFLOW_RUN_ID = self.resume_mlflow_checkpoint(self.args.output_dir)
+            self.env.MLFLOW_RUN_ID = self.resume_mlflow_checkpoint(
+                self.args.output_dir
+            )
 
         self.nested_run = bool(
             self.env.MLFLOW_RUN_ID
             and not self.resume_mlflow_checkpoint(self.args.output_dir)
         )
         _logger.debug(f"Nested run: {self.nested_run}")
-        
+
         if self.env.MLFLOW_RUN_ID and self.nested_run:
             mlflow.start_run()
-            _logger.debug(f"Starting mlflow run: {mlflow.active_run().info.run_id}")
+            _logger.debug(
+                f"Starting mlflow run: {mlflow.active_run().info.run_id}"
+            )
 
     def init_model(self, pretrained_model_name_or_path: str):
         """Initialize the model.
-        
+
         Args:
         - pretrained_model_name_or_path: The pretrained model name or path.
-        
+
         Returns:
         - The model.
         """
-        _logger.info(f"Initializing model from {pretrained_model_name_or_path}.")
+        _logger.info(
+            f"Initializing model from {pretrained_model_name_or_path}."
+        )
         self.model = PreTrainedModel.from_pretrained(
             pretrained_model_name_or_path
         ).to(self.device)
@@ -107,13 +122,17 @@ class Experiment(object):
         Returns:
         - The tokenizer.
         """
-        _logger.info(f"Initializing tokenizer from {pretrained_model_name_or_path}.")
-        
+        _logger.info(
+            f"Initializing tokenizer from {pretrained_model_name_or_path}."
+        )
+
         # Disable parallelism to avoid OOM errors.
         self.env.TOKENIZERS_PARALLELISM = False
 
-        self.tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path)
-        
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            pretrained_model_name_or_path
+        )
+
         return self.tokenizer
 
     def load_dataset(self):
@@ -122,7 +141,9 @@ class Experiment(object):
         dataset = datasets.load_from_disk(self.args.data_dir)
         return dataset
 
-    def slice_dataset(self, dataset: Union[datasets.Dataset, datasets.DatasetDict]):
+    def slice_dataset(
+        self, dataset: Union[datasets.Dataset, datasets.DatasetDict]
+    ):
         """Slice the dataset.
 
         Args:
@@ -134,25 +155,27 @@ class Experiment(object):
         max_samples = {
             "train": self.args.max_train_samples,
             "validation": self.args.max_val_samples,
-            "test": self.args.max_test_samples
+            "test": self.args.max_test_samples,
         }
 
         if not any(max_samples.values()):
             return dataset
 
-        _logger.info(f"Slicing dataset.")
+        _logger.info("Slicing dataset.")
         for key, value in max_samples.items():
             if value is not None:
                 dataset[key] = dataset[key].select(range(value))
                 _logger.info(f"Sliced {key} dataset to {value} samples.")
-        
+
         for split in dataset.keys():
             mlflow.log_param(f"{split}_size", len(dataset[split]))
 
         _logger.info(f"Dataset: {dataset}")
         return dataset
 
-    def prepare_dataset(self, dataset: Union[datasets.Dataset, datasets.DatasetDict]):
+    def prepare_dataset(
+        self, dataset: Union[datasets.Dataset, datasets.DatasetDict]
+    ):
         """Prepare the dataset.
 
         Args:
@@ -161,7 +184,7 @@ class Experiment(object):
         Returns:
         - The prepared dataset.
         """
-        _logger.info(f"Preparing dataset.")
+        _logger.info("Preparing dataset.")
 
         # Concatenate the train and validation sets to create a new train set.
         if (
@@ -170,18 +193,17 @@ class Experiment(object):
             and "train" in dataset.keys()
             and "validation" in dataset.keys()
         ):
-            _logger.info(f"Concatenating validation set to train set.")
+            _logger.info("Concatenating validation set to train set.")
             self.dataset["train"] = datasets.concatenate_datasets(
-                [
-                    self.dataset["train"],
-                    self.dataset["validation"]
-                ]
+                [self.dataset["train"], self.dataset["validation"]]
             )
-            
+
         _logger.info(f"Dataset: {dataset}")
         return dataset
 
-    def get_dataset_stats(self, dataset: Union[datasets.Dataset, datasets.DatasetDict]):
+    def get_dataset_stats(
+        self, dataset: Union[datasets.Dataset, datasets.DatasetDict]
+    ):
         """Get the dataset statistics (e.g. length, average qty words, etc.).
 
         Args:
@@ -190,16 +212,20 @@ class Experiment(object):
         Returns:
         - The dataset statistics as a dictionary.
         """
-        _logger.info(f"Getting dataset statistics.")
+        _logger.info("Getting dataset statistics.")
 
         def compute_stats(examples):
             return {
                 "min_length": min([len(x) for x in examples["text"]]),
                 "max_length": max([len(x) for x in examples["text"]]),
-                "avg_length": round(np.mean([len(x) for x in examples["text"]]), 2),
+                "avg_length": round(
+                    np.mean([len(x) for x in examples["text"]]), 2
+                ),
                 "min_words": min([len(x.split()) for x in examples["text"]]),
                 "max_words": max([len(x.split()) for x in examples["text"]]),
-                "avg_words": round(np.mean([len(x.split()) for x in examples["text"]]), 2),
+                "avg_words": round(
+                    np.mean([len(x.split()) for x in examples["text"]]), 2
+                ),
             }
 
         dataset_stats = {
@@ -230,7 +256,8 @@ class Experiment(object):
         self,
         mlflow_run_id: str,
         output_dir: str,
-        file_name: str = "mlflow_run_id.txt") -> None:
+        file_name: str = "mlflow_run_id.txt",
+    ) -> None:
         """Save the MLFLOW_RUN_ID to the checkpoint directory.
 
         Args:
@@ -242,15 +269,14 @@ class Experiment(object):
             os.mkdir(output_dir)
 
         path = os.path.join(output_dir, file_name)
-        
+
         with open(path, "w") as f:
             f.write(mlflow_run_id)
             _logger.info(f"Saved MLFLOW_RUN_ID {mlflow_run_id} to {path}.")
 
     def resume_mlflow_checkpoint(
-        self,
-        output_dir: str,
-        file_name: str = "mlflow_run_id.txt") -> Union[str, None]:
+        self, output_dir: str, file_name: str = "mlflow_run_id.txt"
+    ) -> Union[str, None]:
         """Read the MLFLOW_RUN_ID from the checkpoint directory.
 
         Args:
@@ -259,12 +285,14 @@ class Experiment(object):
 
         Returns:
         - The MLFLOW_RUN_ID.
-        """        
+        """
         path = os.path.join(output_dir, file_name)
         if os.path.isfile(path):
             with open(path, "r") as f:
                 mlflow_run_id = f.read()
-                _logger.info(f"Read MLFLOW_RUN_ID {mlflow_run_id} from {path}.")
+                _logger.info(
+                    f"Read MLFLOW_RUN_ID {mlflow_run_id} from {path}."
+                )
                 return mlflow_run_id
 
     def plot_hf_metrics(
@@ -274,11 +302,12 @@ class Experiment(object):
             "eval_accuracy": "Accuracy",
             "eval_f1": "F1-score",
             "eval_precision": "Precision",
-            "eval_recall": "Recall"
+            "eval_recall": "Recall",
         },
         xtitle: str = "Epoch",
         ytitle: str = "Scores",
-        ylim: Union[Tuple[float, float], None] = (0.0, 1.0)) -> plt.Figure:
+        ylim: Union[Tuple[float, float], None] = (0.0, 1.0),
+    ) -> plt.Figure:
         """Plot the Hugging Face metrics.
 
         Args:
@@ -296,7 +325,7 @@ class Experiment(object):
                 "log_history": log_history,
                 "metrics": metrics,
                 "xtitle": xtitle,
-                "ytitle": ytitle
+                "ytitle": ytitle,
             }
         )
 
@@ -315,7 +344,8 @@ class Experiment(object):
             data = [_metrics[i][key] for i in _metrics if key in _metrics[i]]
             if len(data) == 0:
                 raise ValueError(
-                    f"{key} is not in the metrics. Metrics: {_metrics}.")
+                    f"{key} is not in the metrics. Metrics: {_metrics}."
+                )
             plt.plot(data, label=value)
 
         plt.xticks(range(len(_metrics)), range(1, len(_metrics) + 1))
@@ -335,14 +365,17 @@ class Experiment(object):
         gitignore_path: str = ".gitignore",
         patterns: List[str] = [
             "*.sagemaker-uploading",
-            "*.sagemaker-uploaded"
-        ]) -> None:
+            "*.sagemaker-uploaded",
+        ],
+    ) -> None:
         """Add the SageMaker Checkpointing patterns to the .gitignore file in Model Repository.
 
         Args:
         - repo: The Model Repository.
         """
-        _logger.debug(f"Adding SageMaker Checkpointing patterns to {repo.local_dir}/{gitignore_path}.")
+        _logger.debug(
+            f"Adding SageMaker Checkpointing patterns to {repo.local_dir}/{gitignore_path}."
+        )
 
         # Check if .gitignore exists
         if os.path.exists(os.path.join(repo.local_dir, gitignore_path)):
@@ -355,7 +388,9 @@ class Experiment(object):
         content = current_content
         for pattern in patterns:
             if pattern not in content:
-                _logger.debug(f"Adding {pattern} to {repo.local_dir}/{gitignore_path}.")
+                _logger.debug(
+                    f"Adding {pattern} to {repo.local_dir}/{gitignore_path}."
+                )
                 if content.endswith("\n"):
                     content += pattern
                 else:
@@ -381,11 +416,11 @@ class Experiment(object):
             # Save MLflow run ID to checkpointing directory.
             self.save_mlflow_checkpoint(
                 mlflow_run_id=mlflow.active_run().info.run_id,
-                output_dir=self.args.output_dir
+                output_dir=self.args.output_dir,
             )
 
             self.init_tokenizer(self.args.model_name)
-            
+
             self.dataset = self.load_dataset()
             self.dataset = self.slice_dataset(self.dataset)
             self.dataset = self.prepare_dataset(self.dataset)
@@ -393,19 +428,19 @@ class Experiment(object):
             # It should be done before the tokenization.
             dataset_stats = self.get_dataset_stats(self.dataset)
             mlflow.log_params(flatten_dict(dataset_stats))
-            
+
             self.init_model(self.args.model_name)
 
             self.dataset.set_format("torch")
 
             trainer_args = TrainingArguments(
                 output_dir=self.args.output_dir,
-                overwrite_output_dir=True if get_last_checkpoint(
-                    self.model_output_dir
-                ) is not None else False,
+                overwrite_output_dir=True
+                if get_last_checkpoint(self.model_output_dir) is not None
+                else False,
                 evaluation_strategy="epoch",
                 save_strategy="epoch",
-                save_total_limit=self.args.early_stopping_patience+1,
+                save_total_limit=self.args.early_stopping_patience + 1,
                 load_best_model_at_end=True,
                 push_to_hub=self.args.push_to_hub,
                 hub_token=self.env.HUGGINGFACE_HUB_TOKEN,
@@ -422,7 +457,7 @@ class Experiment(object):
                 per_device_eval_batch_size=self.args.batch_size,
                 num_train_epochs=self.args.num_train_epochs,
                 report_to=["mlflow"],
-                seed=self.args.seed
+                seed=self.args.seed,
             )
 
             trainer = Trainer(
@@ -431,19 +466,29 @@ class Experiment(object):
                 train_dataset=self.dataset["train"],
                 eval_dataset=self.dataset[self.args.eval_dataset],
                 tokenizer=self.tokenizer,
-                compute_metrics=lambda p: compute_metrics(p, threshold=self.args.threshold, problem_type="multi-class"),
+                compute_metrics=lambda p: compute_metrics(
+                    p,
+                    threshold=self.args.threshold,
+                    problem_type="multi-class",
+                ),
                 callbacks=[
-                    EarlyStoppingCallback(early_stopping_patience=self.args.early_stopping_patience)
-                ] if self.args.early_stopping_patience is not None else None
+                    EarlyStoppingCallback(
+                        early_stopping_patience=self.args.early_stopping_patience
+                    )
+                ]
+                if self.args.early_stopping_patience is not None
+                else None,
             )
 
             # Add *.sagemaker-uploading and *.sagemaker-uploaded patterns to .gitignore.
             self.add_sm_patterns_to_gitignore(trainer.repo)
-            
+
             # check if checkpoint existing if so continue training
             last_checkpoint = get_last_checkpoint(self.model_output_dir)
             if last_checkpoint is not None:
-                _logger.info(f"Resuming training from checkpoint: {last_checkpoint}")
+                _logger.info(
+                    f"Resuming training from checkpoint: {last_checkpoint}"
+                )
 
             trainer.train(resume_from_checkpoint=last_checkpoint)
 
@@ -454,30 +499,30 @@ class Experiment(object):
             _logger.info(f"eval_f1_weighted: {scores['eval_f1']}")
 
             # Plot metrics
-            _logger.info(f"Plotting scores.")
+            _logger.info("Plotting scores.")
             mlflow.log_figure(
                 figure=self.plot_hf_metrics(
                     log_history=trainer.state.log_history
                 ),
-                artifact_file="scores.png"
+                artifact_file="scores.png",
             )
 
             # Plot loss
-            _logger.info(f"Plotting losses.")
+            _logger.info("Plotting losses.")
             mlflow.log_figure(
                 figure=self.plot_hf_metrics(
                     log_history=trainer.state.log_history,
                     metrics={"eval_loss": "Loss"},
                     xtitle="Epoch",
                     ytitle="Loss",
-                    ylim=None
+                    ylim=None,
                 ),
-                artifact_file="losses.png"
+                artifact_file="losses.png",
             )
 
             mlflow.log_dict(
                 dictionary=trainer.state.log_history,
-                artifact_file="log_history.json"
+                artifact_file="log_history.json",
             )
 
             trainer.save_model(self.args.model_dir)
@@ -492,13 +537,13 @@ class Experiment(object):
                         "toxicity",
                         "portuguese",
                         "hate speech",
-                        "offensive language"
+                        "offensive language",
                     ],
                     model_name=self.args.hub_model_id,
                     finetuned_from=self.args.model_name,
                     tasks="text-classification",
-                    dataset="OLID-BR"
+                    dataset="OLID-BR",
                 )
                 _logger.info("Model pushed to Hugging Face Hub.")
-                
-        _logger.info(f"Experiment completed.")
+
+        _logger.info("Experiment completed.")

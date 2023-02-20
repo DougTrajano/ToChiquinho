@@ -3,6 +3,7 @@ from pathlib import Path
 from huggingface_hub.utils import run_subprocess
 import subprocess
 
+
 def patched_files_to_be_staged(
     pattern: str = ".", folder: Union[str, Path, None] = None
 ) -> List[str]:
@@ -20,12 +21,14 @@ def patched_files_to_be_staged(
     """
     try:
         # --exclude-standard
-        p = run_subprocess("git ls-files --exclude-standard -mo".split() + [pattern], folder)
+        p = run_subprocess(
+            "git ls-files --exclude-standard -mo".split() + [pattern], folder
+        )
         if len(p.stdout.strip()):
             files = p.stdout.strip().split("\n")
         else:
             files = []
     except subprocess.CalledProcessError as exc:
         raise EnvironmentError(exc.stderr)
-        
+
     return files

@@ -8,21 +8,25 @@ from transformers.models.bert.modeling_bert import (
     _CHECKPOINT_FOR_SEQUENCE_CLASSIFICATION,
     _SEQ_CLASS_EXPECTED_OUTPUT,
     _SEQ_CLASS_EXPECTED_LOSS,
-    _CONFIG_FOR_DOC
+    _CONFIG_FOR_DOC,
 )
 from transformers.utils import (
     add_start_docstrings_to_model_forward,
-    add_code_sample_docstrings
+    add_code_sample_docstrings,
 )
 
 
 class ToxicityTypeForSequenceClassification(BertForSequenceClassification):
     def __init__(self, config, pos_weight=None, weight=None):
         super().__init__(config)
-        self.pos_weight = pos_weight.to(self.device) if pos_weight is not None else None
+        self.pos_weight = (
+            pos_weight.to(self.device) if pos_weight is not None else None
+        )
         self.weight = weight.to(self.device) if weight is not None else None
 
-    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    @add_start_docstrings_to_model_forward(
+        BERT_INPUTS_DOCSTRING.format("batch_size, sequence_length")
+    )
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_SEQUENCE_CLASSIFICATION,
         output_type=SequenceClassifierOutput,
@@ -49,7 +53,11 @@ class ToxicityTypeForSequenceClassification(BertForSequenceClassification):
             config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+        return_dict = (
+            return_dict
+            if return_dict is not None
+            else self.config.use_return_dict
+        )
 
         outputs = self.bert(
             input_ids,
@@ -73,7 +81,9 @@ class ToxicityTypeForSequenceClassification(BertForSequenceClassification):
             if self.config.problem_type is None:
                 if self.num_labels == 1:
                     self.config.problem_type = "regression"
-                elif self.num_labels > 1 and (labels.dtype == torch.long or labels.dtype == torch.int):
+                elif self.num_labels > 1 and (
+                    labels.dtype == torch.long or labels.dtype == torch.int
+                ):
                     self.config.problem_type = "single_label_classification"
                 else:
                     self.config.problem_type = "multi_label_classification"
@@ -85,15 +95,21 @@ class ToxicityTypeForSequenceClassification(BertForSequenceClassification):
                 else:
                     loss = loss_fct(logits, labels)
             elif self.config.problem_type == "single_label_classification":
-                loss_fct = torch.nn.CrossEntropyLoss(weight=self.weight.to(self.device))
-                loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
+                loss_fct = torch.nn.CrossEntropyLoss(
+                    weight=self.weight.to(self.device)
+                )
+                loss = loss_fct(
+                    logits.view(-1, self.num_labels), labels.view(-1)
+                )
             elif self.config.problem_type == "multi_label_classification":
                 if self.weight is not None:
                     warnings.warn(
                         "The `weight` parameter is not used for multi-label classification. "
                         "Please use `pos_weight` instead."
                     )
-                loss_fct = torch.nn.BCEWithLogitsLoss(pos_weight=self.pos_weight.to(self.device))
+                loss_fct = torch.nn.BCEWithLogitsLoss(
+                    pos_weight=self.pos_weight.to(self.device)
+                )
                 loss = loss_fct(logits, labels)
         if not return_dict:
             output = (logits,) + outputs[2:]

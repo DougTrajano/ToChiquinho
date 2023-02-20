@@ -1,6 +1,7 @@
 import numpy as np
 from typing import List
 
+
 def precision_score(y_true: List[int], y_pred: List[int]):
     """
     Compute the precision score operating on two lists of offsets (e.g., character).
@@ -12,7 +13,7 @@ def precision_score(y_true: List[int], y_pred: List[int]):
 
     Returns:
     - precision: the precision score
-    """   
+    """
     scores = []
     for pred, true in zip(y_pred, y_true):
         if len(true) == 0 and len(pred) == 0:
@@ -25,8 +26,9 @@ def precision_score(y_true: List[int], y_pred: List[int]):
             pred_set = set(pred)
             true_set = set(true)
             scores.append(len(pred_set.intersection(true_set)) / len(pred_set))
-            
+
     return np.mean(scores)
+
 
 def recall_score(y_true: List[int], y_pred: List[int]):
     """
@@ -54,6 +56,7 @@ def recall_score(y_true: List[int], y_pred: List[int]):
             scores.append(len(pred_set.intersection(true_set)) / len(true_set))
     return np.mean(scores)
 
+
 def f1_score(y_true: List[int], y_pred: List[int]):
     """
     Compute the F1 score operating on two lists of offsets (e.g., character).
@@ -69,5 +72,5 @@ def f1_score(y_true: List[int], y_pred: List[int]):
     precision = precision_score(y_true, y_pred)
     recall = recall_score(y_true, y_pred)
     if precision + recall == 0:
-        return 0.
+        return 0.0
     return 2 * (precision * recall) / (precision + recall)

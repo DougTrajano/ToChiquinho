@@ -6,11 +6,7 @@ from typing import Union
 from sklearn.metrics import classification_report
 from sklearn.utils.class_weight import compute_class_weight
 from transformers.trainer_utils import get_last_checkpoint
-from transformers import (
-    Trainer,
-    TrainingArguments,
-    EarlyStoppingCallback
-)
+from transformers import Trainer, TrainingArguments, EarlyStoppingCallback
 
 # Custom code
 from .base import Experiment
@@ -22,7 +18,8 @@ from metrics.utils import compute_metrics
 from utils import flatten_dict
 
 _logger = setup_logger(__name__)
-    
+
+
 def preprocess_data(examples, tokenizer, max_seq_length):
     """Preprocess the data.
 
@@ -36,22 +33,18 @@ def preprocess_data(examples, tokenizer, max_seq_length):
     - The preprocessed examples.
     """
     return tokenizer(
-        examples["text"],
-        truncation=True,
-        max_length=max_seq_length
+        examples["text"], truncation=True, max_length=max_seq_length
     )
+
 
 class ToxicCommentClassification(Experiment):
     name = "toxic-comments-classification"
 
-    labels = {
-        0: "NOT-OFFENSIVE",
-        1: "OFFENSIVE"
-    }
+    labels = {0: "NOT-OFFENSIVE", 1: "OFFENSIVE"}
 
     def __init__(self, args: TrainScriptArguments):
         """Initialize the experiment.
-        
+
         Args:
         - args: The arguments of the experiment.
         """
@@ -60,10 +53,10 @@ class ToxicCommentClassification(Experiment):
 
     def init_model(self, pretrained_model_name_or_path: str):
         """Initialize the model.
-        
+
         Args:
         - pretrained_model_name_or_path: The name or path of the pretrained model.
-        
+
         Returns:
         - The initialized model.
         """
@@ -73,22 +66,26 @@ class ToxicCommentClassification(Experiment):
         class_weights = compute_class_weight(
             class_weight="balanced",
             classes=list(self.labels.keys()),
-            y=self.dataset["train"]["label"]
+            y=self.dataset["train"]["label"],
         ).tolist()
         mlflow.log_param("class_weights", class_weights)
 
-        _logger.info(f"Initializing model from {pretrained_model_name_or_path}.")
+        _logger.info(
+            f"Initializing model from {pretrained_model_name_or_path}."
+        )
         self.model = ToxicityTypeForSequenceClassification.from_pretrained(
             pretrained_model_name_or_path,
             num_labels=len(self.labels),
             id2label=self.labels,
             label2id={v: k for k, v in self.labels.items()},
-            weight=torch.Tensor(class_weights).to(self.device)
+            weight=torch.Tensor(class_weights).to(self.device),
         ).to(self.device)
         mlflow.log_text(str(self.model), "model_summary.txt")
         return self.model
 
-    def prepare_dataset(self, dataset: Union[datasets.Dataset, datasets.DatasetDict]):
+    def prepare_dataset(
+        self, dataset: Union[datasets.Dataset, datasets.DatasetDict]
+    ):
         """Prepare the dataset.
 
         Args:
@@ -98,7 +95,7 @@ class ToxicCommentClassification(Experiment):
         - The prepared dataset.
         """
         super().prepare_dataset(dataset)
-        
+
         dataset_stats = self.get_dataset_stats(self.dataset)
         if mlflow.active_run():
             mlflow.log_params(flatten_dict(dataset_stats))
@@ -109,8 +106,8 @@ class ToxicCommentClassification(Experiment):
             batched=True,
             fn_kwargs={
                 "tokenizer": self.tokenizer,
-                "max_seq_length": self.args.max_seq_length
-            }
+                "max_seq_length": self.args.max_seq_length,
+            },
         )
 
         return dataset
@@ -122,11 +119,11 @@ class ToxicCommentClassification(Experiment):
             # Save MLflow run ID to checkpointing directory.
             self.save_mlflow_checkpoint(
                 mlflow_run_id=mlflow.active_run().info.run_id,
-                output_dir=self.args.output_dir
+                output_dir=self.args.output_dir,
             )
 
             self.init_tokenizer(self.args.model_name)
-            
+
             self.dataset = self.load_dataset()
             self.dataset = self.slice_dataset(self.dataset)
             self.dataset = self.prepare_dataset(self.dataset)
@@ -137,12 +134,12 @@ class ToxicCommentClassification(Experiment):
 
             trainer_args = TrainingArguments(
                 output_dir=self.model_output_dir,
-                overwrite_output_dir=True if get_last_checkpoint(
-                    self.model_output_dir
-                ) is not None else False,
+                overwrite_output_dir=True
+                if get_last_checkpoint(self.model_output_dir) is not None
+                else False,
                 evaluation_strategy="epoch",
                 save_strategy="epoch",
-                save_total_limit=self.args.early_stopping_patience+1,
+                save_total_limit=self.args.early_stopping_patience + 1,
                 load_best_model_at_end=True,
                 push_to_hub=self.args.push_to_hub,
                 hub_token=self.env.HUGGINGFACE_HUB_TOKEN,
@@ -159,7 +156,7 @@ class ToxicCommentClassification(Experiment):
                 per_device_train_batch_size=self.args.batch_size,
                 per_device_eval_batch_size=self.args.batch_size,
                 num_train_epochs=self.args.num_train_epochs,
-                seed=self.args.seed
+                seed=self.args.seed,
             )
 
             trainer = Trainer(
@@ -168,10 +165,16 @@ class ToxicCommentClassification(Experiment):
                 train_dataset=self.dataset["train"],
                 eval_dataset=self.dataset[self.args.eval_dataset],
                 tokenizer=self.tokenizer,
-                compute_metrics=lambda p: compute_metrics(p, threshold=self.args.threshold),
+                compute_metrics=lambda p: compute_metrics(
+                    p, threshold=self.args.threshold
+                ),
                 callbacks=[
-                    EarlyStoppingCallback(early_stopping_patience=self.args.early_stopping_patience)
-                ] if self.args.early_stopping_patience is not None else None
+                    EarlyStoppingCallback(
+                        early_stopping_patience=self.args.early_stopping_patience
+                    )
+                ]
+                if self.args.early_stopping_patience is not None
+                else None,
             )
 
             # Add *.sagemaker-uploading and *.sagemaker-uploaded patterns to .gitignore.
@@ -180,10 +183,12 @@ class ToxicCommentClassification(Experiment):
             # check if checkpoint existing if so continue training
             last_checkpoint = get_last_checkpoint(self.model_output_dir)
             if last_checkpoint is not None:
-                _logger.info(f"Resuming training from checkpoint: {last_checkpoint}")
+                _logger.info(
+                    f"Resuming training from checkpoint: {last_checkpoint}"
+                )
 
             trainer.train(resume_from_checkpoint=last_checkpoint)
-            
+
             # Evaluate model
             mlflow.log_param("eval_dataset", self.args.eval_dataset)
             scores = trainer.evaluate()
@@ -191,44 +196,45 @@ class ToxicCommentClassification(Experiment):
             _logger.info(f"eval_f1_weighted: {scores['eval_f1']}")
 
             # Classification Report
-            _logger.info(f"Computing classification report.")
+            _logger.info("Computing classification report.")
             preds = trainer.predict(self.dataset[self.args.eval_dataset])
             report = classification_report(
                 y_true=self.dataset[self.args.eval_dataset]["label"],
                 y_pred=predict(preds, threshold=self.args.threshold),
                 target_names=self.labels.values(),
-                digits=4, zero_division=0
+                digits=4,
+                zero_division=0,
             )
 
             mlflow.log_text(report, "classification_report.txt")
 
             # Plot metrics
-            _logger.info(f"Plotting metrics.")
+            _logger.info("Plotting metrics.")
             mlflow.log_figure(
                 figure=self.plot_hf_metrics(
                     log_history=trainer.state.log_history
                 ),
-                artifact_file="metrics.png"
+                artifact_file="metrics.png",
             )
 
             # Plot loss
-            _logger.info(f"Plotting loss.")
+            _logger.info("Plotting loss.")
             mlflow.log_figure(
                 figure=self.plot_hf_metrics(
                     log_history=trainer.state.log_history,
                     metrics={"eval_loss": "Loss"},
                     xtitle="Loss",
                     ytitle="Epoch",
-                    ylim=None
+                    ylim=None,
                 ),
-                artifact_file="loss.png"
+                artifact_file="loss.png",
             )
 
             mlflow.log_dict(
                 dictionary=trainer.state.log_history,
-                artifact_file="log_history.json"
+                artifact_file="log_history.json",
             )
-            
+
             trainer.save_model(self.args.model_dir)
 
             if self.args.push_to_hub:
@@ -241,13 +247,13 @@ class ToxicCommentClassification(Experiment):
                         "toxicity",
                         "portuguese",
                         "hate speech",
-                        "offensive language"
+                        "offensive language",
                     ],
                     model_name=self.args.hub_model_id,
                     finetuned_from=self.args.model_name,
                     tasks="text-classification",
-                    dataset="OLID-BR"
+                    dataset="OLID-BR",
                 )
                 _logger.info("Model pushed to Hugging Face Hub.")
 
-        _logger.info(f"Experiment completed.")
+        _logger.info("Experiment completed.")

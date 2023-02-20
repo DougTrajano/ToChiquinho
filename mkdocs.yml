@@ -98,7 +98,7 @@ extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
   - https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js
   - javascripts/tables.js
-  
+
 markdown_extensions:
   - admonition
   - abbr

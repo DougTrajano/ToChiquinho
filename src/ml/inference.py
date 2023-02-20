@@ -4,11 +4,13 @@ from typing import Union
 from transformers import EvalPrediction
 from transformers.trainer_utils import PredictionOutput
 
+
 def predict(
-        predictions: Union[EvalPrediction, PredictionOutput, np.ndarray],
-        return_proba: bool = False,
-        threshold: float = 0.5,
-        problem_type: str = None):
+    predictions: Union[EvalPrediction, PredictionOutput, np.ndarray],
+    return_proba: bool = False,
+    threshold: float = 0.5,
+    problem_type: str = None,
+):
     """Predict the labels of a batch of samples.
 
     Args:
@@ -34,7 +36,7 @@ def predict(
 
     if problem_type == "multi-label":
         act_fn = torch.nn.Sigmoid()
-    else: # binary or multi-class
+    else:  # binary or multi-class
         act_fn = torch.nn.Softmax(dim=1)
 
     probs: np.ndarray = act_fn(torch.Tensor(predictions))

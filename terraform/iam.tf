@@ -1,7 +1,7 @@
 resource "aws_iam_role" "iam_role" {
   name = "${local.name}-role"
 
-  # Change this to Fargate instead App Runner 
+  # Change this to Fargate instead App Runner
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [

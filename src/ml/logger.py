@@ -2,12 +2,13 @@ import os
 import sys
 import logging
 
+
 def setup_logger(name: str = __name__) -> logging.Logger:
     """Setup logger.
 
     Args:
     - name: The name of the logger.
-    
+
     Returns:
     - logger: The logger.
     """
@@ -29,9 +30,9 @@ def setup_logger(name: str = __name__) -> logging.Logger:
 
     formatter = logging.Formatter(
         fmt="%(asctime)s :: %(levelname)s :: %(module)s :: %(funcName)s :: %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
-    
+
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     return logger

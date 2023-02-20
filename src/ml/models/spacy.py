@@ -21,9 +21,10 @@ from logger import setup_logger
 
 _logger = setup_logger(__name__)
 
+
 def _contiguous_ranges(span_list: List[int]):
     """Extracts continguous runs [1, 2, 3, 5, 6, 7] -> [(1,3), (5,7)].
-    
+
     Args:
     - span_list: a list of span indicies
 
@@ -32,16 +33,18 @@ def _contiguous_ranges(span_list: List[int]):
     """
     output = []
     for _, span in itertools.groupby(
-        enumerate(span_list), lambda p: p[1] - p[0]):
+        enumerate(span_list), lambda p: p[1] - p[0]
+    ):
         span = list(span)
         output.append((span[0][1], span[-1][1]))
     return output
 
-def fix_spans(spans: List[int],
-              text: str,
-              special_characters: str = string.whitespace):
+
+def fix_spans(
+    spans: List[int], text: str, special_characters: str = string.whitespace
+):
     """Applies minor edits to trim spans and remove singletons.
-    
+
     Args:
     - spans: a list of span indicies
     - text: the text to which the spans apply
@@ -60,37 +63,39 @@ def fix_spans(spans: List[int],
             cleaned.extend(range(begin, end + 1))
     return cleaned
 
-def spans_to_ents(doc: Doc, spans: Set[int], label: str):
-  """Converts span indicies into spacy entity labels.
-  
-  Args:
-  - doc: a spacy Doc object
-  - spans: a list of span indicies
-  - label: the entity label to assign to the spans
 
-  Returns:
-  - A list containing start, end, and label.
-  """
-  started = False
-  left, right, ents = 0, 0, []
-  for x in doc:
-    if x.pos_ == "SPACE":
-      continue
-    if spans.intersection(set(range(x.idx, x.idx + len(x.text)))):
-      if not started:
-        left, started = x.idx, True
-      right = x.idx + len(x.text)
-    elif started:
-      ents.append((left, right, label))
-      started = False
-  if started:
-    ents.append((left, right, label))
-  return ents
+def spans_to_ents(doc: Doc, spans: Set[int], label: str):
+    """Converts span indicies into spacy entity labels.
+
+    Args:
+    - doc: a spacy Doc object
+    - spans: a list of span indicies
+    - label: the entity label to assign to the spans
+
+    Returns:
+    - A list containing start, end, and label.
+    """
+    started = False
+    left, right, ents = 0, 0, []
+    for x in doc:
+        if x.pos_ == "SPACE":
+            continue
+        if spans.intersection(set(range(x.idx, x.idx + len(x.text)))):
+            if not started:
+                left, started = x.idx, True
+            right = x.idx + len(x.text)
+        elif started:
+            ents.append((left, right, label))
+            started = False
+    if started:
+        ents.append((left, right, label))
+    return ents
+
 
 class ToxicSpansDetectionModel(BaseEstimator):
-    def __init__(self,
-                 spacy_model: str = "pt_core_news_lg",
-                 toxic_label: str = "TOXIC"):
+    def __init__(
+        self, spacy_model: str = "pt_core_news_lg", toxic_label: str = "TOXIC"
+    ):
         """Initializes the model.
 
         Args:
@@ -109,17 +114,14 @@ class ToxicSpansDetectionModel(BaseEstimator):
 
         sns.set_theme(
             style="white",
-            rc={
-                "axes.spines.right": False,
-                "axes.spines.top": False
-            }
+            rc={"axes.spines.right": False, "axes.spines.top": False},
         )
 
         _logger.info("Initialized ToxicSpansDetection model.")
-    
+
     def init_model(self) -> spacy.language.Language:
         """Initializes the model.
-        
+
         Returns:
         - The initialized model.
         """
@@ -132,12 +134,15 @@ class ToxicSpansDetectionModel(BaseEstimator):
         _logger.debug("ToxicSpansDetection model initialized.")
         return model
 
-    def init_optimizer(self, optim: str = "sgd",
-                       learning_rate: float = 0.001,
-                       adam_beta1: float = 0.9,
-                       adam_beta2: float = 0.999,
-                       adam_epsilon: float = 1e-8,
-                       weight_decay: float = 0.0) -> Optimizer:
+    def init_optimizer(
+        self,
+        optim: str = "sgd",
+        learning_rate: float = 0.001,
+        adam_beta1: float = 0.9,
+        adam_beta2: float = 0.999,
+        adam_epsilon: float = 1e-8,
+        weight_decay: float = 0.0,
+    ) -> Optimizer:
         """Initializes the optimizer.
 
         Args:
@@ -154,48 +159,48 @@ class ToxicSpansDetectionModel(BaseEstimator):
         if optim == "adam":
             _logger.debug("Initializing Adam optimizer.")
             from thinc.optimizers import Adam
+
             optimizer = Adam(
                 learn_rate=learning_rate,
                 beta1=adam_beta1,
                 beta2=adam_beta2,
                 eps=adam_epsilon,
-                L2=weight_decay
+                L2=weight_decay,
             )
         elif optim == "radam":
             _logger.debug("Initializing RAdam optimizer.")
             from thinc.optimizers import RAdam
+
             optimizer = RAdam(
                 learn_rate=learning_rate,
                 beta1=adam_beta1,
                 beta2=adam_beta2,
                 eps=adam_epsilon,
-                L2=weight_decay
+                L2=weight_decay,
             )
         elif optim == "sgd":
             _logger.debug("Initializing SGD optimizer.")
             from thinc.optimizers import SGD
-            optimizer = SGD(
-                learn_rate=learning_rate,
-                L2=weight_decay
-            )
+
+            optimizer = SGD(learn_rate=learning_rate, L2=weight_decay)
         else:
             _logger.warning(f"Optimizer {optim} not supported. Using SGD.")
             _logger.debug("Initializing SGD optimizer.")
             from thinc.optimizers import SGD
-            optimizer = SGD(
-                learn_rate=0.001,
-                L2=weight_decay
-            )
+
+            optimizer = SGD(learn_rate=0.001, L2=weight_decay)
         _logger.debug("Optimizer initialized.")
         return optimizer
 
-    def load_model_from_checkpoint(self, checkpoint_dir: str, metrics_dir: str = None):
+    def load_model_from_checkpoint(
+        self, checkpoint_dir: str, metrics_dir: str = None
+    ):
         """Loads the model from the checkpoint directory.
 
         Args:
         - checkpoint_dir: the directory to load the model from.
         - metrics_dir: the directory to load the metrics from.
-        
+
         Path: {checkpoint_dir}/model_{epoch}/...
 
         Returns:
@@ -205,7 +210,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
         if not checkpoint_dir.exists():
             _logger.debug("Checkpoint directory does not exist.")
             return None
-        
+
         _logger.debug(f"Loading model from checkpoint: {checkpoint_dir}")
 
         if self._model is None:
@@ -229,7 +234,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
             self.eval_scores = metrics["eval_scores"]
 
         return self._model
-        
+
     def save(self, checkpoint_dir: Union[str, Path], overwrite: bool = False):
         """Saves the model to the checkpoint directory.
 
@@ -238,12 +243,14 @@ class ToxicSpansDetectionModel(BaseEstimator):
         - overwrite: whether to overwrite the existing model.
         """
         _logger.debug("Saving ToxicSpansDetection model.")
-        
+
         checkpoint_dir = Path(checkpoint_dir)
 
         if checkpoint_dir.exists() and not overwrite:
             _logger.error("Checkpoint directory already exists.")
-            raise FileExistsError(f"Checkpoint directory already exists: {checkpoint_dir}.")
+            raise FileExistsError(
+                f"Checkpoint directory already exists: {checkpoint_dir}."
+            )
 
         self._model.to_disk(checkpoint_dir)
 
@@ -254,7 +261,8 @@ class ToxicSpansDetectionModel(BaseEstimator):
                     "losses": self.losses,
                     "train_scores": self.train_scores,
                     "eval_scores": self.eval_scores,
-                }, f
+                },
+                f,
             )
 
         _logger.debug("ToxicSpansDetection model saved.")
@@ -288,15 +296,24 @@ class ToxicSpansDetectionModel(BaseEstimator):
         return latest_checkpoint
 
     def fit(
-        self, x: List[str], y: List[int],
-        x_val: List[str] = None, y_val: List[int] = None,
-        eval_every: int = 1, early_stopping_patience: int = None,
-        epochs: int = 30, dropout: float = 0.1,
-        optim: str = "sgd", learning_rate: float = 0.001,
-        adam_beta1: float = 0.9, adam_beta2: float = 0.999,
-        adam_epsilon: float = 1e-8, weight_decay: float = 0.0,
+        self,
+        x: List[str],
+        y: List[int],
+        x_val: List[str] = None,
+        y_val: List[int] = None,
+        eval_every: int = 1,
+        early_stopping_patience: int = None,
+        epochs: int = 30,
+        dropout: float = 0.1,
+        optim: str = "sgd",
+        learning_rate: float = 0.001,
+        adam_beta1: float = 0.9,
+        adam_beta2: float = 0.999,
+        adam_epsilon: float = 1e-8,
+        weight_decay: float = 0.0,
         checkpoint_dir: str = "checkpoints",
-        load_best_model_at_end: bool = True):
+        load_best_model_at_end: bool = True,
+    ):
         """Fits the model.
 
         Args:
@@ -337,14 +354,17 @@ class ToxicSpansDetectionModel(BaseEstimator):
         # Load latest checkpoint
         if self.get_latest_checkpoint(checkpoint_dir):
             latest_checkpoint_dir = self.get_latest_checkpoint(checkpoint_dir)
-            self._model = self.load_model_from_checkpoint(latest_checkpoint_dir)
+            self._model = self.load_model_from_checkpoint(
+                latest_checkpoint_dir
+            )
 
         pipe_exceptions = ["ner", "trf_wordpiecer", "trf_tok2vec"]
         unaffected_pipes = [
-            pipe for pipe in self._model.pipe_names
+            pipe
+            for pipe in self._model.pipe_names
             if pipe not in pipe_exceptions
         ]
-            
+
         with self._model.disable_pipes(*unaffected_pipes):
             optimizer = self.init_optimizer(
                 optim=optim.lower(),
@@ -352,7 +372,7 @@ class ToxicSpansDetectionModel(BaseEstimator):
                 adam_beta1=adam_beta1,
                 adam_beta2=adam_beta2,
                 adam_epsilon=adam_epsilon,
-                weight_decay=weight_decay
+                weight_decay=weight_decay,
             )
 
             if self.get_latest_checkpoint(checkpoint_dir):
@@ -364,12 +384,11 @@ class ToxicSpansDetectionModel(BaseEstimator):
             for epoch in range(epochs):
                 _logs = {}
                 losses = {}
-                
+
                 random.shuffle(training_data)
                 batches = spacy.util.minibatch(
                     items=training_data,
-                    size=spacy.util.compounding(
-                        4.0, 64.0, 1.01)
+                    size=spacy.util.compounding(4.0, 64.0, 1.01),
                 )
 
                 if self._trained_epochs and epoch < self._trained_epochs:
@@ -380,9 +399,13 @@ class ToxicSpansDetectionModel(BaseEstimator):
                 for batch in batches:
                     examples = []
                     for text, annotations in batch:
-                        example = Example.from_dict(self.nlp.make_doc(text), annotations)
+                        example = Example.from_dict(
+                            self.nlp.make_doc(text), annotations
+                        )
                         examples.append(example)
-                    self._model.update(examples, drop=dropout, losses=losses, sgd=optimizer)
+                    self._model.update(
+                        examples, drop=dropout, losses=losses, sgd=optimizer
+                    )
                 self.losses.append(losses["ner"])
                 _logs["loss"] = f"{losses['ner']:.2f}"
 
@@ -396,22 +419,24 @@ class ToxicSpansDetectionModel(BaseEstimator):
                     self.save(f"{checkpoint_dir}/model_{epoch+1}")
 
                 _logger.info(f"Epoch {epoch+1}/{epochs}. {_logs}.")
-                
+
                 self._trained_epochs += 1
 
                 if (
-                    x_val and y_val
+                    x_val
+                    and y_val
                     and early_stopping_patience
                     and self.early_stopping(
                         scores=self.eval_scores,
-                        patience=early_stopping_patience)
+                        patience=early_stopping_patience,
+                    )
                 ):
                     _logger.info(f"Early stopping at epoch {epoch+1}.")
                     break
 
         if load_best_model_at_end and len(self.eval_scores) > 1:
             _logger.debug("Loading best model at end of training.")
-            self.best_epoch = np.argmax(self.eval_scores)+1
+            self.best_epoch = np.argmax(self.eval_scores) + 1
             self._model = self.load_model_from_checkpoint(
                 checkpoint_dir=f"{checkpoint_dir}/model_{self.best_epoch}"
             )
@@ -427,26 +452,26 @@ class ToxicSpansDetectionModel(BaseEstimator):
         Args:
         - scores: the list of scores.
         - patience: the number of epochs to wait before early stopping.
-        
+
         Returns:
         - whether to use early stopping.
         """
         if len(scores) < 2:
             return False
-        
+
         best_score = scores[0]
         best_score_idx = 0
         for i in range(1, len(scores)):
             if scores[i] > best_score:
                 best_score = scores[i]
                 best_score_idx = i
-        
+
         if (len(scores) - best_score_idx) > patience:
             return True
         else:
             return False
 
-    def _predict(self, text: str) -> List[int]: 
+    def _predict(self, text: str) -> List[int]:
         """Predicts the toxic spans for a given text.
 
         Args:
@@ -457,16 +482,18 @@ class ToxicSpansDetectionModel(BaseEstimator):
         """
         if not self._model:
             raise ValueError("Model not trained or loaded yet.")
-            
+
         preds = []
         doc = self._model(text)
         for ent in doc.ents:
             preds.extend(range(ent.start_char, ent.end_char))
         return preds
 
-    def predict(self, x: Union[List[str], str]) -> Union[List[int], List[List[int]]]:
+    def predict(
+        self, x: Union[List[str], str]
+    ) -> Union[List[int], List[List[int]]]:
         """Predicts the labels.
-        
+
         Args:
         - x: the list of texts or a single text.
 
@@ -478,14 +505,14 @@ class ToxicSpansDetectionModel(BaseEstimator):
             for text in x:
                 preds.append(self._predict(text))
             return preds
-        elif isinstance(X, str):
+        elif isinstance(x, str):
             return self._predict(x)
         else:
             raise ValueError("X must be a list of strings or a single string.")
-        
+
     def score(self, x: List[str], y: List[int]):
         """Scores the model using the F1-score.
-        
+
         Args:
         - x: the list of texts.
         - y: the list of labels.
@@ -498,10 +525,10 @@ class ToxicSpansDetectionModel(BaseEstimator):
         score = f1_score(y, y_pred)
         _logger.debug(f"F1-score: {score:.4f}")
         return score
-        
-    def plot_losses(self,
-                    xlabel: str = "Epoch",
-                    ylabel: str = "Loss") -> plt.Figure:
+
+    def plot_losses(
+        self, xlabel: str = "Epoch", ylabel: str = "Loss"
+    ) -> plt.Figure:
         """Plots the losses.
 
         Args:
@@ -513,15 +540,15 @@ class ToxicSpansDetectionModel(BaseEstimator):
         plt.plot(self.losses, figure=fig)
         plt.xticks(
             ticks=[int(i) for i in range(len(self.losses))],
-            labels=[int(i+1) for i in range(len(self.losses))]
+            labels=[int(i + 1) for i in range(len(self.losses))],
         )
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
         return fig
 
-    def plot_scores(self,
-                    xlabel: str = "Step",
-                    ylabel: str = "F1-score") -> plt.Figure:
+    def plot_scores(
+        self, xlabel: str = "Step", ylabel: str = "F1-score"
+    ) -> plt.Figure:
         """Plots the scores.
 
         Args:
@@ -534,11 +561,11 @@ class ToxicSpansDetectionModel(BaseEstimator):
         plt.plot(self.eval_scores, label=f"{ylabel} (validation)")
         plt.xticks(
             ticks=[int(i) for i in range(len(self.train_scores))],
-            labels=[int(i+1) for i in range(len(self.train_scores))]
+            labels=[int(i + 1) for i in range(len(self.train_scores))],
         )
 
         plt.ylim(0, 1)
-        
+
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
         plt.legend()

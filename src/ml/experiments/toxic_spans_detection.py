@@ -15,6 +15,7 @@ from metrics.spans import (
 
 _logger = setup_logger(__name__)
 
+
 class ToxicSpansDetection(Experiment):
     name = "toxic-spans-detection"
 
@@ -31,10 +32,11 @@ class ToxicSpansDetection(Experiment):
         else:
             self.args.optim
 
-    def init_model(self, pretrained_model_name_or_path: str = "pt_core_news_lg") -> ToxicSpansDetectionModel:
+    def init_model(
+        self, pretrained_model_name_or_path: str = "pt_core_news_lg"
+    ) -> ToxicSpansDetectionModel:
         self.model = ToxicSpansDetectionModel(
-            spacy_model=pretrained_model_name_or_path,
-            toxic_label="TOXIC"
+            spacy_model=pretrained_model_name_or_path, toxic_label="TOXIC"
         )
         return self.model
 
@@ -45,13 +47,13 @@ class ToxicSpansDetection(Experiment):
             # Save MLflow run ID to checkpointing directory.
             self.save_mlflow_checkpoint(
                 mlflow_run_id=mlflow.active_run().info.run_id,
-                checkpoint_dir=self.args.checkpoint_dir
+                checkpoint_dir=self.args.checkpoint_dir,
             )
-            
+
             self.dataset = self.load_dataset()
             self.dataset = self.slice_dataset(self.dataset)
             self.dataset = self.prepare_dataset(self.dataset)
-            
+
             dataset_stats = self.get_dataset_stats(self.dataset)
             if mlflow.active_run():
                 mlflow.log_params(flatten_dict(dataset_stats))
@@ -74,7 +76,7 @@ class ToxicSpansDetection(Experiment):
                 adam_epsilon=self.args.adam_epsilon,
                 weight_decay=self.args.weight_decay,
                 checkpoint_dir=self.args.checkpoint_dir,
-                load_best_model_at_end=True
+                load_best_model_at_end=True,
             )
 
             mlflow.log_params(
@@ -90,7 +92,7 @@ class ToxicSpansDetection(Experiment):
                     "adam_beta1": self.args.adam_beta1,
                     "adam_beta2": self.args.adam_beta2,
                     "adam_epsilon": self.args.adam_epsilon,
-                    "weight_decay": self.args.weight_decay
+                    "weight_decay": self.args.weight_decay,
                 }
             )
 
@@ -102,16 +104,16 @@ class ToxicSpansDetection(Experiment):
             scores = {
                 "eval_f1": f1_score(
                     y_true=self.dataset[self.args.eval_dataset]["toxic_spans"],
-                    y_pred=preds
+                    y_pred=preds,
                 ),
                 "eval_precision": precision_score(
                     y_true=self.dataset[self.args.eval_dataset]["toxic_spans"],
-                    y_pred=preds
+                    y_pred=preds,
                 ),
                 "eval_recall": recall_score(
                     y_true=self.dataset[self.args.eval_dataset]["toxic_spans"],
-                    y_pred=preds
-                )
+                    y_pred=preds,
+                ),
             }
 
             _logger.info(f"Scores ({self.args.eval_dataset} set): {scores}")
@@ -120,13 +122,11 @@ class ToxicSpansDetection(Experiment):
             mlflow.log_metrics(scores)
 
             mlflow.log_figure(
-                figure=self.model.plot_losses(),
-                artifact_file="losses.png"
+                figure=self.model.plot_losses(), artifact_file="losses.png"
             )
-            
+
             mlflow.log_figure(
-                figure=self.model.plot_scores(),
-                artifact_file="scores.png"
+                figure=self.model.plot_scores(), artifact_file="scores.png"
             )
 
             mlflow.spacy.log_model(
@@ -134,8 +134,10 @@ class ToxicSpansDetection(Experiment):
                 artifact_path="model",
                 signature=mlflow.models.signature.infer_signature(
                     np.array(self.dataset[self.args.eval_dataset]["text"]),
-                    np.array(self.dataset[self.args.eval_dataset]["toxic_spans"][0])
-                )
+                    np.array(
+                        self.dataset[self.args.eval_dataset]["toxic_spans"][0]
+                    ),
+                ),
             )
 
-        _logger.info(f"Experiment completed.")
+        _logger.info("Experiment completed.")

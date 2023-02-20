@@ -8,7 +8,7 @@ on:
       - 'docs/**'
       - 'mkdocs.yml'
       - 'requirements-docs.txt'
-      
+
 jobs:
   build:
     name: Deploy docs
