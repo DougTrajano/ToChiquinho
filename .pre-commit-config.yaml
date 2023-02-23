@@ -23,11 +23,6 @@ repos:
     entry: detect-secrets-hook
     args: ['--baseline', '.secrets.baseline']
 
-- repo: https://github.com/PabloRMira/sql_formatter
-  rev: 0.6.2
-  hooks:
-  - id: sql_formatter
-
 - repo: https://github.com/psf/black
   rev: 23.1.0
   hooks:
