@@ -1,5 +1,5 @@
 --extra-index-url https://download.pytorch.org/whl/cu116
-boto3==1.26.69
+boto3==1.26.84
 fastapi[all]==0.89.1
 kaggle==1.5.12
 uvicorn==0.20.0
